@@ -1,10 +1,12 @@
-package br.com.localoeste.hungry;
+package br.com.localoeste.hungry.activy;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import br.com.localoeste.hungry.R;
+
+public class AutenticacaoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
