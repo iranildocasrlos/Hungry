@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF6347"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".activy.AutenticacaoActivity">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        app:srcCompat="@drawable/hungry_logotipo_transparencia" />
+
+    <EditText
+        android:id="@+id/editTextCadastroEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textPersonName|textEmailAddress" />
+
+    <EditText
+        android:id="@+id/editTextTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Senha"
+        android:inputType="textPassword" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logar" />
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cadastre-se" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btAcesso"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Acessar" />
+</LinearLayout>
