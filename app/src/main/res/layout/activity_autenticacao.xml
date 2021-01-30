@@ -48,7 +48,7 @@
 
         <TextView
             android:id="@+id/textViewLogar"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="Logar"
             android:textColor="#FFFFFF"
@@ -63,12 +63,58 @@
 
         <TextView
             android:id="@+id/textViewCadastre"
-            android:layout_width="wrap_content"
+            android:layout_width="86dp"
             android:layout_height="wrap_content"
             android:text="Cadastre-se"
             android:textColor="#FFFFFF"
             android:textStyle="bold" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewQuem"
+        android:layout_width="119dp"
+        android:layout_height="wrap_content"
+        android:text="Quem você é?"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+    <LinearLayout
+        android:id="@+id/linearTipoUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/textViewUsuario"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="Usuario"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <Switch
+            android:id="@+id/switchTipoAcesso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+
+        <TextView
+            android:id="@+id/textViewEmpresa"
+            android:layout_width="86dp"
+            android:layout_height="wrap_content"
+            android:text="Empresa"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/btAcesso"

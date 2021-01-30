@@ -7,8 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,16 +21,22 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
 
 import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
+import br.com.localoeste.hungry.helper.UsuarioFirebase;
 
 public class AutenticacaoActivity extends AppCompatActivity {
 
     private Button btAcessar;
     private EditText campoEmail, campoSenha;
-    private Switch tipoAcesso;
+    private Switch tipoAcesso, tipoUsuario;
     private FirebaseAuth  autenticacao;
+    private LinearLayout linearTipoUsuario;
+    private TextView textViewQuem;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,14 +46,32 @@ public class AutenticacaoActivity extends AppCompatActivity {
 
         inicializarComponenetes();
 
+        ///Metodo para verificar se o usuário está logado
+        verificaUsuarioLogado();
+
+        //Esconde ou exibe o swicht abaixo dele
+        tipoAcesso.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    linearTipoUsuario.setVisibility(View.VISIBLE);
+                    textViewQuem.setVisibility(View.VISIBLE);
+                }else{
+                    linearTipoUsuario.setVisibility(View.GONE);
+                    textViewQuem.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
         btAcessar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = campoEmail.getText().toString();
                 String senha = campoSenha.getText().toString();
 
-                if(email.isEmpty()){
-                    if(senha.isEmpty()){
+                if(!email.isEmpty()){
+                    if(!senha.isEmpty()){
 
                         //verifica o estado do switch
                         if (tipoAcesso.isChecked()){
@@ -57,9 +84,8 @@ public class AutenticacaoActivity extends AppCompatActivity {
                                         Toast.makeText(AutenticacaoActivity.this,
                                                 "Cadastro realizado com sucesso!",
                                                 Toast.LENGTH_SHORT).show();
-
-                                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                                       // abrirTelaPrincipal();
+                                        UsuarioFirebase.salvarDados("Iranildo",email);
+                                        abrirTelaPrincipal();
 
                                     }else {
                                         String erroExcecao = "";
@@ -91,8 +117,8 @@ public class AutenticacaoActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()){
 
-                                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                                        // abrirTelaPrincipal();
+
+                                       abrirTelaPrincipal();
                                     }else{
                                         Toast.makeText(AutenticacaoActivity.this,
                                                 "Erro ao fazer login : " + task.getException() ,
@@ -115,12 +141,27 @@ public class AutenticacaoActivity extends AppCompatActivity {
 
     }
 
+    private void abrirTelaPrincipal() {
+        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+    }
+
+    private void verificaUsuarioLogado() {
+        FirebaseUser usuarioAtual = autenticacao.getCurrentUser();
+        if (usuarioAtual != null){
+            abrirTelaPrincipal();
+        }
+    }
+
     private void inicializarComponenetes() {
         campoEmail = findViewById(R.id.editTextCadastroEmail);
         campoSenha = findViewById(R.id.editTextTextPassword);
         btAcessar = findViewById(R.id.btAcesso);
         tipoAcesso = findViewById(R.id.switchAcesso);
         autenticacao = ConfiguracaoFirebase.getReferenciaAutenticacao();
+        tipoUsuario = findViewById(R.id.switchTipoAcesso);
+        linearTipoUsuario = findViewById(R.id.linearTipoUsuario);
+        textViewQuem = findViewById(R.id.textViewQuem);
+        //autenticacao.signOut();
     }
 
 

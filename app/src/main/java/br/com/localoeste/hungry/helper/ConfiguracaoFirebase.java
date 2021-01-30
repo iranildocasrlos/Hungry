@@ -11,6 +11,7 @@ public class ConfiguracaoFirebase {
     private static FirebaseFirestore referenciaFirestore;
 
 
+
     ///Retorna o id do Usuario logado
     public static String getId_Usuario(){
         FirebaseAuth autenticacao = getReferenciaAutenticacao();
