@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "225385548628-9d6mulo8eg9ho8015i6onaba1ss7p1ot.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.localoeste.hungry",
+            "certificate_hash": "e2e46caa0a1b3743328165109ddca77af8fdb565"
+          }
+        },
+        {
           "client_id": "225385548628-lg9jptroel49ggik5pkfkdc028pa9bg1.apps.googleusercontent.com",
           "client_type": 3
         }
