@@ -84,8 +84,13 @@ public class AutenticacaoActivity extends AppCompatActivity {
                                         Toast.makeText(AutenticacaoActivity.this,
                                                 "Cadastro realizado com sucesso!",
                                                 Toast.LENGTH_SHORT).show();
-                                        UsuarioFirebase.salvarDados("Iranildo",email);
-                                        abrirTelaPrincipal();
+
+                                        if (getTipoUsuario() == "U"){
+                                            abrirTelaCadastroUsuario();
+                                        }else{
+                                            abrirTelaCadastroEmpresa();
+                                        }
+
 
                                     }else {
                                         String erroExcecao = "";
@@ -115,10 +120,16 @@ public class AutenticacaoActivity extends AppCompatActivity {
                             autenticacao.signInWithEmailAndPassword(email, senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
+
                                     if (task.isSuccessful()){
+                                        if (getTipoUsuario() == "U"){
 
+                                            abrirTelaPrincipal();
 
-                                       abrirTelaPrincipal();
+                                        }else{
+                                            abrirTelaPrincipalEmpresa();
+                                        }
+
                                     }else{
                                         Toast.makeText(AutenticacaoActivity.this,
                                                 "Erro ao fazer login : " + task.getException() ,
@@ -141,8 +152,25 @@ public class AutenticacaoActivity extends AppCompatActivity {
 
     }
 
+    //Cadastro de Empresa
+    private void abrirTelaCadastroEmpresa() {
+        startActivity(new Intent(getApplicationContext(), CadastroEmpresaActivity.class));
+    }
+
+    //Cadastro de Usuário
+    private void abrirTelaCadastroUsuario() {
+
+        startActivity(new Intent(getApplicationContext(), CadastroUsuarioActivity.class));
+    }
+
+    //Tela principal Usuário
     private void abrirTelaPrincipal() {
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+    }
+
+    //Tela principal Usuário
+    private void abrirTelaPrincipalEmpresa() {
+        startActivity(new Intent(getApplicationContext(), EmpresaActivity.class));
     }
 
     private void verificaUsuarioLogado() {
@@ -150,6 +178,11 @@ public class AutenticacaoActivity extends AppCompatActivity {
         if (usuarioAtual != null){
             abrirTelaPrincipal();
         }
+    }
+
+
+    private String getTipoUsuario(){
+        return tipoUsuario.isChecked()? "E" : "U";
     }
 
     private void inicializarComponenetes() {
