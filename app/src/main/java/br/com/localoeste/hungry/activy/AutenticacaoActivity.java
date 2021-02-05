@@ -124,7 +124,8 @@ public class AutenticacaoActivity extends AppCompatActivity {
                                     if (task.isSuccessful()){
                                         if (getTipoUsuario() == "U"){
 
-                                            abrirTelaPrincipal();
+                                            //abrirTelaPrincipal();
+                                            abrirTelaCadastroUsuario();
 
                                         }else{
                                             abrirTelaPrincipalEmpresa();
@@ -176,7 +177,8 @@ public class AutenticacaoActivity extends AppCompatActivity {
     private void verificaUsuarioLogado() {
         FirebaseUser usuarioAtual = autenticacao.getCurrentUser();
         if (usuarioAtual != null){
-            abrirTelaPrincipal();
+            //abrirTelaPrincipal();
+            abrirTelaCadastroUsuario();
         }
     }
 
