@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Hungry</string>
     <string name="by">by - Local Oeste Software House</string>
+    <string name="title_activity_cadastro_empresactivity">CadastroEmpresactivity</string>
+    <string name="tab_text_1">Dados Proprietário</string>
+    <string name="tab_text_2">Dados Empresa</string>
+    <string name="title_activity_cadastro_empresa">CadastroEmpresaActivity</string>
 </resources>

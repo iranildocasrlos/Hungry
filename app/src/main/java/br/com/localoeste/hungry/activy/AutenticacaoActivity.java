@@ -145,7 +145,13 @@ public class AutenticacaoActivity extends AppCompatActivity {
                         Toast.makeText(AutenticacaoActivity.this, "Preencha o campo senha", Toast.LENGTH_LONG).show();
                     }
                 }else{
-                    Toast.makeText(AutenticacaoActivity.this, "Preencha o campo email", Toast.LENGTH_LONG).show();
+
+                    if (getTipoUsuario() == "U"){
+                        abrirTelaCadastroUsuario();
+                    }else{
+                        abrirTelaCadastroEmpresa();
+                    }
+//                    Toast.makeText(AutenticacaoActivity.this, "Preencha o campo email", Toast.LENGTH_LONG).show();
                 }
 
             }
