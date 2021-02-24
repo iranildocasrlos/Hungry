@@ -9,6 +9,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import br.com.localoeste.hungry.R;
+import br.com.localoeste.hungry.activy.fragment.EmpresaFragment;
+import br.com.localoeste.hungry.activy.fragment.ProprietarioFragment;
 
 
 /**
@@ -30,7 +32,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+        Fragment fragment = null;
+        switch (position){
+            case 0: fragment = new ProprietarioFragment();
+            break;
+            case 1: fragment = new EmpresaFragment();
+                break;
+        }
+
+
+        return fragment;
     }
 
     @Nullable
