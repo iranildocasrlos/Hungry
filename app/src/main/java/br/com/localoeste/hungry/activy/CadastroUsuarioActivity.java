@@ -44,6 +44,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
                 usuario.setEndereco(endereco.getText().toString());
                 usuario.setTelefone(telefone.getText().toString());
                 usuario.setCpf(cpf.getText().toString());
+                usuario.setTipoUsuario("cliente");
                 usuario.salvarDados();
 
                 abrirTelaPrincipal();

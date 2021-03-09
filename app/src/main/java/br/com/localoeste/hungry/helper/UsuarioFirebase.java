@@ -1,5 +1,7 @@
 package br.com.localoeste.hungry.helper;
 
+import android.widget.TableRow;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -9,16 +11,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class UsuarioFirebase {
+public class UsuarioFirebase{
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private static String nome,email,endereco,telefone,cpf;
+    private static String nome,email,endereco,telefone,cpf,tipoUsuario;
 
     public UsuarioFirebase() {
     }
 //++++++++++= Geters e Seters ++++++++++++++++++++++++++++++
 
-    public static String getNome() {
+    public String getNome() {
         return nome;
     }
 
@@ -26,7 +28,7 @@ public class UsuarioFirebase {
         this.nome = nome;
     }
 
-    public static String getEmail() {
+    public String getEmail() {
         return email;
     }
 
@@ -34,7 +36,7 @@ public class UsuarioFirebase {
         this.email = email;
     }
 
-    public static String getEndereco() {
+    public String getEndereco() {
         return endereco;
     }
 
@@ -42,7 +44,7 @@ public class UsuarioFirebase {
         this.endereco = endereco;
     }
 
-    public static String getTelefone() {
+    public  String getTelefone() {
         return telefone;
     }
 
@@ -50,12 +52,20 @@ public class UsuarioFirebase {
         this.telefone = telefone;
     }
 
-    public static String getCpf() {
+    public  String getCpf() {
         return cpf;
     }
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public static void setTipoUsuario(String tipoUsuario) {
+        UsuarioFirebase.tipoUsuario = tipoUsuario;
     }
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -82,10 +92,13 @@ public class UsuarioFirebase {
         data.put("endereco", endereco);
         data.put("telefone",telefone);
         data.put("cpf", cpf);
+        data.put("tipoUsuario", tipoUsuario);
         documentRef.set(data);
 
 
 
     }
+
+
 
 }
