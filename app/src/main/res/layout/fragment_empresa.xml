@@ -29,54 +29,75 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/cadastroUNome"
+            android:id="@+id/nomeEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
             android:ems="10"
             android:hint="Nome da empresa"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="LocalOeste Software House" />
 
         <EditText
-            android:id="@+id/cadastroUEmail"
+            android:id="@+id/emailEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:ems="10"
             android:hint="E-mail"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="contato@localoeste.com.br" />
 
         <EditText
-            android:id="@+id/cadastroUEndereco"
+            android:id="@+id/enderecoEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:ems="10"
             android:hint="Endereço"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="Rua pedro Bolgione 116" />
 
         <EditText
-            android:id="@+id/cadastroUTelefone"
+            android:id="@+id/telefoneEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:ems="10"
             android:hint="Telefone"
-            android:inputType="numberSigned" />
+            android:inputType="numberSigned"
+            android:text="1147739605" />
 
         <EditText
-            android:id="@+id/cadastroCnpj"
+            android:id="@+id/cnpjEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:ems="10"
             android:hint="CNPJ"
-            android:inputType="numberSigned" />
+            android:inputType="numberSigned"
+            android:text="13056456/0001-15" />
+
+        <Button
+            android:id="@+id/buttonEmpresa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="salvar dados empresa" />
+
+        <ImageView
+            android:id="@+id/imageEmpresaOK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ok"
+            android:visibility="invisible" />
 
 
     </LinearLayout>

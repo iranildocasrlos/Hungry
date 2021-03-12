@@ -34,7 +34,7 @@ public class ActivitySplash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        getSupportActionBar().hide();
+       // getSupportActionBar().hide();
         autenticacao = ConfiguracaoFirebase.getReferenciaAutenticacao();
 
         new Handler().postDelayed(new Runnable() {
@@ -60,12 +60,17 @@ public class ActivitySplash extends AppCompatActivity {
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     UsuarioFirebase user = documentSnapshot.toObject(UsuarioFirebase.class);
 
-                   if (user.getTipoUsuario().equals("cliente")){
-                       abrirTelaPrincipal();
-                       Log.d("HUNGRY", user.getNome());
-                   }else if (user.getTipoUsuario().equals("empresario")){
-                       abrirTelaPrincipalEmpresa();
-                   }
+                    if (user.getTipoUsuario()!= null){
+                        if (user.getTipoUsuario().equals("cliente")){
+                            abrirTelaPrincipal();
+                            Log.d("HUNGRY", user.getNome() + "==> ID: "+user.getId_Usuario());
+                        }else if (user.getTipoUsuario().equals("empresario")){
+                            //abrirTelaPrincipalEmpresa();
+                            abrirTelaCadastroEmpresa();
+                            Log.d("HUNGRY", user.getNome() + "==> ID: "+user.getId_Usuario());
+                        }
+                    }
+
 
                 }
             });
@@ -90,6 +95,8 @@ public class ActivitySplash extends AppCompatActivity {
         startActivity(i);
         finish();
     }
-
+    private void abrirTelaCadastroEmpresa() {
+        startActivity(new Intent(getApplicationContext(), CadastroEmpresaActivity.class));
+    }
 
 }

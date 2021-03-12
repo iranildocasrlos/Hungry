@@ -29,7 +29,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/cadastroUNome"
+            android:id="@+id/nomeEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -43,7 +43,7 @@
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/cadastroUEmail"
+            android:id="@+id/emailEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -52,7 +52,7 @@
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/cadastroUEndereco"
+            android:id="@+id/enderecoEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -61,7 +61,7 @@
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/cadastroUTelefone"
+            android:id="@+id/telefoneEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -70,7 +70,7 @@
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/cafastroUCPF"
+            android:id="@+id/cpfProprietario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"

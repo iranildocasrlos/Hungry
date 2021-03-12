@@ -1,6 +1,7 @@
 package br.com.localoeste.hungry.activy.ui.main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +55,8 @@ public class PlaceholderFragment extends Fragment {
         pageViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-              //  textView.setText(s);
+                textView.setText(s);
+                Log.d("HUNGRY", String.valueOf(textView));
             }
         });
         return root;

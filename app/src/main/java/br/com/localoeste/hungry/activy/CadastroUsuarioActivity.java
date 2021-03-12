@@ -8,11 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import br.com.localoeste.hungry.R;
-import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 import br.com.localoeste.hungry.helper.UsuarioFirebase;
 
 public class CadastroUsuarioActivity extends AppCompatActivity {
@@ -59,11 +57,11 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
 
 
     private void iniciaComponentes(){
-        nome = findViewById(R.id.cadastroUNome);
-        telefone = findViewById(R.id.cadastroUTelefone);
-        email = findViewById(R.id.cadastroUEmail);
-        endereco =findViewById(R.id.cadastroUEndereco);
-        cpf = findViewById(R.id.cafastroUCPF);
+        nome = findViewById(R.id.nomeEmpresa);
+        telefone = findViewById(R.id.telefoneEmpresa);
+        email = findViewById(R.id.emailEmpresa);
+        endereco =findViewById(R.id.enderecoEmpresa);
+        cpf = findViewById(R.id.cpfProprietario);
         btCadastroUsuario = findViewById(R.id.buttonCriarUconta);
         usuario = new UsuarioFirebase();
 

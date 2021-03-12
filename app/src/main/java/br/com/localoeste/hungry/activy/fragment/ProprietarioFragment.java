@@ -7,8 +7,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import br.com.localoeste.hungry.R;
+import br.com.localoeste.hungry.helper.UsuarioFirebase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +25,14 @@ public class ProprietarioFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static EditText editNomeProprietario;
+    private static EditText editEmailProprietario;
+    private static EditText editEnderecoProprietario;
+    private static EditText editTelefoneProprietario;
+    private static EditText editCpfProprietario;
+    private static Button botaoSalvar;
+    private static ImageView imageOK;
+    private UsuarioFirebase usuario;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -54,13 +66,63 @@ public class ProprietarioFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
+
+        usuario = new UsuarioFirebase();
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_proprietario, container, false);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_proprietario, container, false);
+        editNomeProprietario = view.findViewById(R.id.nomeEmpresa);
+        editEmailProprietario = view.findViewById(R.id.emailEmpresa);
+        editEnderecoProprietario = view.findViewById(R.id.enderecoEmpresa);
+        editTelefoneProprietario = view.findViewById(R.id.telefoneEmpresa);
+        editCpfProprietario = view.findViewById(R.id.cpfProprietario);
+        botaoSalvar = view.findViewById(R.id.btnSalvarProp);
+        imageOK =  view.findViewById(R.id.imageOK);
+
+
+        botaoSalvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String nomeDigitado = editNomeProprietario.getText().toString();
+                String emailDigitado = editEmailProprietario.getText().toString();
+                String enderecoDigitado = editEnderecoProprietario.getText().toString();
+                String telefoneDigitado = editTelefoneProprietario.getText().toString();
+                String cpfDigitado = editCpfProprietario.getText().toString();
+
+                usuario.setNome(nomeDigitado);
+                usuario.setEmail(emailDigitado);
+                usuario.setEndereco(enderecoDigitado);
+                usuario.setTelefone(telefoneDigitado);
+                usuario.setCpf(cpfDigitado);
+
+                usuario.atualizarDados();
+                botaoSalvar.setEnabled(false);
+                botaoSalvar.setVisibility(View.INVISIBLE);
+                imageOK.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+
+
+        return view;
+
     }
+
+
+
+
+
+
+
 }

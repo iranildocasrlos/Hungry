@@ -1,7 +1,5 @@
 package br.com.localoeste.hungry.helper;
 
-import android.widget.TableRow;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -71,7 +69,7 @@ public class UsuarioFirebase{
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     ///Retorna o id do Usuario logado
-    public static String getId_Usuario(){
+    public String getId_Usuario(){
         FirebaseAuth autenticacao = ConfiguracaoFirebase.getReferenciaAutenticacao();
         return autenticacao.getCurrentUser().getUid();
     }
@@ -94,6 +92,20 @@ public class UsuarioFirebase{
         data.put("cpf", cpf);
         data.put("tipoUsuario", tipoUsuario);
         documentRef.set(data);
+
+
+
+    }
+
+    public void atualizarDados(){
+        DocumentReference documentRef = db.collection("usuarios").document(getId_Usuario());
+        Map<String, Object> data = new HashMap<>();
+        data.put("nome", nome);
+        data.put("email", email);
+        data.put("endereco", endereco);
+        data.put("telefone",telefone);
+        data.put("cpf", cpf);
+        documentRef.update(data);
 
 
 

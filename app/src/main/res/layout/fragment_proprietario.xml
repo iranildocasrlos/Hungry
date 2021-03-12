@@ -29,54 +29,76 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/cadastroUNome"
+            android:id="@+id/nomeEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:ems="10"
+            android:ems="5"
             android:hint="Nome"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="iranildo ok" />
 
         <EditText
-            android:id="@+id/cadastroUEmail"
+            android:id="@+id/emailEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:ems="10"
             android:hint="E-mail"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="iranildocarlos@localoeste.com.br" />
 
         <EditText
-            android:id="@+id/cadastroUEndereco"
+            android:id="@+id/enderecoEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:ems="10"
             android:hint="Endereço"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="Rua Pedro Bolgione 116" />
 
         <EditText
-            android:id="@+id/cadastroUTelefone"
+            android:id="@+id/telefoneEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:ems="10"
             android:hint="Telefone"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="11974124829" />
 
         <EditText
-            android:id="@+id/cafastroUCPF"
+            android:id="@+id/cpfProprietario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:ems="10"
             android:hint="CPF"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="27623677861" />
+
+        <Button
+            android:id="@+id/btnSalvarProp"
+            android:layout_width="wrap_content"
+            android:layout_height="72dp"
+            android:layout_gravity="center"
+            android:text="Salvar dados"
+            app:backgroundTint="#FF5722" />
+
+        <ImageView
+            android:id="@+id/imageOK"
+            android:layout_width="162dp"
+            android:layout_height="98dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ok"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </LinearLayout>

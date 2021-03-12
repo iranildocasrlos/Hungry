@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +24,9 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
@@ -35,14 +40,14 @@ public class AutenticacaoActivity extends AppCompatActivity {
     private FirebaseAuth  autenticacao;
     private LinearLayout linearTipoUsuario;
     private TextView textViewQuem;
-
+    private FirebaseFirestore firestore ;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_autenticacao);
-        getSupportActionBar().hide();
+       // getSupportActionBar().hide();
 
         inicializarComponenetes();
 
@@ -122,14 +127,9 @@ public class AutenticacaoActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
 
                                     if (task.isSuccessful()){
-                                        if (getTipoUsuario() == "U"){
 
-                                            abrirTelaPrincipal();
+                                        verificaUsuarioFirestore();
 
-
-                                        }else{
-                                            abrirTelaPrincipalEmpresa();
-                                        }
 
                                     }else{
                                         Toast.makeText(AutenticacaoActivity.this,
@@ -184,6 +184,35 @@ public class AutenticacaoActivity extends AppCompatActivity {
         FirebaseUser usuarioAtual = autenticacao.getCurrentUser();
         if (usuarioAtual != null){
             abrirTelaPrincipal();
+
+        }
+    }
+
+    private void verificaUsuarioFirestore() {
+        FirebaseUser usuarioAtual = autenticacao.getCurrentUser();
+        if (usuarioAtual != null){
+            firestore = ConfiguracaoFirebase.getReferenciaFirestore();
+
+            DocumentReference usuarios = firestore.collection("usuarios").document(usuarioAtual.getUid());
+
+            usuarios.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    UsuarioFirebase user = documentSnapshot.toObject(UsuarioFirebase.class);
+
+                    if (user.getTipoUsuario()!= null){
+                        if (user.getTipoUsuario().equals("cliente")){
+                            abrirTelaPrincipal();
+                            Log.d("HUNGRY", user.getNome());
+                        }else if (user.getTipoUsuario().equals("empresario")){
+                            //abrirTelaPrincipalEmpresa();
+                            abrirTelaCadastroEmpresa();
+                        }
+                    }
+
+
+                }
+            });
 
         }
     }
