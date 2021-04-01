@@ -5,6 +5,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +19,8 @@ import android.view.MenuItem;
 import com.google.firebase.auth.FirebaseAuth;
 
 import br.com.localoeste.hungry.R;
+import br.com.localoeste.hungry.activy.ui.main.ConfiguracaoEmpresaActivity;
+import br.com.localoeste.hungry.activy.ui.main.NovoProdutoEmpresaActivity;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 
 public class EmpresaActivity extends AppCompatActivity {
@@ -76,10 +80,12 @@ public class EmpresaActivity extends AppCompatActivity {
 
     private void abrirConfiguracoes(){
 
+        startActivity(new Intent(EmpresaActivity.this, ConfiguracaoEmpresaActivity.class));
+
     }
 
     private void abrirNovoProduto(){
-
+        startActivity(new Intent(EmpresaActivity.this, NovoProdutoEmpresaActivity.class));
     }
 
 
