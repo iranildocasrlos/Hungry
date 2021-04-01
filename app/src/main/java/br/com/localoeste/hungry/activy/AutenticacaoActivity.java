@@ -205,8 +205,11 @@ public class AutenticacaoActivity extends AppCompatActivity {
                             abrirTelaPrincipal();
                             Log.d("HUNGRY", user.getNome());
                         }else if (user.getTipoUsuario().equals("empresario")){
-                            //abrirTelaPrincipalEmpresa();
-                            abrirTelaCadastroEmpresa();
+                            if (user.getCpf() != null){
+                                abrirTelaPrincipalEmpresa();
+                            }else{
+                                abrirTelaCadastroEmpresa();
+                            }
                         }
                     }
 
