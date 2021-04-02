@@ -46,6 +46,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
                 usuario.salvarDados();
 
                 abrirTelaPrincipal();
+                finish();
 
 
             }

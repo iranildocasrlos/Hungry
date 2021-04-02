@@ -5,12 +5,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,8 +16,6 @@ import android.view.MenuItem;
 import com.google.firebase.auth.FirebaseAuth;
 
 import br.com.localoeste.hungry.R;
-import br.com.localoeste.hungry.activy.ui.main.ConfiguracaoEmpresaActivity;
-import br.com.localoeste.hungry.activy.ui.main.NovoProdutoEmpresaActivity;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 
 public class EmpresaActivity extends AppCompatActivity {
