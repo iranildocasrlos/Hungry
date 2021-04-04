@@ -18,7 +18,7 @@
         app:srcCompat="@drawable/hungry_logotipo_transparencia" />
 
     <EditText
-        android:id="@+id/editTextCadastroEmail"
+        android:id="@+id/editTextNomeEmpresa"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_edit_text"
@@ -28,7 +28,7 @@
         android:padding="16dp" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/editTextCategoria"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="-2dp"
@@ -121,5 +121,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Acessar"
-        android:padding="16dp"/>
+        android:padding="16dp"
+        />
 </LinearLayout>

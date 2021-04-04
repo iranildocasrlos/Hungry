@@ -53,8 +53,15 @@ dependencies {
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.miguelcatalan:materialsearchview:1.4.0'
 
+    //SearchView
     implementation 'com.miguelcatalan:materialsearchview:1.4.0'
 
+    //Circle ImageView
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+
+    //SpinnerSearch
+    implementation 'com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1'
 
 
 }

@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,6 +23,7 @@ import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 public class EmpresaActivity extends AppCompatActivity {
 
     private FirebaseAuth autenticacao;
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -37,8 +40,16 @@ public class EmpresaActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
+
+        inicializarComponentes();
+
+
+
     }
 
+    private void inicializarComponentes() {
+
+    }
 
 
     @Override
