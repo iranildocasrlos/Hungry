@@ -112,6 +112,7 @@
             android:id="@+id/btAcesso"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="validarDadosEmpresa"
             android:padding="16dp"
             android:text="Salvar" />
 
