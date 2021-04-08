@@ -69,7 +69,7 @@ public class UsuarioFirebase{
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     ///Retorna o id do Usuario logado
-    public String getId_Usuario(){
+    public static String getId_Usuario(){
         FirebaseAuth autenticacao = ConfiguracaoFirebase.getReferenciaAutenticacao();
         return autenticacao.getCurrentUser().getUid();
     }

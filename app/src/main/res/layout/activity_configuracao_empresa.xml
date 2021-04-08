@@ -64,7 +64,7 @@
 
 
         <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-            android:id="@+id/spinnerTeste"
+            android:id="@+id/spinnerCategoria"
             android:layout_width="match_parent"
             android:layout_height="50dp" />
 
@@ -103,13 +103,13 @@
 
 
         <CheckBox
-            android:id="@+id/checkBox"
+            android:id="@+id/checkBoxAutomatico"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Horário de abertura automático" />
 
         <Button
-            android:id="@+id/btAcesso"
+            android:id="@+id/btSalvarConfigurcacao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="validarDadosEmpresa"

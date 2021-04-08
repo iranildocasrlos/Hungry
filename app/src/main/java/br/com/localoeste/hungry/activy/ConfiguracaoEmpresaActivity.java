@@ -1,5 +1,6 @@
 package br.com.localoeste.hungry.activy;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,20 +14,41 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 
 import br.com.localoeste.hungry.R;
+import br.com.localoeste.hungry.helper.EmpresaFirebase;
+import br.com.localoeste.hungry.model.Empresa;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
 
-    private Spinner spinner;
+    private Spinner spinnerCategoria;
     private Spinner spinnerInicio;
     private Spinner spinnerFinal;
-    private EditText editEmpresaNome, getEditEmpresaTaxa,getGetEditEmpresaCategoria, getEditEmpresaTempo;
-    private ImageView imagePerfilEmpresa;
+    private EditText editEmpresaNome, editEmpresaTaxa,editEmpresaCategoria, editEmpresaTempo;
+    private CircleImageView imagePerfilEmpresa;
     private static final int SELECAO_GALERIA = 200;
+    private StorageReference storageReference;
+    private String idUsuarioLogado ;
+    private String urlImagemSeleconada = "";
+    private CheckBox checkBoxAutomatico;
+    private Button btSalvar;
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -42,6 +64,9 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         inicializarComponentes();
+      //  storageReference = ConfiguracaoFirebase.getFirebaseS
+
+
 
         imagePerfilEmpresa.setOnContextClickListener(new View.OnContextClickListener() {
             @Override
@@ -89,12 +114,21 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
     }
 
     private void inicializarComponentes() {
-        spinner = findViewById(R.id.spinnerTeste);
+        editEmpresaNome = findViewById(R.id.editTextNomeEmpresa);
+        editEmpresaTaxa = findViewById(R.id.editTextTaxaEntrega);
+        editEmpresaTempo = findViewById(R.id.editTextTempoEntrega);
+
+        checkBoxAutomatico = findViewById(R.id.checkBoxAutomatico);
+
+        btSalvar = findViewById(R.id.btSalvarConfigurcacao);
+
+        spinnerCategoria = findViewById(R.id.spinnerCategoria);
         spinnerInicio = findViewById(R.id.spinnerHorarioInicio);
         spinnerFinal = findViewById(R.id.spinnerHorarioFinal);
         String[] categorias = getResources().getStringArray(R.array.nome_categoria);
         String[] horarios = getResources().getStringArray(R.array.horario);
         imagePerfilEmpresa = findViewById(R.id.image_perfil_empresa);
+        idUsuarioLogado = EmpresaFirebase.getId_empresa();
 
         ArrayAdapter<String> adapterHorario = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
                 horarios);
@@ -106,7 +140,7 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
         adapterHorario.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spinner.setAdapter(adapter);
+        spinnerCategoria.setAdapter(adapter);
         spinnerInicio.setAdapter(adapterHorario);
         spinnerFinal.setAdapter(adapterHorario);
     }
@@ -114,6 +148,86 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
 
     private void validarDadosEmpresa(View view) {
 
+        String nome = editEmpresaNome.getText().toString();
+        String taxa = editEmpresaTaxa.getText().toString();
+        String tempo = editEmpresaTempo.getText().toString();
+        String categoria = spinnerCategoria.getSelectedItem().toString();
+        String horaInicio = spinnerInicio.getSelectedItem().toString();
+        String horaFim = spinnerFinal.getSelectedItem().toString();
+        Boolean automatico = checkBoxAutomatico.isChecked();
+
+        if (!nome.isEmpty() ){
+
+            if (!tempo.isEmpty() ){
+
+                if (!taxa.isEmpty() ){
+
+                    Empresa empresa = new Empresa();
+                    empresa.setIdEmpresa(idUsuarioLogado);
+                    empresa.setNomeEmpresa(nome);
+                    empresa.setTempoEntrega(tempo);
+                    empresa.setTaxaEntrega(Double.parseDouble(taxa));
+                    empresa.setCategoria(categoria);
+                    empresa.setHorarioAbertura(horaInicio);
+                    empresa.setHorarioFechamento(horaFim);
+                    empresa.setInicioAutomatico(automatico);
+
+                }else {
+                    exibirMensagem("Diigite uma taxa para entrega");
+                }
+
+            }else {
+                exibirMensagem("Diigite o tempo de entrega ");
+            }
+
+        }else {
+            exibirMensagem("Diigite um nome para empresa");
+        }
+
+
+    }
+
+
+
+    private void salvarImagem(Bitmap imagemCapturada){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        imagemCapturada.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+        byte[] dadosImagem = baos.toByteArray();
+
+    final   StorageReference imagemRef = storageReference
+                .child("imagens")
+                .child("empresas")
+                .child(idUsuarioLogado + "jpeg");
+
+        UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ConfiguracaoEmpresaActivity.this,
+                        "Erro ao fazer o upload da imagem",
+                         Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                imagemRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        Uri uri = task.getResult();
+                        urlImagemSeleconada = uri.toString();
+                    }
+                });
+
+            }
+        });
+
+
+
+    }
+
+    private  void exibirMensagem(String texto){
+        Toast.makeText(this, texto, Toast.LENGTH_SHORT).show();
     }
 
 

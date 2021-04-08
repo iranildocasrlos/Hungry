@@ -1,5 +1,6 @@
 package br.com.localoeste.hungry.helper;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -79,6 +80,14 @@ public class EmpresaFirebase {
         data.put("idProprietario", idProprietario);
         documentRef.set(data);
     }
+
+
+    ///Retorna o id do Usuario logado
+    public static String getId_empresa(){
+        FirebaseAuth autenticacao = ConfiguracaoFirebase.getReferenciaAutenticacao();
+        return autenticacao.getCurrentUser().getUid();
+    }
+
 }
 
 

@@ -228,7 +228,7 @@ public class AutenticacaoActivity extends AppCompatActivity {
     private void inicializarComponenetes() {
         campoEmail = findViewById(R.id.editTextNomeEmpresa);
         campoSenha = findViewById(R.id.editTextCategoria);
-        btAcessar = findViewById(R.id.btAcesso);
+        btAcessar = findViewById(R.id.btSalvarConfigurcacao);
         tipoAcesso = findViewById(R.id.switchAcesso);
         autenticacao = ConfiguracaoFirebase.getReferenciaAutenticacao();
         tipoUsuario = findViewById(R.id.switchTipoAcesso);
