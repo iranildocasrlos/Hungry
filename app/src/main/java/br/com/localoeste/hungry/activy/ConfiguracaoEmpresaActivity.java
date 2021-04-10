@@ -68,18 +68,18 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
 
 
 
-        imagePerfilEmpresa.setOnContextClickListener(new View.OnContextClickListener() {
-            @Override
-            public boolean onContextClick(View v) {
-                Intent i = new Intent(Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                if (i.resolveActivity(getPackageManager()) != null){
-                    startActivityForResult(i, SELECAO_GALERIA);
-                }
-                return false;
-            }
-        });
+//        imagePerfilEmpresa.setOnContextClickListener(new View.OnContextClickListener() {
+//            @Override
+//            public boolean onContextClick(View v) {
+//                Intent i = new Intent(Intent.ACTION_PICK,
+//                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//                if (i.resolveActivity(getPackageManager()) != null){
+//                    startActivityForResult(i, SELECAO_GALERIA);
+//                }
+//                return false;
+//            }
+//        });
 
 
 
