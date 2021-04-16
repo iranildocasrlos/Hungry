@@ -70,7 +70,7 @@ public class EmpresaFirebase {
 
 
     public void salvarDados() {
-        DocumentReference documentRef = db.collection("empresa").document();
+        DocumentReference documentRef = db.collection("empresas").document(idProprietario);
         Map<String, Object> data = new HashMap<>();
         data.put("nome", nome);
         data.put("email", email);

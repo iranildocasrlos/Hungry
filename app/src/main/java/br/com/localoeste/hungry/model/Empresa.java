@@ -105,12 +105,6 @@ public class Empresa {
 
         DocumentReference documentRef = db.collection("empresas").document(getIdEmpresa());
         Map<String, Object> data = new HashMap<>();
-//        data.put("nome", nome);
-//        data.put("email", email);
-//        data.put("endereco", endereco);
-//        data.put("telefone",telefone);
-//        data.put("cpf", cpf);
-//        data.put("tipoUsuario", tipoUsuario);
           documentRef.set(this);
 
 
