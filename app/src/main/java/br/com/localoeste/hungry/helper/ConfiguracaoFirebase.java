@@ -5,11 +5,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class ConfiguracaoFirebase {
 
     private static DatabaseReference referenciaFirebase;
-    private static FirebaseStorage referenciaStorage;
+    private static StorageReference referenciaStorage;
     private static FirebaseAuth    referenciaAutenticacao;
     private static FirebaseFirestore referenciaFirestore;
 
@@ -40,13 +41,14 @@ public class ConfiguracaoFirebase {
         return referenciaAutenticacao;
     }
 
-    ///retorna a instancia Instancia do Storage
-    public static FirebaseStorage getReferenciaStorage(){
-        if (referenciaStorage == null){
-            referenciaStorage = FirebaseStorage.getInstance();
+    //Retorna instancia do FirebaseStorage
+    public static StorageReference getFirebaseStorage(){
+        if( referenciaStorage == null ){
+            referenciaStorage = FirebaseStorage.getInstance().getReference();
         }
         return referenciaStorage;
     }
+
 
 
 

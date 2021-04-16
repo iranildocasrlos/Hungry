@@ -49,7 +49,7 @@
             android:background="@drawable/bg_edit_text"
             android:ems="10"
             android:hint="Tempo de entrega"
-            android:inputType="text"
+            android:inputType="number"
             android:padding="16dp" />
 
         <EditText
@@ -60,7 +60,7 @@
             android:background="@drawable/bg_edit_text"
             android:ems="10"
             android:hint="Taxa de entrega"
-            android:inputType="text"
+            android:inputType="text|numberDecimal"
             android:padding="16dp" />
 
 

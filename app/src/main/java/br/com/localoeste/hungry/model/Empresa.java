@@ -1,5 +1,14 @@
 package br.com.localoeste.hungry.model;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
+
 public class Empresa {
 
     private String idEmpresa;
@@ -11,6 +20,14 @@ public class Empresa {
     private String horarioFechamento;
     private Boolean inicioAutomatico;
     private String categoria;
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
+
+    public Empresa() {
+    }
+
+
 
     public String getCategoria() {
         return categoria;
@@ -19,11 +36,6 @@ public class Empresa {
     public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
-
-    public Empresa() {
-    }
-
-
     public String getIdEmpresa() {
         return idEmpresa;
     }
@@ -87,4 +99,23 @@ public class Empresa {
     public void setInicioAutomatico(Boolean inicioAutomatico) {
         this.inicioAutomatico = inicioAutomatico;
     }
+
+
+    public void salvar(){
+
+        DocumentReference documentRef = db.collection("empresas").document(getIdEmpresa());
+        Map<String, Object> data = new HashMap<>();
+//        data.put("nome", nome);
+//        data.put("email", email);
+//        data.put("endereco", endereco);
+//        data.put("telefone",telefone);
+//        data.put("cpf", cpf);
+//        data.put("tipoUsuario", tipoUsuario);
+          documentRef.set(this);
+
+
+    }
+
+
+
 }

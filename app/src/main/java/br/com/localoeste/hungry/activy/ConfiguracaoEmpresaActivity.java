@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -31,6 +32,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 
 import br.com.localoeste.hungry.R;
+import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 import br.com.localoeste.hungry.helper.EmpresaFirebase;
 import br.com.localoeste.hungry.model.Empresa;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -40,7 +42,7 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
     private Spinner spinnerCategoria;
     private Spinner spinnerInicio;
     private Spinner spinnerFinal;
-    private EditText editEmpresaNome, editEmpresaTaxa,editEmpresaCategoria, editEmpresaTempo;
+    private EditText editEmpresaNome, editEmpresaTaxa, editEmpresaTempo;
     private CircleImageView imagePerfilEmpresa;
     private static final int SELECAO_GALERIA = 200;
     private StorageReference storageReference;
@@ -48,6 +50,7 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
     private String urlImagemSeleconada = "";
     private CheckBox checkBoxAutomatico;
     private Button btSalvar;
+    private Bitmap imagemParaSalvar = null;
 
 
 
@@ -64,22 +67,11 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         inicializarComponentes();
-      //  storageReference = ConfiguracaoFirebase.getFirebaseS
+      storageReference = ConfiguracaoFirebase.getFirebaseStorage();
 
 
 
-//        imagePerfilEmpresa.setOnContextClickListener(new View.OnContextClickListener() {
-//            @Override
-//            public boolean onContextClick(View v) {
-//                Intent i = new Intent(Intent.ACTION_PICK,
-//                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//
-//                if (i.resolveActivity(getPackageManager()) != null){
-//                    startActivityForResult(i, SELECAO_GALERIA);
-//                }
-//                return false;
-//            }
-//        });
+
 
 
 
@@ -92,7 +84,7 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
             Bitmap imagem = null;
             try {
 
-                switch (resultCode){
+                switch (requestCode){
                     case SELECAO_GALERIA:
                         Uri localImagem = data.getData();
                         imagem = MediaStore.Images
@@ -105,6 +97,7 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
                 }
                 if (imagem != null){
                         imagePerfilEmpresa.setImageBitmap(imagem);
+                        imagemParaSalvar = imagem;
                 }
 
             }catch (Exception erro){
@@ -112,6 +105,7 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
             }
         }
     }
+
 
     private void inicializarComponentes() {
         editEmpresaNome = findViewById(R.id.editTextNomeEmpresa);
@@ -143,10 +137,28 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
         spinnerCategoria.setAdapter(adapter);
         spinnerInicio.setAdapter(adapterHorario);
         spinnerFinal.setAdapter(adapterHorario);
+
+
+        imagePerfilEmpresa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                if (i.resolveActivity(getPackageManager()) != null){
+                    startActivityForResult(i,SELECAO_GALERIA);
+                }
+
+            }
+        });
+
+
+
+
     }
 
 
-    private void validarDadosEmpresa(View view) {
+    public void validarDadosEmpresa(View view) {
 
         String nome = editEmpresaNome.getText().toString();
         String taxa = editEmpresaTaxa.getText().toString();
@@ -161,7 +173,7 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
             if (!tempo.isEmpty() ){
 
                 if (!taxa.isEmpty() ){
-
+                    salvarImagem();
                     Empresa empresa = new Empresa();
                     empresa.setIdEmpresa(idUsuarioLogado);
                     empresa.setNomeEmpresa(nome);
@@ -171,6 +183,10 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
                     empresa.setHorarioAbertura(horaInicio);
                     empresa.setHorarioFechamento(horaFim);
                     empresa.setInicioAutomatico(automatico);
+                    empresa.setUrlImagem(urlImagemSeleconada);
+                    empresa.salvar();
+
+                    finish();
 
                 }else {
                     exibirMensagem("Diigite uma taxa para entrega");
@@ -189,38 +205,45 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
 
 
 
-    private void salvarImagem(Bitmap imagemCapturada){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        imagemCapturada.compress(Bitmap.CompressFormat.JPEG, 70, baos);
-        byte[] dadosImagem = baos.toByteArray();
+    private void salvarImagem(){
 
-    final   StorageReference imagemRef = storageReference
-                .child("imagens")
-                .child("empresas")
-                .child(idUsuarioLogado + "jpeg");
+        if (imagemParaSalvar != null){
 
-        UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ConfiguracaoEmpresaActivity.this,
-                        "Erro ao fazer o upload da imagem",
-                         Toast.LENGTH_SHORT).show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            imagemParaSalvar.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+            byte[] dadosImagem = baos.toByteArray();
 
-                imagemRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        Uri uri = task.getResult();
-                        urlImagemSeleconada = uri.toString();
-                    }
-                });
+            final   StorageReference imagemRef = storageReference
+                    .child("imagens")
+                    .child("empresas")
+                    .child(idUsuarioLogado + ".jpeg");
 
-            }
-        });
+            UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(ConfiguracaoEmpresaActivity.this,
+                            "Erro ao fazer o upload da imagem",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    imagemRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            Uri uri = task.getResult();
+                            urlImagemSeleconada = uri.toString();
+                        }
+                    });
+
+                }
+            });
+
+
+
+        }
 
 
 
