@@ -22,6 +22,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
+import br.com.localoeste.hungry.helper.EmpresaFirebase;
 import br.com.localoeste.hungry.helper.UsuarioFirebase;
 
 public class ActivitySplash extends AppCompatActivity {
@@ -55,31 +56,82 @@ public class ActivitySplash extends AppCompatActivity {
 
             DocumentReference usuarios = firestore.collection("usuarios").document(usuarioAtual.getUid());
 
-            usuarios.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    UsuarioFirebase user = documentSnapshot.toObject(UsuarioFirebase.class);
+            if (usuarios != null){
 
-                    if (user.getTipoUsuario()!= null){
-                        if (user.getTipoUsuario().equals("cliente")){
-                            abrirTelaPrincipal();
-                            Log.d("HUNGRY", user.getNome() + "==> ID: "+user.getId_Usuario());
-                        }else if (user.getTipoUsuario().equals("empresario")){
+                usuarios.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        UsuarioFirebase user = documentSnapshot.toObject(UsuarioFirebase.class);
 
-                            if (user.getCpf() != null){
-                                abrirTelaPrincipalEmpresa();
-                            }else{
-                                abrirTelaCadastroEmpresa();
+                        if (user != null){
+                            if (user.getTipoUsuario()!= null){
+                                if (user.getTipoUsuario().equals("cliente")){
+                                    abrirTelaPrincipal();
+                                    Log.d("HUNGRY", user.getNome() + "==> ID: "+user.getId_Usuario());
+                                }else if (user.getTipoUsuario().equals("empresario")){
+
+                                    if (user.getCpf() != null){
+                                        abrirTelaPrincipalEmpresa();
+                                    }else{
+                                        abrirTelaCadastroEmpresa();
+                                    }
+
+                                    Log.d("HUNGRY", user.getNome() + "==> ID: "+user.getId_Usuario());
+                                }
+                            }
+
+                        }else {
+
+                            DocumentReference empresas = firestore.collection("empresas").document(usuarioAtual.getUid());
+                            empresas.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    EmpresaFirebase user = documentSnapshot.toObject(EmpresaFirebase.class);
+
+                                    if (user.getCnpj() != null) {
+
+                                        abrirTelaPrincipalEmpresa();
+                                    } else {
+                                        abrirTelaCadastroEmpresa();
+                                    }
+
+                                }
+
+
+                            });
+
+
+
+
+                        }
+
+                    }
+                });
+
+            }else{
+
+                DocumentReference empresas = firestore.collection("empresas").document(usuarioAtual.getUid());
+                empresas.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        EmpresaFirebase user = documentSnapshot.toObject(EmpresaFirebase.class);
+
+                        if (user.getCnpj()!= null){
+
+                                    abrirTelaPrincipalEmpresa();
+                                }else{
+                                    abrirTelaCadastroEmpresa();
+                                }
+
                             }
 
 
-                            Log.d("HUNGRY", user.getNome() + "==> ID: "+user.getId_Usuario());
-                        }
-                    }
+                });
 
 
-                }
-            });
+            }
+
+
 
         }else{
             abrirAutenticacao();

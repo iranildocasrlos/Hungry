@@ -7,7 +7,7 @@
     tools:context=".activy.fragment.ProprietarioFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -20,28 +20,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
             android:autoText="false"
             android:gravity="center"
             android:text="Cadastro Proprietário"
             android:textColor="#020101"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/nomeEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"
             android:ems="5"
             android:hint="Nome"
             android:inputType="textPersonName"
-            android:text="iranildo ok" />
+            android:text="iranildo Carlos da Silva"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCadastroUsuarrio" />
 
         <EditText
             android:id="@+id/emailEmpresa"
@@ -51,7 +50,10 @@
             android:ems="10"
             android:hint="E-mail"
             android:inputType="textPersonName"
-            android:text="iranildocarlos@localoeste.com.br" />
+            android:text="iranildocarlos@localoeste.com.br"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nomeEmpresa" />
 
         <EditText
             android:id="@+id/enderecoEmpresa"
@@ -61,7 +63,10 @@
             android:ems="10"
             android:hint="Endereço"
             android:inputType="textPersonName"
-            android:text="Rua Pedro Bolgione 116" />
+            android:text="Rua Pedro Bolgione 116"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emailEmpresa" />
 
         <EditText
             android:id="@+id/telefoneEmpresa"
@@ -71,7 +76,10 @@
             android:ems="10"
             android:hint="Telefone"
             android:inputType="textPersonName"
-            android:text="11974124829" />
+            android:text="11974124829"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/enderecoEmpresa" />
 
         <EditText
             android:id="@+id/cpfProprietario"
@@ -81,7 +89,10 @@
             android:ems="10"
             android:hint="CPF"
             android:inputType="textPersonName"
-            android:text="27623677861" />
+            android:text="27623677861"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/telefoneEmpresa" />
 
         <Button
             android:id="@+id/btnSalvarProp"
@@ -89,18 +100,24 @@
             android:layout_height="72dp"
             android:layout_gravity="center"
             android:text="Salvar dados"
-            app:backgroundTint="#FF5722" />
+            app:backgroundTint="#FF5722"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cpfProprietario" />
 
         <ImageView
             android:id="@+id/imageOK"
             android:layout_width="162dp"
             android:layout_height="98dp"
             android:layout_gravity="center"
+            android:layout_marginTop="332dp"
             android:src="@drawable/ok"
-            android:visibility="gone"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

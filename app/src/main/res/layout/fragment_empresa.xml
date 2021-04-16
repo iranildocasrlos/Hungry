@@ -7,7 +7,7 @@
     tools:context=".activy.fragment.EmpresaFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -20,28 +20,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
             android:autoText="false"
             android:gravity="center"
             android:text="Cadastro Empresa"
             android:textColor="#020101"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/nomeEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="16dp"
             android:ems="10"
             android:hint="Nome da empresa"
             android:inputType="textPersonName"
-            android:text="LocalOeste Software House" />
+            android:text="LocalOeste Software House"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCadastroUsuarrio" />
 
         <EditText
             android:id="@+id/emailEmpresa"
@@ -51,7 +51,10 @@
             android:ems="10"
             android:hint="E-mail"
             android:inputType="textPersonName"
-            android:text="contato@localoeste.com.br" />
+            android:text="contato@localoeste.com.br"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nomeEmpresa" />
 
         <EditText
             android:id="@+id/enderecoEmpresa"
@@ -61,7 +64,10 @@
             android:ems="10"
             android:hint="Endereço"
             android:inputType="textPersonName"
-            android:text="Rua pedro Bolgione 116" />
+            android:text="Rua pedro Bolgione 116"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emailEmpresa" />
 
         <EditText
             android:id="@+id/telefoneEmpresa"
@@ -71,7 +77,10 @@
             android:ems="10"
             android:hint="Telefone"
             android:inputType="numberSigned"
-            android:text="1147739605" />
+            android:text="1147739605"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/enderecoEmpresa" />
 
         <EditText
             android:id="@+id/cnpjEmpresa"
@@ -81,25 +90,37 @@
             android:ems="10"
             android:hint="CNPJ"
             android:inputType="numberSigned"
-            android:text="13056456/0001-15" />
+            android:text="13056456/0001-15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/telefoneEmpresa" />
 
         <Button
             android:id="@+id/buttonEmpresa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="12dp"
             android:gravity="center"
-            android:text="salvar dados empresa" />
+            android:text="salvar dados empresa"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cnpjEmpresa" />
 
         <ImageView
             android:id="@+id/imageEmpresaOK"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="163dp"
+            android:layout_height="97dp"
             android:layout_gravity="center"
+            android:layout_marginTop="60dp"
             android:src="@drawable/ok"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/cnpjEmpresa" />
 
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
