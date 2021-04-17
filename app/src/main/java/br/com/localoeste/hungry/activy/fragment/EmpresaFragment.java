@@ -1,5 +1,6 @@
 package br.com.localoeste.hungry.activy.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,8 +13,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import br.com.localoeste.hungry.R;
+import br.com.localoeste.hungry.activy.EmpresaActivity;
 import br.com.localoeste.hungry.helper.EmpresaFirebase;
 import br.com.localoeste.hungry.helper.UsuarioFirebase;
+import br.com.localoeste.hungry.model.Empresa;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -110,16 +113,24 @@ public class EmpresaFragment extends Fragment {
                 empresa.setCnpj(cnpj);
                 empresa.setIdProprietario(usuarioFirebase.getId_Usuario());
 
-                empresa.salvarDados();
+                empresa.atualizarDados();
 
                 btnSalvar.setEnabled(false);
                 btnSalvar.setVisibility(View.INVISIBLE);
                 imageEmpresaOK.setVisibility(View.VISIBLE);
+
+                Intent i = new Intent(getActivity(), EmpresaActivity.class);
+                startActivity(i);
+                
+
             }
         });
 
 
 
         return view;
+
     }
+
+
 }

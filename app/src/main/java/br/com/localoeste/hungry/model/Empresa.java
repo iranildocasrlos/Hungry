@@ -110,6 +110,25 @@ public class Empresa {
 
     }
 
+    public void atualizar(){
+
+        DocumentReference documentRef = db.collection("empresas").document(getIdEmpresa());
+        Map<String, Object> data = new HashMap<>();
+        data.put("nome", nomeEmpresa);
+        data.put("id", idEmpresa);
+        data.put("tempo_entrega", tempoEntrega);
+        data.put("taxa",taxaEntrega);
+        data.put("categoria", categoria);
+        data.put("horario_abertura", horarioAbertura);
+        data.put("horario_fechamento", horarioFechamento);
+        data.put("inicio_automatico", inicioAutomatico);
+        data.put("urlImagem", urlImagem);
+
+        documentRef.update(data);
+
+
+    }
+
 
 
 }

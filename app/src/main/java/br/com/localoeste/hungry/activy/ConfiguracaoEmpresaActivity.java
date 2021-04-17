@@ -159,7 +159,7 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
 
 
     public void validarDadosEmpresa(View view) {
-
+        salvarImagem();
         String nome = editEmpresaNome.getText().toString();
         String taxa = editEmpresaTaxa.getText().toString();
         String tempo = editEmpresaTempo.getText().toString();
@@ -173,7 +173,7 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
             if (!tempo.isEmpty() ){
 
                 if (!taxa.isEmpty() ){
-                    salvarImagem();
+
                     Empresa empresa = new Empresa();
                     empresa.setIdEmpresa(idUsuarioLogado);
                     empresa.setNomeEmpresa(nome);
@@ -184,7 +184,7 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
                     empresa.setHorarioFechamento(horaFim);
                     empresa.setInicioAutomatico(automatico);
                     empresa.setUrlImagem(urlImagemSeleconada);
-                    empresa.salvar();
+                    empresa.atualizar();
 
                     finish();
 

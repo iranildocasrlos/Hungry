@@ -81,6 +81,18 @@ public class EmpresaFirebase {
         documentRef.set(data);
     }
 
+    public void atualizarDados() {
+        DocumentReference documentRef = db.collection("empresas").document(idProprietario);
+        Map<String, Object> data = new HashMap<>();
+        data.put("nome", nome);
+        data.put("email", email);
+        data.put("endereco", endereco);
+        data.put("telefone",telefone);
+        data.put("cnpj", cnpj);
+        data.put("idProprietario", idProprietario);
+        documentRef.update(data);
+    }
+
 
     ///Retorna o id do Usuario logado
     public static String getId_empresa(){
