@@ -11,8 +11,9 @@ import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 
 public class Empresa {
 
+    private String nomeConta;
     private String idEmpresa;
-    private String nomeEmpresa;
+    private String nomeFantasia;
     private String tempoEntrega;
     private Double taxaEntrega;
     private String urlImagem;
@@ -28,6 +29,13 @@ public class Empresa {
     }
 
 
+    public String getNomeConta() {
+        return nomeConta;
+    }
+
+    public void setNomeConta(String nomeConta) {
+        this.nomeConta = nomeConta;
+    }
 
     public String getCategoria() {
         return categoria;
@@ -44,12 +52,12 @@ public class Empresa {
         this.idEmpresa = idEmpresa;
     }
 
-    public String getNomeEmpresa() {
-        return nomeEmpresa;
+    public String getNomeFantasia() {
+        return nomeFantasia;
     }
 
-    public void setNomeEmpresa(String nomeEmpresa) {
-        this.nomeEmpresa = nomeEmpresa;
+    public void setNomeFantasia(String nomeFantasia) {
+        this.nomeFantasia = nomeFantasia;
     }
 
     public String getTempoEntrega() {
@@ -114,21 +122,27 @@ public class Empresa {
 
         DocumentReference documentRef = db.collection("empresas").document(getIdEmpresa());
         Map<String, Object> data = new HashMap<>();
-        data.put("nome", nomeEmpresa);
+        data.put("nomeFantasia", nomeFantasia);
         data.put("id", idEmpresa);
-        data.put("tempo_entrega", tempoEntrega);
-        data.put("taxa",taxaEntrega);
+        data.put("tempoEntrega", tempoEntrega);
+        data.put("taxaEntrega",taxaEntrega);
         data.put("categoria", categoria);
-        data.put("horario_abertura", horarioAbertura);
-        data.put("horario_fechamento", horarioFechamento);
-        data.put("inicio_automatico", inicioAutomatico);
-        data.put("urlImagem", urlImagem);
+        data.put("horarioAbertura", horarioAbertura);
+        data.put("horarioFechamento", horarioFechamento);
+        data.put("inicioAutomatico", inicioAutomatico);
+        documentRef.update(data);
 
+    }
+
+    public void atualizarLogo(){
+        DocumentReference documentRef = db.collection("empresas").document(getIdEmpresa());
+        Map<String, Object> data = new HashMap<>();
+
+        data.put("urlImagem", urlImagem);
         documentRef.update(data);
 
 
     }
-
 
 
 }

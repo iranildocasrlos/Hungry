@@ -9,21 +9,10 @@ import com.google.firebase.storage.StorageReference;
 
 public class ConfiguracaoFirebase {
 
-    private static DatabaseReference referenciaFirebase;
     private static StorageReference referenciaStorage;
     private static FirebaseAuth    referenciaAutenticacao;
     private static FirebaseFirestore referenciaFirestore;
 
-
-
-
-    //retorna a referencia do database
-    public static DatabaseReference getFirebase(){
-        if( referenciaFirebase == null ){
-            referenciaFirebase = FirebaseDatabase.getInstance().getReference();
-        }
-        return referenciaFirebase;
-    }
 
     /// Retorna a instancia do Firestore
     public static  FirebaseFirestore getReferenciaFirestore(){

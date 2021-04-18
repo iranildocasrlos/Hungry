@@ -72,7 +72,7 @@ public class EmpresaFirebase {
     public void salvarDados() {
         DocumentReference documentRef = db.collection("empresas").document(idProprietario);
         Map<String, Object> data = new HashMap<>();
-        data.put("nome", nome);
+        data.put("nomeConta", nome);
         data.put("email", email);
         data.put("endereco", endereco);
         data.put("telefone",telefone);
@@ -84,7 +84,7 @@ public class EmpresaFirebase {
     public void atualizarDados() {
         DocumentReference documentRef = db.collection("empresas").document(idProprietario);
         Map<String, Object> data = new HashMap<>();
-        data.put("nome", nome);
+        data.put("nomeConta", nome);
         data.put("email", email);
         data.put("endereco", endereco);
         data.put("telefone",telefone);

@@ -26,8 +26,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 
@@ -47,10 +52,14 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
     private static final int SELECAO_GALERIA = 200;
     private StorageReference storageReference;
     private String idUsuarioLogado ;
-    private String urlImagemSeleconada = "";
+    private String urlImagemSelecionada = "";
     private CheckBox checkBoxAutomatico;
     private Button btSalvar;
     private Bitmap imagemParaSalvar = null;
+    private Empresa empresa = new Empresa();
+    private FirebaseFirestore referenciaFirestore;
+    private ArrayAdapter<String> adapterHorario;
+    private ArrayAdapter<String> adapter;
 
 
 
@@ -69,12 +78,6 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
         inicializarComponentes();
       storageReference = ConfiguracaoFirebase.getFirebaseStorage();
 
-
-
-
-
-
-
     }
 
     @Override
@@ -87,12 +90,14 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
                 switch (requestCode){
                     case SELECAO_GALERIA:
                         Uri localImagem = data.getData();
+
                         imagem = MediaStore.Images
                                 .Media
                                 .getBitmap(
                                         getContentResolver(),
                                         localImagem
                                 );
+
                         break;
                 }
                 if (imagem != null){
@@ -111,11 +116,8 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
         editEmpresaNome = findViewById(R.id.editTextNomeEmpresa);
         editEmpresaTaxa = findViewById(R.id.editTextTaxaEntrega);
         editEmpresaTempo = findViewById(R.id.editTextTempoEntrega);
-
         checkBoxAutomatico = findViewById(R.id.checkBoxAutomatico);
-
         btSalvar = findViewById(R.id.btSalvarConfigurcacao);
-
         spinnerCategoria = findViewById(R.id.spinnerCategoria);
         spinnerInicio = findViewById(R.id.spinnerHorarioInicio);
         spinnerFinal = findViewById(R.id.spinnerHorarioFinal);
@@ -123,12 +125,13 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
         String[] horarios = getResources().getStringArray(R.array.horario);
         imagePerfilEmpresa = findViewById(R.id.image_perfil_empresa);
         idUsuarioLogado = EmpresaFirebase.getId_empresa();
+        referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
 
-        ArrayAdapter<String> adapterHorario = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
+        adapterHorario = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
                 horarios);
         adapterHorario.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
                 categorias);
 
         adapterHorario.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -152,9 +155,50 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
             }
         });
 
+        recuperarDadosEmpresa();
+
+        DocumentReference empresaRef = referenciaFirestore
+                .collection("empresas")
+                .document(idUsuarioLogado);
+
+        empresaRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    Empresa dadosEmpresa = documentSnapshot.toObject(Empresa.class);
+                    if (dadosEmpresa != null){
+                        if (dadosEmpresa.getNomeFantasia() != null){
+                            editEmpresaNome.setText(dadosEmpresa.getNomeFantasia());
+                            editEmpresaTaxa.setText(dadosEmpresa.getTaxaEntrega().toString());
+                            editEmpresaTempo.setText(dadosEmpresa.getTempoEntrega());
+                            if (dadosEmpresa.getInicioAutomatico()){
+                                checkBoxAutomatico.setChecked(true);
+                            }else{
+                                checkBoxAutomatico.setChecked(false);
+                            }
+                            spinnerCategoria.setSelection(adapter.getPosition(dadosEmpresa.getCategoria()));
+                            spinnerInicio.setSelection(adapterHorario.getPosition(dadosEmpresa.getHorarioAbertura()));
+                            spinnerFinal.setSelection(adapterHorario.getPosition(dadosEmpresa.getHorarioFechamento()));
+
+                            if (dadosEmpresa.getUrlImagem()!= null){
+                                urlImagemSelecionada = dadosEmpresa.getUrlImagem();
+                                Picasso.get()
+                                        .load(urlImagemSelecionada)
+                                        .into(imagePerfilEmpresa);
+                            }
 
 
 
+                        }
+
+                    }
+                }
+            }
+        });
+
+    }
+
+    private void recuperarDadosEmpresa() {
     }
 
 
@@ -174,19 +218,15 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
 
                 if (!taxa.isEmpty() ){
 
-                    Empresa empresa = new Empresa();
                     empresa.setIdEmpresa(idUsuarioLogado);
-                    empresa.setNomeEmpresa(nome);
+                    empresa.setNomeFantasia(nome);
                     empresa.setTempoEntrega(tempo);
                     empresa.setTaxaEntrega(Double.parseDouble(taxa));
                     empresa.setCategoria(categoria);
                     empresa.setHorarioAbertura(horaInicio);
                     empresa.setHorarioFechamento(horaFim);
                     empresa.setInicioAutomatico(automatico);
-                    empresa.setUrlImagem(urlImagemSeleconada);
                     empresa.atualizar();
-
-                    finish();
 
                 }else {
                     exibirMensagem("Diigite uma taxa para entrega");
@@ -234,7 +274,18 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Uri> task) {
                             Uri uri = task.getResult();
-                            urlImagemSeleconada = uri.toString();
+                            urlImagemSelecionada = uri.toString();
+                            if (urlImagemSelecionada != ""){
+                                Empresa empresa = new Empresa();
+                                empresa.setIdEmpresa(idUsuarioLogado);
+                                empresa.setUrlImagem(urlImagemSelecionada);
+
+                                empresa.atualizarLogo();
+
+                                finish();
+
+                            }
+
                         }
                     });
 
@@ -244,8 +295,6 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
 
 
         }
-
-
 
     }
 
