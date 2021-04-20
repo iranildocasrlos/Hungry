@@ -6,7 +6,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -18,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -29,7 +27,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
@@ -113,9 +110,9 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
 
 
     private void inicializarComponentes() {
-        editEmpresaNome = findViewById(R.id.editTextNomeEmpresa);
-        editEmpresaTaxa = findViewById(R.id.editTextTaxaEntrega);
-        editEmpresaTempo = findViewById(R.id.editTextTempoEntrega);
+        editEmpresaNome = findViewById(R.id.editNomeProduto);
+        editEmpresaTaxa = findViewById(R.id.editPrecoProduto);
+        editEmpresaTempo = findViewById(R.id.editDescricaoProduto);
         checkBoxAutomatico = findViewById(R.id.checkBoxAutomatico);
         btSalvar = findViewById(R.id.btSalvarConfigurcacao);
         spinnerCategoria = findViewById(R.id.spinnerCategoria);
@@ -123,7 +120,7 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
         spinnerFinal = findViewById(R.id.spinnerHorarioFinal);
         String[] categorias = getResources().getStringArray(R.array.nome_categoria);
         String[] horarios = getResources().getStringArray(R.array.horario);
-        imagePerfilEmpresa = findViewById(R.id.image_perfil_empresa);
+        imagePerfilEmpresa = findViewById(R.id.imagem_produto);
         idUsuarioLogado = EmpresaFirebase.getId_empresa();
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
 
@@ -227,7 +224,7 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
                     empresa.setHorarioFechamento(horaFim);
                     empresa.setInicioAutomatico(automatico);
                     empresa.atualizar();
-
+                    exibirMensagem("Atualizado com sucesso!");
                 }else {
                     exibirMensagem("Diigite uma taxa para entrega");
                 }

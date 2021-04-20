@@ -13,4 +13,73 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+
+            android:id="@+id/imagem_produto"
+            android:layout_width="411dp"
+            android:layout_height="126dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
+            android:src="@drawable/food2" />
+
+        <EditText
+            android:id="@+id/editNomeProduto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_edit_text"
+            android:ems="10"
+            android:hint="Nome Produto"
+            android:inputType="text"
+            android:padding="16dp" />
+
+
+        <EditText
+            android:id="@+id/editDescricaoProduto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-2dp"
+            android:background="@drawable/bg_edit_text"
+            android:ems="10"
+            android:hint="Descrição"
+            android:inputType="text"
+            android:padding="16dp"
+            android:singleLine="false" />
+
+        <EditText
+            android:id="@+id/editPrecoProduto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-2dp"
+            android:background="@drawable/bg_edit_text"
+            android:ems="10"
+            android:hint="Preço"
+            android:inputType="text|numberDecimal"
+            android:padding="16dp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"/>
+
+
+        <Button
+            android:id="@+id/btSalvarConfigurcacao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="validarDadosProduto"
+            android:padding="16dp"
+            android:text="Salvar" />
+
+
+    </LinearLayout>
+
 </LinearLayout>
