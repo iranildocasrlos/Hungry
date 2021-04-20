@@ -1,6 +1,7 @@
 package br.com.localoeste.hungry.activy;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -26,11 +27,13 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.util.UUID;
 
 import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 import br.com.localoeste.hungry.helper.EmpresaFirebase;
 import br.com.localoeste.hungry.model.Empresa;
+import br.com.localoeste.hungry.model.Produto;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NovoProdutoEmpresaActivity extends AppCompatActivity {
@@ -43,6 +46,8 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
     private FirebaseFirestore referenciaFirestore;
     private EditText editProdutoNome, editProdutoDescricao, editProdutoPreco;
     private String idUsuarioLogado ;
+    private String idProduto ="";
+    private Produto produto = new Produto();
 
 
     @Override
@@ -56,6 +61,9 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
         toolbar.setTitle("Novo Produto");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        inicializarComponentes();
+
     }
 
 
@@ -64,9 +72,9 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
         editProdutoDescricao = findViewById(R.id.editDescricaoProduto);
         editProdutoPreco = findViewById(R.id.editPrecoProduto);
         imagemProduto = findViewById(R.id.imagem_produto);
-
+        idUsuarioLogado = EmpresaFirebase.getId_empresa();
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
-
+        storageReference = ConfiguracaoFirebase.getFirebaseStorage();
 
 
 
@@ -85,34 +93,26 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
 
 
 
-        DocumentReference produtoRef = referenciaFirestore
-                .collection("produtos")
-                .document(idUsuarioLogado);
-
+//        DocumentReference produtoRef = referenciaFirestore
+//                .collection("produtos")
+//                .document(idUsuarioLogado);
+//
 //        produtoRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 //            @Override
 //            public void onSuccess(DocumentSnapshot documentSnapshot) {
 //                if(documentSnapshot.exists()){
-//                    Empresa dadosEmpresa = documentSnapshot.toObject(Empresa.class);
-//                    if (dadosEmpresa != null){
-//                        if (dadosEmpresa.getNomeFantasia() != null){
-//                            editEmpresaNome.setText(dadosEmpresa.getNomeFantasia());
-//                            editEmpresaTaxa.setText(dadosEmpresa.getTaxaEntrega().toString());
-//                            editEmpresaTempo.setText(dadosEmpresa.getTempoEntrega());
-//                            if (dadosEmpresa.getInicioAutomatico()){
-//                                checkBoxAutomatico.setChecked(true);
-//                            }else{
-//                                checkBoxAutomatico.setChecked(false);
-//                            }
-//                            spinnerCategoria.setSelection(adapter.getPosition(dadosEmpresa.getCategoria()));
-//                            spinnerInicio.setSelection(adapterHorario.getPosition(dadosEmpresa.getHorarioAbertura()));
-//                            spinnerFinal.setSelection(adapterHorario.getPosition(dadosEmpresa.getHorarioFechamento()));
+//                    Produto dadosProduto = documentSnapshot.toObject(Produto.class);
+//                    if (dadosProduto != null){
+//                        if (dadosProduto.getNomeProduto() != null){
 //
-//                            if (dadosEmpresa.getUrlImagem()!= null){
-//                                urlImagemSelecionada = dadosEmpresa.getUrlImagem();
+//
+//
+//
+//                            if (dadosProduto.getUrlImagemProduto()!= null){
+//                                urlImagemSelecionada = dadosProduto.getUrlImagemProduto();
 //                                Picasso.get()
 //                                        .load(urlImagemSelecionada)
-//                                        .into(imagePerfilEmpresa);
+//                                        .into(imagemProduto);
 //                            }
 //
 //
@@ -126,7 +126,9 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
 
     }
     public void validarDadosProduto(View view) {
-        salvarImagem();
+        UUID uuid = UUID.randomUUID();
+        idProduto = String.valueOf(uuid);
+
         String nomeProduto = editProdutoNome.getText().toString();
         String descricaoProduto = editProdutoDescricao.getText().toString();
         String precoProduto = editProdutoPreco.getText().toString();
@@ -139,17 +141,29 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
                 if (!precoProduto.isEmpty() ){
 
 
-                    exibirMensagem("Atualizado com sucesso!");
+
+                    produto.setIdProduto(idProduto);
+                    produto.setIdUsuario(idUsuarioLogado);
+                    produto.setNomeProduto(nomeProduto);
+                    produto.setDescricaoProduto(descricaoProduto);
+                    produto.setPrecoProduto(Double.parseDouble(precoProduto));
+                    produto.setUrlImagemProduto(urlImagemSelecionada);
+                    produto.salvar();
+                    salvarImagem();
+                    exibirMensagem("Produto salvo com sucesso");
+
+                    finish();
+
                 }else {
-                    exibirMensagem("Diigite uma taxa para entrega");
+                    exibirMensagem("Diigite um preço para o produto");
                 }
 
             }else {
-                exibirMensagem("Diigite o tempo de entrega ");
+                exibirMensagem("Diigite uma descrição para o produto ");
             }
 
         }else {
-            exibirMensagem("Diigite um nome para empresa");
+            exibirMensagem("Diigite um nome para o produto");
         }
 
 
@@ -167,8 +181,9 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
 
             final StorageReference imagemRef = storageReference
                     .child("imagens")
-                    .child("empresas")
-                    .child(idUsuarioLogado + ".jpeg");
+                    .child("produtos")
+                    .child(idUsuarioLogado)
+                    .child(idProduto+ ".jpeg");
 
             UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
             uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -188,13 +203,12 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
                             Uri uri = task.getResult();
                             urlImagemSelecionada = uri.toString();
                             if (urlImagemSelecionada != ""){
-                                Empresa empresa = new Empresa();
-                                empresa.setIdEmpresa(idUsuarioLogado);
-                                empresa.setUrlImagem(urlImagemSelecionada);
+                                Produto produto = new Produto();
+                                produto.setIdProduto(idProduto);
+                                produto.setUrlImagemProduto(urlImagemSelecionada);
+                                produto.salvarFoto();
 
-                                empresa.atualizarLogo();
 
-                                finish();
 
                             }
 
@@ -208,6 +222,36 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
 
         }
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK){
+            Bitmap imagem = null;
+            try {
+
+                switch (requestCode){
+                    case SELECAO_GALERIA:
+                        Uri localImagem = data.getData();
+
+                        imagem = MediaStore.Images
+                                .Media
+                                .getBitmap(
+                                        getContentResolver(),
+                                        localImagem
+                                );
+
+                        break;
+                }
+                if (imagem != null){
+                    imagemProduto.setImageBitmap(imagem);
+                    imagemParaSalvar = imagem;
+                }
+
+            }catch (Exception erro){
+                erro.printStackTrace();
+            }
+        }
     }
 
     private  void exibirMensagem(String texto){

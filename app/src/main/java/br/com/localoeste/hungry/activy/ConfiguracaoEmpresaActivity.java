@@ -152,7 +152,7 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
             }
         });
 
-        recuperarDadosEmpresa();
+
 
         DocumentReference empresaRef = referenciaFirestore
                 .collection("empresas")
@@ -195,8 +195,7 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
 
     }
 
-    private void recuperarDadosEmpresa() {
-    }
+
 
 
     public void validarDadosEmpresa(View view) {
