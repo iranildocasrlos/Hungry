@@ -14,7 +14,7 @@ public class Produto {
     private String descricaoProduto;
     private Double precoProduto;
     private String idProduto;
-    private String idUsuario;
+    private String idEmpresa;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
@@ -25,12 +25,12 @@ public class Produto {
     //Métodos Getters e Setters
 
 
-    public String getIdUsuario() {
-        return idUsuario;
+    public String getIdEmpresa() {
+        return idEmpresa;
     }
 
-    public void setIdUsuario(String idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setIdEmpresa(String idUsuario) {
+        this.idEmpresa = idUsuario;
     }
 
     public  String getUrlImagemProduto() {
@@ -82,7 +82,7 @@ public class Produto {
         data.put("nomeProduto",nomeProduto);
         data.put("descricaoProduto",descricaoProduto);
         data.put("precoProduto",precoProduto);
-        data.put("idUsuario",idUsuario);
+        data.put("idEmpresa",idEmpresa);
         data.put("idProduto", idProduto);
         documentRef.set(data);
 
@@ -95,7 +95,7 @@ public class Produto {
         data.put("nomeProduto",nomeProduto);
         data.put("descricaoProduto",descricaoProduto);
         data.put("precoProduto",precoProduto);
-        data.put("idUsuario",idUsuario);
+        data.put("idEmpresa",idEmpresa);
         data.put("idProduto", idProduto);
         documentRef.update(data);
 

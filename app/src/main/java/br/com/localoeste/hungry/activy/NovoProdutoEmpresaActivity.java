@@ -143,7 +143,7 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
 
 
                     produto.setIdProduto(idProduto);
-                    produto.setIdUsuario(idUsuarioLogado);
+                    produto.setIdEmpresa(idUsuarioLogado);
                     produto.setNomeProduto(nomeProduto);
                     produto.setDescricaoProduto(descricaoProduto);
                     produto.setPrecoProduto(Double.parseDouble(precoProduto));
