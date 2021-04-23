@@ -57,7 +57,7 @@ public class AdapterProduto extends RecyclerView.Adapter<AdapterProduto.MyViewHo
         return new MyViewHolder(itemLista);
     }
 
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder( MyViewHolder holder, int i) {
         Produto produto = produtos.get(i);

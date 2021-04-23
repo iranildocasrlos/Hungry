@@ -42,6 +42,7 @@ public class EmpresaActivity extends AppCompatActivity {
     private List<Produto> produtos = new ArrayList<>();
     private FirebaseFirestore referenciaFirestore;
     private String idEmpresaLogada ;
+   
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -89,15 +90,17 @@ public class EmpresaActivity extends AppCompatActivity {
                             for(QueryDocumentSnapshot document : task.getResult()){
                                 if (document.getData() != null){
                                     Produto produto =  document.toObject(Produto.class);
+                                     if (produto.getUrlImagemProduto() != "" && produto.getUrlImagemProduto() != null){
+                                         produtos.add(produto);
+                                     }
 
-                                    produtos.add(produto);
 
                                 }
 
                             }
-                            adapterProduto.notifyDataSetChanged();
-                        }
 
+                        }
+                        adapterProduto.notifyDataSetChanged();
                     }
                 });
 
