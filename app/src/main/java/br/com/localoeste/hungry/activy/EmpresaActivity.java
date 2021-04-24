@@ -5,9 +5,12 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.solver.state.Dimension;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,19 +24,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +60,7 @@ public class EmpresaActivity extends AppCompatActivity {
     private List<Produto> produtos = new ArrayList<>();
     private FirebaseFirestore referenciaFirestore;
     private String idEmpresaLogada ;
+    private StorageReference storageRef;
    
 
 
@@ -60,7 +70,7 @@ public class EmpresaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_empresa);
 
-        autenticacao = ConfiguracaoFirebase.getReferenciaAutenticacao();
+
 
         //Configurações da Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -112,7 +122,7 @@ public class EmpresaActivity extends AppCompatActivity {
                         adapterProduto.notifyDataSetChanged();
                     }
                 });
-
+        adapterProduto.notifyDataSetChanged();
     }
 
     private void inicializarComponentes() {
@@ -120,6 +130,9 @@ public class EmpresaActivity extends AppCompatActivity {
         recyclerProdutos = findViewById(R.id.recyclerProdutos);
         idEmpresaLogada = EmpresaFirebase.getId_empresa();
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
+        autenticacao = ConfiguracaoFirebase.getReferenciaAutenticacao();
+        storageRef =  ConfiguracaoFirebase.getFirebaseStorage();
+
 
     }
 
@@ -167,6 +180,8 @@ public class EmpresaActivity extends AppCompatActivity {
     }
 
 
+
+    //Método responsável pelo evento de arrastar da lista de produtos
     private void swipe(){
 
         ItemTouchHelper.Callback itemTouch = new ItemTouchHelper.Callback() {
@@ -200,6 +215,9 @@ public class EmpresaActivity extends AppCompatActivity {
         int itemProduto = viewHolder.getAdapterPosition();
         LayoutInflater inflater = getLayoutInflater();
         ImageView imageAlert = new ImageView(this);
+
+
+
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
         alertDialog.setTitle("Excluir Produto");
@@ -209,6 +227,7 @@ public class EmpresaActivity extends AppCompatActivity {
         String urlImagemSelecionada = produtos.get(itemProduto).getUrlImagemProduto();
         Picasso.get()
                 .load(urlImagemSelecionada)
+                .resize(300,300)
                 .into(imageAlert);
 
         alertDialog.setCancelable(false);
@@ -217,9 +236,50 @@ public class EmpresaActivity extends AppCompatActivity {
                 produtos.get(itemProduto).getNomeProduto().toUpperCase()+ "</b>"));
 
 
+
+        //Criando a caixa ed alerta para o método excluir
         alertDialog.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
+                if (produtos.get(itemProduto).getIdProduto() != null){
+
+                    String id_produto_deletar = produtos.get(itemProduto).getIdProduto();
+
+                    referenciaFirestore.collection("produtos")
+                                        .document(id_produto_deletar)
+                                        .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+
+                            String caminhoFoto = "imagens/produtos/"+idEmpresaLogada+"/"+id_produto_deletar+".jpeg";
+                   //Exclui foto do produto do Storage
+                            StorageReference foodRef = storageRef.child(caminhoFoto);
+                            foodRef.delete()
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            exibirMensagem("Erro ao excluir foto do produto");
+                                        }
+                                    });
+
+
+                            exibirMensagem("Produto excluído com sucesso!");
+                            produtos.remove(id_produto_deletar);
+                            produtos.clear();
+                            adapterProduto.notifyDataSetChanged();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            exibirMensagem("Erro ao excluir produto!");
+                        }
+                    });
+
+
+                }
 
             }
         });
@@ -242,5 +302,16 @@ public class EmpresaActivity extends AppCompatActivity {
         Toast.makeText(this, texto, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+    }
+
+    @Override
+    protected void onRestart() {
+        adapterProduto.notifyDataSetChanged();
+        super.onRestart();
+
+    }
 }
