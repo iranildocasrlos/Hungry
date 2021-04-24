@@ -2,19 +2,24 @@ package br.com.localoeste.hungry.activy;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -68,7 +73,7 @@ public class EmpresaActivity extends AppCompatActivity {
 
         //Recupera produtos da empresa
         recuperarProdutos();
-
+        swipe();
 
 
 
@@ -155,6 +160,72 @@ public class EmpresaActivity extends AppCompatActivity {
 
     private void abrirNovoProduto(){
         startActivity(new Intent(EmpresaActivity.this, NovoProdutoEmpresaActivity.class));
+    }
+
+
+    private void swipe(){
+
+        ItemTouchHelper.Callback itemTouch = new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+
+                int dragFlags = ItemTouchHelper.ACTION_STATE_IDLE;
+                int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                return makeMovementFlags(dragFlags,swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                excluirProduto(viewHolder);
+
+            }
+        };
+
+        new ItemTouchHelper(itemTouch).attachToRecyclerView(recyclerProdutos);
+
+    }
+
+
+    private void excluirProduto(RecyclerView.ViewHolder viewHolder){
+
+        int itemProduto = viewHolder.getAdapterPosition();
+
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+        alertDialog.setTitle("Excluir Produto");
+        alertDialog.setMessage(Html.fromHtml("Deseja excluir escluir este produto?"+"<b>\n \n "+
+                               produtos.get(itemProduto).getNomeProduto().toUpperCase()+ "</b>"));
+
+        alertDialog.setCancelable(false);
+
+        alertDialog.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                exibirMensagem("Cancelado");
+                adapterProduto.notifyDataSetChanged();
+            }
+        });
+        alertDialog.create();
+        alertDialog.show();
+
+    }
+
+
+    private  void exibirMensagem(String texto){
+        Toast.makeText(this, texto, Toast.LENGTH_SHORT).show();
     }
 
 
