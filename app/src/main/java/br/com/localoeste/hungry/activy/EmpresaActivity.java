@@ -14,10 +14,13 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -29,6 +32,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -194,15 +198,24 @@ public class EmpresaActivity extends AppCompatActivity {
     private void excluirProduto(RecyclerView.ViewHolder viewHolder){
 
         int itemProduto = viewHolder.getAdapterPosition();
-
-
+        LayoutInflater inflater = getLayoutInflater();
+        ImageView imageAlert = new ImageView(this);
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
         alertDialog.setTitle("Excluir Produto");
-        alertDialog.setMessage(Html.fromHtml("Deseja excluir escluir este produto?"+"<b>\n \n "+
-                               produtos.get(itemProduto).getNomeProduto().toUpperCase()+ "</b>"));
+
+
+        ImageView imagemAlertProduto = findViewById(R.id.imagemAlert);
+        String urlImagemSelecionada = produtos.get(itemProduto).getUrlImagemProduto();
+        Picasso.get()
+                .load(urlImagemSelecionada)
+                .into(imageAlert);
 
         alertDialog.setCancelable(false);
+        alertDialog.setView(imageAlert);
+        alertDialog.setMessage(Html.fromHtml("Deseja excluir escluir este produto?"+"<b>\n \n "+
+                produtos.get(itemProduto).getNomeProduto().toUpperCase()+ "</b>"));
+
 
         alertDialog.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
             @Override
@@ -218,6 +231,7 @@ public class EmpresaActivity extends AppCompatActivity {
                 adapterProduto.notifyDataSetChanged();
             }
         });
+
         alertDialog.create();
         alertDialog.show();
 
