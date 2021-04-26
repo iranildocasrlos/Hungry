@@ -103,9 +103,10 @@ public class ProprietarioFragment extends Fragment {
                 usuario.setEmail(emailDigitado);
                 usuario.setEndereco(enderecoDigitado);
                 usuario.setTelefone(telefoneDigitado);
+                usuario.setTipoUsuario("empresa");
                 usuario.setCpf(cpfDigitado);
 
-                usuario.atualizarDados();
+                usuario.salvarDados();
                 botaoSalvar.setEnabled(false);
                 botaoSalvar.setVisibility(View.INVISIBLE);
                 imageOK.setVisibility(View.VISIBLE);

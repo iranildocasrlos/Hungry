@@ -113,7 +113,7 @@ public class EmpresaFragment extends Fragment {
                 empresa.setCnpj(cnpj);
                 empresa.setIdProprietario(usuarioFirebase.getId_Usuario());
 
-                empresa.atualizarDados();
+                empresa.salvarDados();
 
                 btnSalvar.setEnabled(false);
                 btnSalvar.setVisibility(View.INVISIBLE);
@@ -121,7 +121,11 @@ public class EmpresaFragment extends Fragment {
 
                 Intent i = new Intent(getActivity(), EmpresaActivity.class);
                 startActivity(i);
-                
+                try {
+                    EmpresaFragment.this.finalize();
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
 
             }
         });

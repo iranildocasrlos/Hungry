@@ -5,7 +5,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.solver.state.Dimension;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,11 +20,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 
@@ -34,15 +29,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,7 +119,7 @@ public class EmpresaActivity extends AppCompatActivity {
 
     private void inicializarComponentes() {
 
-        recyclerProdutos = findViewById(R.id.recyclerProdutos);
+        recyclerProdutos = findViewById(R.id.recyclerEmpresas);
         idEmpresaLogada = EmpresaFirebase.getId_empresa();
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         autenticacao = ConfiguracaoFirebase.getReferenciaAutenticacao();
@@ -314,4 +306,5 @@ public class EmpresaActivity extends AppCompatActivity {
         super.onRestart();
 
     }
+
 }

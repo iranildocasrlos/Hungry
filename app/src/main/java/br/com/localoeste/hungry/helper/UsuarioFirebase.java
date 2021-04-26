@@ -62,7 +62,7 @@ public class UsuarioFirebase{
         return tipoUsuario;
     }
 
-    public static void setTipoUsuario(String tipoUsuario) {
+    public void setTipoUsuario(String tipoUsuario) {
         UsuarioFirebase.tipoUsuario = tipoUsuario;
     }
 
