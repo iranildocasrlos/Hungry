@@ -296,12 +296,14 @@ public class EmpresaActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+
         super.onStart();
 
     }
 
     @Override
     protected void onRestart() {
+        recuperarProdutos();
         adapterProduto.notifyDataSetChanged();
         super.onRestart();
 

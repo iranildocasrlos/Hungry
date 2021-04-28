@@ -68,7 +68,7 @@ public class ActivitySplash extends AppCompatActivity {
                                 if (user.getTipoUsuario().equals("cliente")){
                                     abrirTelaPrincipal();
                                     Log.d("HUNGRY", user.getNome() + "==> ID: "+user.getId_Usuario());
-                                }else if (user.getTipoUsuario().equals("empresario")){
+                                }else if (user.getTipoUsuario().equals("empresa")){
 
                                     if (user.getCpf() != null){
                                         abrirTelaPrincipalEmpresa();

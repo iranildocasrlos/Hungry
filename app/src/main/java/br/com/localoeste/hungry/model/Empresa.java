@@ -4,12 +4,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 
-public class Empresa {
+public class Empresa implements Serializable {
 
     private String nomeConta;
     private String idEmpresa;
@@ -123,7 +124,7 @@ public class Empresa {
         DocumentReference documentRef = db.collection("empresas").document(getIdEmpresa());
         Map<String, Object> data = new HashMap<>();
         data.put("nomeFantasia", nomeFantasia);
-        data.put("id", idEmpresa);
+        data.put("idEmpresa", idEmpresa);
         data.put("tempoEntrega", tempoEntrega);
         data.put("taxaEntrega",taxaEntrega);
         data.put("categoria", categoria);

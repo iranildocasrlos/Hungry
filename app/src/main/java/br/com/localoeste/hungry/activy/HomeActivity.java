@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,6 +31,7 @@ import br.com.localoeste.hungry.adapter.AdapterEmpresa;
 import br.com.localoeste.hungry.adapter.AdapterProduto;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 import br.com.localoeste.hungry.helper.UsuarioFirebase;
+import br.com.localoeste.hungry.listener.RecyclerItemClickListener;
 import br.com.localoeste.hungry.model.Empresa;
 import br.com.localoeste.hungry.model.Produto;
 
@@ -82,6 +85,34 @@ public class HomeActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
+        //Configura o evennto de clique
+        recyclerViewEmpressas.addOnItemTouchListener(new RecyclerItemClickListener(
+                this,
+                recyclerViewEmpressas,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Empresa empresaSelecionada = empresas.get(position);
+                        Intent i = new Intent(HomeActivity.this, CardapioActivity.class);
+
+                        i.putExtra("empresa", empresaSelecionada);
+
+                        startActivity(i);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    }
+                }
+        ));
 
     }
 
@@ -151,7 +182,10 @@ public class HomeActivity extends AppCompatActivity {
                         adapterEmpresa.notifyDataSetChanged();
                     }
                 });
-        adapterEmpresa.notifyDataSetChanged();
+
+
+
+
     }
 
 
@@ -200,6 +234,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onRestart() {
         adapterEmpresa.notifyDataSetChanged();
         super.onRestart();
+        recuperarEmpresas();
     }
 
 
