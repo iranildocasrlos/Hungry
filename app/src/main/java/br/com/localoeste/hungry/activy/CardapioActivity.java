@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,7 +19,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import br.com.localoeste.hungry.R;
@@ -43,6 +49,11 @@ public class CardapioActivity extends AppCompatActivity {
     private FirebaseFirestore referenciaFirestore;
     private String idEmpresaLogada ;
     private StorageReference storageRef;
+    private String currentDate;
+    private String stringDate;
+    private SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+    //Initializing Calender Object
+    private Calendar calendar = Calendar.getInstance();
 
 
 
@@ -68,11 +79,72 @@ public class CardapioActivity extends AppCompatActivity {
             categoria.setText(empresaSelecionada.getCategoria());
             horario.setText(empresaSelecionada.getHorarioAbertura()+" - "+empresaSelecionada.getHorarioFechamento());
             if (empresaSelecionada.getStatus()){
-                status.setText("Aberto");
-                status.setTextColor(Color.GREEN);
+
+                Date present = null;
+                try {
+
+                    //Horário atual
+                    present = format.parse(stringDate);
+                    calendar.setTime(present);
+                    int hour = calendar.get(Calendar.HOUR);
+                    int min = calendar.get(Calendar.MINUTE);
+
+                    //Horário abertura
+                    Date horaAbertura = format.parse(empresaSelecionada.getHorarioAbertura());
+                    calendar.setTime(horaAbertura);
+                    int hourAbertura = calendar.get(Calendar.HOUR);
+                    int minAbertura = calendar.get(Calendar.MINUTE);
+
+                    //Horário fechamento
+                    Date horaFechamento = format.parse(empresaSelecionada.getHorarioFechamento());
+                    calendar.setTime(horaFechamento);
+                    int hourFechamento = calendar.get(Calendar.HOUR);
+                    int minFechamento = calendar.get(Calendar.MINUTE);
+
+                    //Verifica se está no horário de funcionamento
+                    if (hour > hourAbertura){
+                        if (min >= minAbertura) {
+                            if (hour <= hourFechamento){
+                                if (min <= minFechamento){
+                                    status.setTextColor(Color.GREEN);
+                                    status.setText("Aberto");
+                                    Log.d("hora","Aberto");
+
+                                }else {
+                                    status.setTextColor(Color.RED);
+                                    status.setText("Fechado");
+                                    Log.d("hora","Fechado");
+                                }
+
+                            }else {
+                                status.setTextColor(Color.RED);
+                                status.setText("Fechado");
+                                Log.d("hora","Fechado");
+                            }
+
+                        }else {
+                            status.setTextColor(Color.RED);
+                            status.setText("Fechado");
+                            Log.d("hora","Fechado");
+                        }
+
+                    }else{
+                        status.setTextColor(Color.RED);
+                        status.setText("Fechado");
+                        Log.d("hora","Fechado");
+                    }
+
+
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
             }else{
-                status.setText("Fechado");
                 status.setTextColor(Color.RED);
+                status.setText("Fechado");
+                Log.d("hora","Fechado");
+
             }
 
 
@@ -104,6 +176,16 @@ public class CardapioActivity extends AppCompatActivity {
         categoria = findViewById(R.id.textCardapioCategoria);
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         storageRef =  ConfiguracaoFirebase.getFirebaseStorage();
+
+        //pega horário atual
+        //Initializing the date formatter
+        DateFormat Date = DateFormat.getDateInstance();
+
+        //Displaying the actual date
+        currentDate = Date.format(calendar.getTime());
+        Date date = new Date();
+        stringDate = format.format(date);
+        Log.d("hora",stringDate);
 
     }
 
