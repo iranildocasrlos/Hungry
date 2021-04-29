@@ -46,7 +46,13 @@
         <item>21:00</item>
         <item>22:00</item>
         <item>23:00</item>
+    </string-array>
 
 
+    <string-array name="formas_pagamento">
+        <item>Dinheiro</item>
+        <item>Máquina de Cartão débito</item>
+        <item>Máquina de Cartão Crédito</item>
+        <item>Vale Refeição</item>
     </string-array>
 </resources>

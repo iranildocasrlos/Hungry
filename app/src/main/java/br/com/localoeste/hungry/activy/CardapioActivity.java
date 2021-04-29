@@ -5,8 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,6 +33,9 @@ public class CardapioActivity extends AppCompatActivity {
 
     private CircleImageView imagemEmpresaCardapio;
     private TextView nomeEmpresaCadapio;
+    private TextView horario;
+    private TextView status;
+    private TextView categoria;
     private RecyclerView recyclerViewEmpresaCardapio;
     private Empresa empresaSelecionada;
     private AdapterProduto adapterProduto;
@@ -61,6 +65,16 @@ public class CardapioActivity extends AppCompatActivity {
             empresaSelecionada = (Empresa)bundle.getSerializable("empresa");
             nomeEmpresaCadapio.setText(empresaSelecionada.getNomeFantasia());
             idEmpresaLogada = empresaSelecionada.getIdEmpresa();
+            categoria.setText(empresaSelecionada.getCategoria());
+            horario.setText(empresaSelecionada.getHorarioAbertura()+" - "+empresaSelecionada.getHorarioFechamento());
+            if (empresaSelecionada.getStatus()){
+                status.setText("Aberto");
+                status.setTextColor(Color.GREEN);
+            }else{
+                status.setText("Fechado");
+                status.setTextColor(Color.RED);
+            }
+
 
             String url = empresaSelecionada.getUrlImagem();
             Picasso.get().load(url).into(imagemEmpresaCardapio);
@@ -85,6 +99,9 @@ public class CardapioActivity extends AppCompatActivity {
         recyclerViewEmpresaCardapio = findViewById(R.id.recyclerProdutoCardapio);
         nomeEmpresaCadapio = findViewById(R.id.textNomeEmCardapio);
         imagemEmpresaCardapio =  findViewById(R.id.imageCardapioEmpresa);
+        horario = findViewById(R.id.textCardapioHorario);
+        status = findViewById(R.id.textCadapioStatus);
+        categoria = findViewById(R.id.textCardapioCategoria);
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         storageRef =  ConfiguracaoFirebase.getFirebaseStorage();
 

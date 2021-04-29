@@ -10,6 +10,7 @@ import java.util.Map;
 public class EmpresaFirebase {
 
     private static String nome,email,endereco,telefone,cnpj,idProprietario;
+    private Boolean status;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public EmpresaFirebase() {
@@ -68,6 +69,17 @@ public class EmpresaFirebase {
         EmpresaFirebase.idProprietario = idProprietario;
     }
 
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
+
+
+    //Métodos
 
     public void salvarDados() {
         DocumentReference documentRef = db.collection("empresas").document(idProprietario);
@@ -78,6 +90,7 @@ public class EmpresaFirebase {
         data.put("telefone",telefone);
         data.put("cnpj", cnpj);
         data.put("idProprietario", idProprietario);
+        data.put("status",false);
         documentRef.set(data);
     }
 

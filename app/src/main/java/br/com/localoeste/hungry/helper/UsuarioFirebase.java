@@ -12,11 +12,20 @@ import java.util.Map;
 public class UsuarioFirebase{
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private static String nome,email,endereco,telefone,cpf,tipoUsuario;
+    private static String idUsuario,nome,email,endereco,telefone,cep,cpf,tipoUsuario;
 
     public UsuarioFirebase() {
     }
 //++++++++++= Geters e Seters ++++++++++++++++++++++++++++++
+
+
+    public  String getIdUsuario() {
+        return idUsuario;
+    }
+
+    public  void setIdUsuario(String idUsuario) {
+        UsuarioFirebase.idUsuario = idUsuario;
+    }
 
     public String getNome() {
         return nome;
@@ -66,6 +75,14 @@ public class UsuarioFirebase{
         UsuarioFirebase.tipoUsuario = tipoUsuario;
     }
 
+    public  String getCep() {
+        return cep;
+    }
+
+    public  void setCep(String cep) {
+        UsuarioFirebase.cep = cep;
+    }
+
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     ///Retorna o id do Usuario logado
@@ -98,13 +115,15 @@ public class UsuarioFirebase{
     }
 
     public void atualizarDados(){
-        DocumentReference documentRef = db.collection("usuarios").document(getId_Usuario());
+        DocumentReference documentRef = db.collection("usuarios").document(idUsuario);
         Map<String, Object> data = new HashMap<>();
+
         data.put("nome", nome);
         data.put("email", email);
         data.put("endereco", endereco);
         data.put("telefone",telefone);
         data.put("cpf", cpf);
+        data.put("cep", cep);
         documentRef.update(data);
 
 

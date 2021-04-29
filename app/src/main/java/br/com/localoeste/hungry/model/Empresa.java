@@ -22,6 +22,7 @@ public class Empresa implements Serializable {
     private String horarioFechamento;
     private Boolean inicioAutomatico;
     private String categoria;
+    private Boolean status;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
@@ -109,6 +110,13 @@ public class Empresa implements Serializable {
         this.inicioAutomatico = inicioAutomatico;
     }
 
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
     public void salvar(){
 
@@ -131,6 +139,13 @@ public class Empresa implements Serializable {
         data.put("horarioAbertura", horarioAbertura);
         data.put("horarioFechamento", horarioFechamento);
         data.put("inicioAutomatico", inicioAutomatico);
+
+        //Verifica o status
+        if (inicioAutomatico.booleanValue()){
+            data.put("status",true);
+        }else{
+            data.put("status",false);
+        }
         documentRef.update(data);
 
     }
