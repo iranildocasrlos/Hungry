@@ -5,14 +5,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -30,9 +38,11 @@ import java.util.List;
 import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.adapter.AdapterProduto;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
+import br.com.localoeste.hungry.helper.UsuarioFirebase;
 import br.com.localoeste.hungry.model.Empresa;
 import br.com.localoeste.hungry.model.Produto;
 import de.hdodenhof.circleimageview.CircleImageView;
+import dmax.dialog.SpotsDialog;
 
 public class CardapioActivity extends AppCompatActivity {
 
@@ -48,10 +58,13 @@ public class CardapioActivity extends AppCompatActivity {
     private List<Produto> produtos = new ArrayList<>();
     private FirebaseFirestore referenciaFirestore;
     private String idEmpresaLogada ;
+    private String idUsuarioLogado;
     private StorageReference storageRef;
     private String currentDate;
     private String stringDate;
     private SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+    private AlertDialog dialog;
+
     //Initializing Calender Object
     private Calendar calendar = Calendar.getInstance();
 
@@ -86,7 +99,7 @@ public class CardapioActivity extends AppCompatActivity {
                     //Horário atual
                     present = format.parse(stringDate);
                     calendar.setTime(present);
-                    int hour = calendar.get(Calendar.HOUR);
+                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
                     int min = calendar.get(Calendar.MINUTE);
 
                     //Horário abertura
@@ -98,23 +111,18 @@ public class CardapioActivity extends AppCompatActivity {
                     //Horário fechamento
                     Date horaFechamento = format.parse(empresaSelecionada.getHorarioFechamento());
                     calendar.setTime(horaFechamento);
-                    int hourFechamento = calendar.get(Calendar.HOUR);
+                    int hourFechamento = calendar.get(Calendar.HOUR_OF_DAY);
                     int minFechamento = calendar.get(Calendar.MINUTE);
 
                     //Verifica se está no horário de funcionamento
                     if (hour > hourAbertura){
-                        if (min >= minAbertura) {
+
                             if (hour <= hourFechamento){
-                                if (min <= minFechamento){
+
                                     status.setTextColor(Color.GREEN);
                                     status.setText("Aberto");
                                     Log.d("hora","Aberto");
 
-                                }else {
-                                    status.setTextColor(Color.RED);
-                                    status.setText("Fechado");
-                                    Log.d("hora","Fechado");
-                                }
 
                             }else {
                                 status.setTextColor(Color.RED);
@@ -122,11 +130,7 @@ public class CardapioActivity extends AppCompatActivity {
                                 Log.d("hora","Fechado");
                             }
 
-                        }else {
-                            status.setTextColor(Color.RED);
-                            status.setText("Fechado");
-                            Log.d("hora","Fechado");
-                        }
+
 
                     }else{
                         status.setTextColor(Color.RED);
@@ -160,6 +164,9 @@ public class CardapioActivity extends AppCompatActivity {
             //Recupera produtos da empresa
             recuperarProdutos();
 
+            //Recupera DADOS Usuario
+            recuperarDadosUsuario();
+
 
         }
 
@@ -176,6 +183,7 @@ public class CardapioActivity extends AppCompatActivity {
         categoria = findViewById(R.id.textCardapioCategoria);
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         storageRef =  ConfiguracaoFirebase.getFirebaseStorage();
+        idUsuarioLogado = UsuarioFirebase.getId_Usuario();
 
         //pega horário atual
         //Initializing the date formatter
@@ -222,7 +230,69 @@ public class CardapioActivity extends AppCompatActivity {
 
 
 
+   private void recuperarDadosUsuario(){
 
+        dialog = new SpotsDialog.Builder()
+                .setContext(this)
+                .setMessage("Carregando dados!")
+                .setCancelable(false)
+                .build();
+
+        dialog.show();
+
+                DocumentReference docRef =  referenciaFirestore.collection("usuarios")
+               .document(idUsuarioLogado);
+
+                docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            UsuarioFirebase usuarioFirebase = documentSnapshot.toObject(UsuarioFirebase.class);
+                            if (usuarioFirebase != null) {
+
+
+
+                            }
+                            recuperarPedido();
+                        }
+
+                    }
+                });
+
+
+   }
+
+
+
+
+
+
+   private void recuperarPedido(){
+
+        dialog.dismiss();
+   }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_cardapio, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menuPedido:
+
+                break;
+
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
 
 
 
