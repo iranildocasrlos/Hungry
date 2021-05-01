@@ -22,11 +22,11 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
 
     private Produto produtoSelecionado ;
     private TextView descricaoProduto;
-    private Spinner  spinnerQuantidadeProduto;
+    private TextView  quantidadeProduto;
     private ImageView imagemProduto;
-    private String urlProduto,quantidade;
+    private String urlProduto;
     private Button  btAdicionar;
-    private ArrayAdapter<String> adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,12 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
                 urlProduto = produtoSelecionado.getUrlImagemProduto();
             }
 
-            quantidade = spinnerQuantidadeProduto.getSelectedItem().toString();
+            if (produtoSelecionado.getPrecoProduto() != null){
+                btAdicionar.setText("Adicionar  " + produtoSelecionado.getPrecoProduto());
+
+
+            }
+
 
             Picasso.get().load(urlProduto).into(imagemProduto);
 
@@ -73,13 +78,12 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
 
 
         descricaoProduto = findViewById(R.id.textViewDescricaoDet);
-        spinnerQuantidadeProduto = findViewById(R.id.spinnerQuantDescricao);
+        quantidadeProduto = findViewById(R.id.textQuantidadeDetalhes);
         imagemProduto = findViewById(R.id.imageDescricao);
         btAdicionar =  findViewById(R.id.btAdicionarDescricao);
-        String[] quantidades = getResources().getStringArray(R.array.quantidade_item);
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
-                quantidades);
-        spinnerQuantidadeProduto.setAdapter(adapter);
+
+
+
 
     }
 
