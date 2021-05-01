@@ -5,10 +5,12 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,6 +28,10 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
     private ImageView imagemProduto;
     private String urlProduto;
     private Button  btAdicionar;
+    private ImageButton btnAdd;
+    private ImageButton btnRemove;
+    private  int quantidade = 1;
+    private  Double valor = 0.0;
 
 
     @Override
@@ -66,21 +72,58 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
 
             Picasso.get().load(urlProduto).into(imagemProduto);
 
-
-
         }
 
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adicionarItem();
+            }
+        });
+
+
+       btnRemove.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               removerItem();
+           }
+       });
 
 
     }
 
+    private void adicionarItem(){
+        quantidade++;
+        btAdicionar.setText("Adicionar  " + (produtoSelecionado.getPrecoProduto()* quantidade));
+
+        valor = valor + produtoSelecionado.getPrecoProduto();
+        quantidadeProduto.setText(String.valueOf(quantidade));
+
+    }
+
+    private void removerItem(){
+
+        if (quantidade != 1){
+            valor =  produtoSelecionado.getPrecoProduto() * quantidade;
+            quantidade--;
+            btAdicionar.setText("Adicionar  " + ( valor - produtoSelecionado.getPrecoProduto() ));
+
+
+            quantidadeProduto.setText(String.valueOf(quantidade));
+        }
+
+
+    }
     private void inicializaComponentes() {
 
 
         descricaoProduto = findViewById(R.id.textViewDescricaoDet);
-        quantidadeProduto = findViewById(R.id.textQuantidadeDetalhes);
+        quantidadeProduto = findViewById(R.id.textAdicionaQuantidade);
         imagemProduto = findViewById(R.id.imageDescricao);
         btAdicionar =  findViewById(R.id.btAdicionarDescricao);
+        btnAdd = findViewById(R.id.imageButtonAdd);
+        btnRemove = findViewById(R.id.imageButtonRemove);
+
 
 
 

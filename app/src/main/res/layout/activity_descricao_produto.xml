@@ -89,7 +89,7 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/imageButton5"
+                android:id="@+id/imageButtonRemove"
                 android:layout_width="50dp"
                 android:layout_height="60dp"
                 android:backgroundTint="#E64A19"
@@ -105,7 +105,7 @@
                 android:text="1" />
 
             <ImageButton
-                android:id="@+id/imageButton4"
+                android:id="@+id/imageButtonAdd"
                 android:layout_width="50dp"
                 android:layout_height="60dp"
                 android:backgroundTint="#E64A19"
