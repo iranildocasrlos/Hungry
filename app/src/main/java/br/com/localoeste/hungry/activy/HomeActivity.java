@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -235,12 +236,14 @@ public class HomeActivity extends AppCompatActivity {
         adapterEmpresa.notifyDataSetChanged();
         super.onRestart();
         recuperarEmpresas();
+        Log.d("logs","chamou onRestart");
     }
 
 
     @Override
     protected void onResume() {
         adapterEmpresa.notifyDataSetChanged();
+        Log.d("logs","chamou onResume");
         super.onResume();
     }
 }

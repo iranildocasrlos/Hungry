@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -81,4 +82,12 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
         spinnerQuantidadeProduto.setAdapter(adapter);
 
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        Log.d("logs","chamou de volta a tela cardápio");
+        finish();
+        return true;
+    }
+
 }

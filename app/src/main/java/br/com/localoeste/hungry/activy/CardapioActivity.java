@@ -329,6 +329,7 @@ public class CardapioActivity extends AppCompatActivity {
 
     @Override
     protected void onRestart() {
+
         super.onRestart();
         recuperarProdutos();
         Log.d("logs","chamou onRestart");
@@ -336,9 +337,16 @@ public class CardapioActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
-        Log.d("logs","chamou onResume");
 
+        super.onResume();
 
     }
+
+
+
+
+
+
+
+
 }
