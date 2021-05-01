@@ -9,32 +9,27 @@
         android:roundIcon="@mipmap/icone_hungry"
         android:supportsRtl="true"
         android:theme="@style/Theme.Hungry">
-        <activity android:name=".activy.CardapioActivity"
-                  android:parentActivityName=".activy.HomeActivity"/>
-
+        <activity android:name=".activy.DescricaoProdutoActivity"
+                  android:parentActivityName=".activy.CardapioActivity" />>
+        <activity
+            android:name=".activy.CardapioActivity"
+            android:parentActivityName=".activy.HomeActivity" />
         <activity
             android:name=".activy.ConfiguracoesUsuarioActivity"
             android:parentActivityName=".activy.HomeActivity" />
-
         <activity
             android:name=".activy.NovoProdutoEmpresaActivity"
             android:parentActivityName=".activy.EmpresaActivity" />
-
         <activity
             android:name=".activy.ConfiguracaoEmpresaActivity"
             android:parentActivityName=".activy.EmpresaActivity" />
-
         <activity
             android:name=".activy.CadastroEmpresaActivity"
             android:label="@string/title_activity_cadastro_empresa"
             android:theme="@style/Theme.Hungry.NoActionBar" />
-
         <activity android:name=".activy.CadastroUsuarioActivity" />
-
         <activity android:name=".activy.EmpresaActivity" />
-
         <activity android:name=".activy.HomeActivity" />
-
         <activity android:name=".activy.ActivitySplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

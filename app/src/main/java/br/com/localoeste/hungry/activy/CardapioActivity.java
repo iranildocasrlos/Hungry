@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -14,6 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,6 +42,7 @@ import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.adapter.AdapterProduto;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 import br.com.localoeste.hungry.helper.UsuarioFirebase;
+import br.com.localoeste.hungry.listener.RecyclerItemClickListener;
 import br.com.localoeste.hungry.model.Empresa;
 import br.com.localoeste.hungry.model.Produto;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -160,6 +164,34 @@ public class CardapioActivity extends AppCompatActivity {
             recyclerViewEmpresaCardapio.setHasFixedSize(true);
             adapterProduto = new AdapterProduto(produtos,this);
             recyclerViewEmpresaCardapio.setAdapter(adapterProduto);
+
+
+            // Configura a ação de toque do Recycler
+            recyclerViewEmpresaCardapio.addOnItemTouchListener(new RecyclerItemClickListener(
+                    this,
+                    recyclerViewEmpresaCardapio,
+                    new RecyclerItemClickListener.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+
+                            Produto produtoSelecionado = produtos.get(position);
+                            Intent itDescricao = new Intent(CardapioActivity.this ,DescricaoProdutoActivity.class);
+                            itDescricao.putExtra("produto",produtoSelecionado);
+                            startActivity(itDescricao);
+                        }
+
+                        @Override
+                        public void onLongItemClick(View view, int position) {
+
+                        }
+
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        }
+                    }
+            ));
+
 
             //Recupera produtos da empresa
             recuperarProdutos();
@@ -295,5 +327,18 @@ public class CardapioActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        recuperarProdutos();
+        Log.d("logs","chamou onRestart");
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("logs","chamou onResume");
+
+
+    }
 }

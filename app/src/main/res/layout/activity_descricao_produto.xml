@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activy.DescricaoProdutoActivity">
+
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageDescricao"
+            android:layout_width="match_parent"
+            android:layout_height="207dp"
+            app:srcCompat="@drawable/sacolas" />
+
+        <TextView
+            android:id="@+id/textDetalhesNome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Descrição:" />
+
+
+        <TextView
+            android:id="@+id/textViewDescricaoDet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text="Descrição Produto" />
+
+
+
+        <TextView
+            android:id="@+id/textDetalhesNome3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Quantidade:" />
+
+        <Spinner
+            android:id="@+id/spinnerQuantDescricao"
+            android:layout_width="match_parent"
+            android:layout_height="42dp" />
+
+
+
+        <Button
+            android:id="@+id/btAdicionarDescricao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:gravity="center|fill_horizontal"
+            android:padding="16dp"
+            android:text="Adicionar Produto" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
