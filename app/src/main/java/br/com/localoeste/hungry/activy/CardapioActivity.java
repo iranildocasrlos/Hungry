@@ -121,17 +121,25 @@ public class CardapioActivity extends AppCompatActivity {
                     //Verifica se está no horário de funcionamento
                     if (hour > hourAbertura){
 
-                            if (hour <= hourFechamento){
+                            if (hour == hourFechamento){
 
+                                if (min == minFechamento){
                                     status.setTextColor(Color.GREEN);
                                     status.setText("Aberto");
-                                    Log.d("hora","Aberto");
+
+                                }else{
+                                    status.setTextColor(Color.RED);
+                                    status.setText("Fechado");
+                                }
 
 
-                            }else {
+                            }else if (hour < hourFechamento){
+                                status.setTextColor(Color.GREEN);
+                                status.setText("Aberto");
+
+                            }else{
                                 status.setTextColor(Color.RED);
                                 status.setText("Fechado");
-                                Log.d("hora","Fechado");
                             }
 
 
@@ -139,7 +147,7 @@ public class CardapioActivity extends AppCompatActivity {
                     }else{
                         status.setTextColor(Color.RED);
                         status.setText("Fechado");
-                        Log.d("hora","Fechado");
+
                     }
 
 
@@ -151,7 +159,7 @@ public class CardapioActivity extends AppCompatActivity {
             }else{
                 status.setTextColor(Color.RED);
                 status.setText("Fechado");
-                Log.d("hora","Fechado");
+
 
             }
 
@@ -344,7 +352,11 @@ public class CardapioActivity extends AppCompatActivity {
 
 
 
-
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
 
 
 
