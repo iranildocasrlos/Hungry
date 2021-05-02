@@ -1,11 +1,14 @@
 package br.com.localoeste.hungry.model;
 
-public class ItemPedido {
+import java.io.Serializable;
+
+public class ItemPedido implements Serializable {
 
     private String idProduto;
+    private String idEmpresa;
     private String nomeProduto;
-    private String quantidadeProduto;
-    private String precoProduto;
+    private int quantidadeProduto;
+    private Double precoProduto;
     private String descricaoProduto;
 
     public ItemPedido() {
@@ -27,19 +30,19 @@ public class ItemPedido {
         this.nomeProduto = nomeProduto;
     }
 
-    public String getQuantidadeProduto() {
+    public int getQuantidadeProduto() {
         return quantidadeProduto;
     }
 
-    public void setQuantidadeProduto(String quantidadeProduto) {
+    public void setQuantidadeProduto(int quantidadeProduto) {
         this.quantidadeProduto = quantidadeProduto;
     }
 
-    public String getPrecoProduto() {
+    public Double getPrecoProduto() {
         return precoProduto;
     }
 
-    public void setPrecoProduto(String precoProduto) {
+    public void setPrecoProduto(Double precoProduto) {
         this.precoProduto = precoProduto;
     }
 
@@ -52,5 +55,11 @@ public class ItemPedido {
     }
 
 
+    public String getIdEmpresa() {
+        return idEmpresa;
+    }
 
+    public void setIdEmpresa(String idEmpresa) {
+        this.idEmpresa = idEmpresa;
+    }
 }

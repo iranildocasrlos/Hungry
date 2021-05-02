@@ -3,6 +3,7 @@ package br.com.localoeste.hungry.activy;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import br.com.localoeste.hungry.R;
+import br.com.localoeste.hungry.model.ItemPedido;
 import br.com.localoeste.hungry.model.Produto;
 
 public class DescricaoProdutoActivity extends AppCompatActivity {
@@ -32,6 +34,7 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
     private ImageButton btnRemove;
     private  int quantidade = 1;
     private  Double valor = 0.0;
+    private String idEmpresa;
 
 
     @Override
@@ -69,6 +72,8 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
 
             }
 
+            idEmpresa = produtoSelecionado.getIdEmpresa();
+
 
             Picasso.get().load(urlProduto).into(imagemProduto);
 
@@ -88,6 +93,35 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
                removerItem();
            }
        });
+
+
+
+       //Ação do botao adicionar
+        btAdicionar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ItemPedido itemPedido = new ItemPedido();
+                itemPedido.setIdProduto(produtoSelecionado.getIdProduto());
+                itemPedido.setNomeProduto(produtoSelecionado.getNomeProduto());
+                itemPedido.setDescricaoProduto(produtoSelecionado.getDescricaoProduto());
+                itemPedido.setIdEmpresa(idEmpresa);
+                if (valor!= 0.0){
+                    itemPedido.setPrecoProduto(valor);
+                }else{
+                    itemPedido.setPrecoProduto(produtoSelecionado.getPrecoProduto());
+                }
+
+                itemPedido.setQuantidadeProduto(quantidade);
+
+                Intent intentCardapio = new Intent(DescricaoProdutoActivity.this, CardapioActivity.class);
+                intentCardapio.putExtra("item",itemPedido);
+                startActivity(intentCardapio);
+                finish();
+            }
+        });
+
+
+
 
 
     }
@@ -111,6 +145,7 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
 
             quantidadeProduto.setText(String.valueOf(quantidade));
         }
+
 
 
     }

@@ -44,6 +44,7 @@ import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 import br.com.localoeste.hungry.helper.UsuarioFirebase;
 import br.com.localoeste.hungry.listener.RecyclerItemClickListener;
 import br.com.localoeste.hungry.model.Empresa;
+import br.com.localoeste.hungry.model.ItemPedido;
 import br.com.localoeste.hungry.model.Produto;
 import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
@@ -60,6 +61,8 @@ public class CardapioActivity extends AppCompatActivity {
     private Empresa empresaSelecionada;
     private AdapterProduto adapterProduto;
     private List<Produto> produtos = new ArrayList<>();
+    private List<ItemPedido>itensCarrinho = new ArrayList<>();
+    private ItemPedido itemPedido;
     private FirebaseFirestore referenciaFirestore;
     private String idEmpresaLogada ;
     private String idUsuarioLogado;
@@ -90,82 +93,35 @@ public class CardapioActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
 
-            empresaSelecionada = (Empresa)bundle.getSerializable("empresa");
-            nomeEmpresaCadapio.setText(empresaSelecionada.getNomeFantasia());
-            idEmpresaLogada = empresaSelecionada.getIdEmpresa();
-            categoria.setText(empresaSelecionada.getCategoria());
-            horario.setText(empresaSelecionada.getHorarioAbertura()+" - "+empresaSelecionada.getHorarioFechamento());
-            if (empresaSelecionada.getStatus()){
+            if (bundle.containsKey("item")){
+                itemPedido = (ItemPedido) bundle.getSerializable("item");
 
-                Date present = null;
-                try {
-
-                    //Horário atual
-                    present = format.parse(stringDate);
-                    calendar.setTime(present);
-                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                    int min = calendar.get(Calendar.MINUTE);
-
-                    //Horário abertura
-                    Date horaAbertura = format.parse(empresaSelecionada.getHorarioAbertura());
-                    calendar.setTime(horaAbertura);
-                    int hourAbertura = calendar.get(Calendar.HOUR);
-                    int minAbertura = calendar.get(Calendar.MINUTE);
-
-                    //Horário fechamento
-                    Date horaFechamento = format.parse(empresaSelecionada.getHorarioFechamento());
-                    calendar.setTime(horaFechamento);
-                    int hourFechamento = calendar.get(Calendar.HOUR_OF_DAY);
-                    int minFechamento = calendar.get(Calendar.MINUTE);
-
-                    //Verifica se está no horário de funcionamento
-                    if (hour > hourAbertura){
-
-                            if (hour == hourFechamento){
-
-                                if (min == minFechamento){
-                                    status.setTextColor(Color.GREEN);
-                                    status.setText("Aberto");
-
-                                }else{
-                                    status.setTextColor(Color.RED);
-                                    status.setText("Fechado");
-                                }
-
-
-                            }else if (hour < hourFechamento){
-                                status.setTextColor(Color.GREEN);
-                                status.setText("Aberto");
-
-                            }else{
-                                status.setTextColor(Color.RED);
-                                status.setText("Fechado");
-                            }
-
-
-
-                    }else{
-                        status.setTextColor(Color.RED);
-                        status.setText("Fechado");
-
-                    }
-
-
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
+                ItemPedido novoPedido = new ItemPedido();
+                novoPedido.setIdProduto(itemPedido.getIdProduto());
+                idEmpresaLogada = itemPedido.getIdEmpresa();
+                novoPedido.setNomeProduto(itemPedido.getNomeProduto());
+                novoPedido.setDescricaoProduto(itemPedido.getDescricaoProduto());
+                novoPedido.setPrecoProduto(itemPedido.getPrecoProduto());
+                novoPedido.setQuantidadeProduto(itemPedido.getQuantidadeProduto());
+                itensCarrinho.add(novoPedido);
+                pesquisarEmpresa(idEmpresaLogada);
             }else{
-                status.setTextColor(Color.RED);
-                status.setText("Fechado");
+
+                empresaSelecionada = (Empresa)bundle.getSerializable("empresa");
+                //Verificada se foi criado pela tela de detalhes ou Home
+                if (empresaSelecionada.getNomeFantasia() != null){
+
+
+                    configurarEmpresa(empresaSelecionada);
+
+                }else{
+
+                    pesquisarEmpresa(idEmpresaLogada);
+                }
 
 
             }
 
-
-            String url = empresaSelecionada.getUrlImagem();
-            Picasso.get().load(url).into(imagemEmpresaCardapio);
 
             //Configurações do recyclerView
             recyclerViewEmpresaCardapio.setLayoutManager(new LinearLayoutManager(this));
@@ -209,6 +165,90 @@ public class CardapioActivity extends AppCompatActivity {
 
 
         }
+
+
+    }
+
+    // COnfigura  o cabeçalho  baseado na empresa passada
+    private void configurarEmpresa(Empresa empresaSelecionada) {
+
+
+        nomeEmpresaCadapio.setText(empresaSelecionada.getNomeFantasia());
+        idEmpresaLogada = empresaSelecionada.getIdEmpresa();
+        categoria.setText(empresaSelecionada.getCategoria());
+        horario.setText(empresaSelecionada.getHorarioAbertura()+" - "+empresaSelecionada.getHorarioFechamento());
+        if (empresaSelecionada.getStatus()){
+
+            Date present = null;
+            try {
+
+                //Horário atual
+                present = format.parse(stringDate);
+                calendar.setTime(present);
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                int min = calendar.get(Calendar.MINUTE);
+
+                //Horário abertura
+                Date horaAbertura = format.parse(empresaSelecionada.getHorarioAbertura());
+                calendar.setTime(horaAbertura);
+                int hourAbertura = calendar.get(Calendar.HOUR);
+                int minAbertura = calendar.get(Calendar.MINUTE);
+
+                //Horário fechamento
+                Date horaFechamento = format.parse(empresaSelecionada.getHorarioFechamento());
+                calendar.setTime(horaFechamento);
+                int hourFechamento = calendar.get(Calendar.HOUR_OF_DAY);
+                int minFechamento = calendar.get(Calendar.MINUTE);
+
+                //Verifica se está no horário de funcionamento
+                if (hour > hourAbertura){
+
+                    if (hour == hourFechamento){
+
+                        if (min == minFechamento){
+                            status.setTextColor(Color.GREEN);
+                            status.setText("Aberto");
+
+                        }else{
+                            status.setTextColor(Color.RED);
+                            status.setText("Fechado");
+                        }
+
+
+                    }else if (hour < hourFechamento){
+                        status.setTextColor(Color.GREEN);
+                        status.setText("Aberto");
+
+                    }else{
+                        status.setTextColor(Color.RED);
+                        status.setText("Fechado");
+                    }
+
+
+
+                }else{
+                    status.setTextColor(Color.RED);
+                    status.setText("Fechado");
+
+                }
+
+
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }else{
+            status.setTextColor(Color.RED);
+            status.setText("Fechado");
+
+
+        }
+
+
+        String url = empresaSelecionada.getUrlImagem();
+        Picasso.get().load(url).into(imagemEmpresaCardapio);
+
 
 
     }
@@ -303,7 +343,30 @@ public class CardapioActivity extends AppCompatActivity {
    }
 
 
+   //Método par recuperar empresa
+    private void pesquisarEmpresa(String id) {
+        DocumentReference empresaRef = referenciaFirestore
+                .collection("empresas")
+                .document(idEmpresaLogada);
 
+        empresaRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    Empresa dadosEmpresa = documentSnapshot.toObject(Empresa.class);
+                    if (dadosEmpresa != null){
+                        if (dadosEmpresa.getNomeFantasia() != null){
+
+                             configurarEmpresa(dadosEmpresa);
+
+                        }
+
+                    }
+                }
+            }
+        });
+
+    }
 
 
 
