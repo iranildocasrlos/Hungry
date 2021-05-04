@@ -2,7 +2,7 @@ package br.com.localoeste.hungry.model;
 
 import java.io.Serializable;
 
-public class ItemPedido implements Serializable {
+public class ItemPedido implements Serializable{
 
     private String idProduto;
     private String idEmpresa;

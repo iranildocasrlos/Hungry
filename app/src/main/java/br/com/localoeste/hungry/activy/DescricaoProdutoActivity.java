@@ -20,6 +20,7 @@ import com.squareup.picasso.Picasso;
 
 import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.model.ItemPedido;
+import br.com.localoeste.hungry.model.Pedido;
 import br.com.localoeste.hungry.model.Produto;
 
 public class DescricaoProdutoActivity extends AppCompatActivity {
@@ -36,6 +37,7 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
     private  int quantidade = 1;
     private  Double valor = 0.0;
     private String idEmpresa;
+    private Pedido pedidoAnterior;
 
 
     @Override
@@ -71,6 +73,12 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
                 btAdicionar.setText("Adicionar  " + produtoSelecionado.getPrecoProduto());
 
 
+            }
+
+            pedidoAnterior = (Pedido) bundle.getSerializable("pedido");
+
+            if (pedidoAnterior.getIdPedido() != null){
+              String  idPedidoAnterior = pedidoAnterior.getIdPedido();
             }
 
 
@@ -121,8 +129,14 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
 
                 itemPedido.setQuantidadeProduto(quantidade);
 
+                if (pedidoAnterior.getIdPedido() != null){
+                    pedidoAnterior.getItens().add(itemPedido);
+                }
+
+
                 Intent intentCardapio = new Intent(DescricaoProdutoActivity.this, CardapioActivity.class);
                 intentCardapio.putExtra("item",itemPedido);
+                intentCardapio.putExtra("pedidoAnterior", pedidoAnterior);
                 startActivity(intentCardapio);
                 finish();
             }

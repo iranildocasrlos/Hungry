@@ -138,9 +138,25 @@ public class Pedido implements Serializable {
         UUID uuid = UUID.randomUUID();
         String uuidAsString = uuid.toString();
         setIdPedido(uuidAsString);
-        Task<Void> documentRef = db.collection("pedidos").document(getIdEmpresa()).set(this);
+        Task<Void> documentRef = db.collection("pedidos")
+                .document(getIdEmpresa())
+                .collection(idUsuario)
+                .document(getIdPedido()).set(this);
 
 
+
+
+    }
+
+    public void atualizarPedido(String idPedidoSalvo){
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("itens", getItens());
+        Task<Void> documentRef = db.collection("pedidos")
+                .document(getIdEmpresa())
+                .collection(getIdUsuario())
+                .document(idPedidoSalvo)
+                .update(data);
 
     }
 

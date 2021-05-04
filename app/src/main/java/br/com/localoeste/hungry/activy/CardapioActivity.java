@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +35,7 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,7 +72,7 @@ public class CardapioActivity extends AppCompatActivity {
     private Empresa empresaSelecionada;
     private AdapterProduto adapterProduto;
     private List<Produto> produtos = new ArrayList<>();
-    private List<ItemPedido>itensCarrinho = new ArrayList<>();
+    public List<ItemPedido>itensCarrinho = new ArrayList<>();
     private ItemPedido itemPedido;
     private FirebaseFirestore referenciaFirestore;
     private String idEmpresaLogada ;
@@ -81,6 +83,7 @@ public class CardapioActivity extends AppCompatActivity {
     private SimpleDateFormat format = new SimpleDateFormat("HH:mm");
     private AlertDialog dialog;
     private Pedido pedidoRecuperado;
+    private Pedido pedidoAnterior;
     private UsuarioFirebase usuario;
 
 
@@ -109,58 +112,65 @@ public class CardapioActivity extends AppCompatActivity {
 
             if (bundle.containsKey("item")){
                 itemPedido = (ItemPedido) bundle.getSerializable("item");
+                pedidoAnterior = (Pedido)  bundle.getSerializable("pedidoAnterior");
                 ItemPedido novoPedido = new ItemPedido();
 
-                Map<String, Object> usuarioShared = loadMap();
+//                Map<String, Object> usuarioShared = loadMap();
+
+                  if (pedidoAnterior != null){
+
+                      pedidoAnterior.atualizarPedido(pedidoAnterior.getIdPedido());
+                      idEmpresaLogada = pedidoAnterior.getIdEmpresa();
+
+                  }else{
+
+                      novoPedido.setIdProduto(itemPedido.getIdProduto());
+                      idEmpresaLogada = itemPedido.getIdEmpresa();
+                      novoPedido.setNomeProduto(itemPedido.getNomeProduto());
+                      novoPedido.setDescricaoProduto(itemPedido.getDescricaoProduto());
+                      novoPedido.setPrecoProduto(itemPedido.getPrecoProduto());
+                      novoPedido.setQuantidadeProduto(itemPedido.getQuantidadeProduto());
+                      novoPedido.setObservacao(itemPedido.getObservacao());
+                      novoPedido.setIdEmpresa(idEmpresaLogada);
+                      itensCarrinho.add(novoPedido);
 
 
-                   recuperarDadosUsuario();
+
+                      //salvar pedido
+                      if (pedidoRecuperado == null){
+
+                              pedidoRecuperado = new Pedido();
+                              pedidoRecuperado.setIdEmpresa(itemPedido.getIdEmpresa());
+                              pedidoRecuperado.setIdProduto(itemPedido.getIdProduto());
+                              pedidoRecuperado.setIdUsuario(idUsuarioLogado);
+                              pedidoRecuperado.setEndereco(usuario.getEndereco());
+                              pedidoRecuperado.setMetodoPagemento(1);
+                              pedidoRecuperado.setTotal(itemPedido.getPrecoProduto());
+                              pedidoRecuperado.setItens(itensCarrinho);
+                              pedidoRecuperado.setNome(usuario.getNome());
+
+                              pedidoRecuperado.salvar();
 
 
-                novoPedido.setIdProduto(itemPedido.getIdProduto());
-                idEmpresaLogada = itemPedido.getIdEmpresa();
-                novoPedido.setNomeProduto(itemPedido.getNomeProduto());
-                novoPedido.setDescricaoProduto(itemPedido.getDescricaoProduto());
-                novoPedido.setPrecoProduto(itemPedido.getPrecoProduto());
-                novoPedido.setQuantidadeProduto(itemPedido.getQuantidadeProduto());
-                novoPedido.setObservacao(itemPedido.getObservacao());
+                      }else{
+                          Log.d("log", "Já existe um pedido deste usuário");
+                          // pedidoRecuperado.setTotal(itemPedido.getPrecoProduto());
+                          pedidoRecuperado = new Pedido();
+                          pedidoRecuperado.setItens(itensCarrinho);
+                          pedidoRecuperado.atualizarPedido(pedidoRecuperado.getIdPedido());
+
+                      }
 
 
-
-                itensCarrinho.add(novoPedido);
-
-                //salvar pedido
-                if (pedidoRecuperado == null){
-                    pedidoRecuperado = new Pedido();
-                    if (usuarioShared != null){
-                        //Salvando no SharedPreferences
-//                    Map<String, Object> inputMap = new HashMap<>();
-//                    inputMap.put("nome", novoUsuario.getNome());
-//                    inputMap.put("endereco",  novoUsuario.getEndereco());
-//                    inputMap.put("telefone",  novoUsuario.getTelefone());
-//                    inputMap.put("email", novoUsuario.getEndereco());
-//                    inputMap.put("cpf",  novoUsuario.getCpf());
-//                    saveMap(inputMap);
-                    }
+                  }
 
 
-                    pedidoRecuperado.setIdEmpresa(itemPedido.getIdEmpresa());
-                    pedidoRecuperado.setIdProduto(itemPedido.getIdProduto());
-                    pedidoRecuperado.setIdUsuario(idUsuarioLogado);
-                    pedidoRecuperado.setEndereco(usuario.getEndereco());
-                    pedidoRecuperado.setMetodoPagemento(1);
-                    pedidoRecuperado.setTotal(itemPedido.getPrecoProduto());
-                    pedidoRecuperado.setItens(itensCarrinho);
-                    pedidoRecuperado.setNome(usuario.getNome());
-
-                    pedidoRecuperado.salvar();
-
-                }else{
-                    Log.d("log", "Já existe um pedido deste usuário");
-                }
-
-
-                pesquisarEmpresa(idEmpresaLogada);
+// Está ocorrendo o erro aqui
+                  if (idEmpresaLogada != null) {
+                      pesquisarEmpresa(idEmpresaLogada);
+                  }else{
+                      pesquisarEmpresa(empresaSelecionada.getIdEmpresa());
+                  }
             }else{
 
                 empresaSelecionada = (Empresa)bundle.getSerializable("empresa");
@@ -197,6 +207,7 @@ public class CardapioActivity extends AppCompatActivity {
                             Produto produtoSelecionado = produtos.get(position);
                             Intent itDescricao = new Intent(CardapioActivity.this ,DescricaoProdutoActivity.class);
                             itDescricao.putExtra("produto",produtoSelecionado);
+                            itDescricao.putExtra("pedido", (Serializable) pedidoRecuperado);
                             startActivity(itDescricao);
                             finish();
                         }
@@ -215,7 +226,7 @@ public class CardapioActivity extends AppCompatActivity {
 
 
             //Recupera produtos da empresa
-            recuperarProdutos();
+            recuperarProdutos(idEmpresaLogada);
 
 
 
@@ -228,41 +239,41 @@ public class CardapioActivity extends AppCompatActivity {
     }
 
 
-    private void saveMap(Map<String, Object> inputMap) {
-       SharedPreferences preferences = getApplicationContext().getSharedPreferences("dados_usuario", Context.MODE_PRIVATE);
-
-        if (preferences != null) {
-            JSONObject jsonObject = new JSONObject(inputMap);
-            String jsonString = jsonObject.toString();
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.remove("dados_usuario").apply();
-            editor.putString("dados_usuario", jsonString);
-            editor.commit();
-        }
-    }
-
-
-    private Map<String, Object> loadMap() {
-        Map<String, Object> outputMap = new HashMap<>();
-        SharedPreferences preferences = getApplicationContext().getSharedPreferences("dados_usuario", Context.MODE_PRIVATE);
-
-
-
-        try {
-            if (preferences != null) {
-                String jsonString = preferences.getString("dados_usuario", (new JSONObject()).toString());
-                JSONObject jsonObject = new JSONObject(jsonString);
-                Iterator<String> keysItr = jsonObject.keys();
-                while (keysItr.hasNext()) {
-                    String key = keysItr.next();
-                    outputMap.put(key, jsonObject.get(key));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return outputMap;
-    }
+//    private void saveMap(Map<String, Object> inputMap) {
+//       SharedPreferences preferences = getApplicationContext().getSharedPreferences("dados_usuario", Context.MODE_PRIVATE);
+//
+//        if (preferences != null) {
+//            JSONObject jsonObject = new JSONObject(inputMap);
+//            String jsonString = jsonObject.toString();
+//            SharedPreferences.Editor editor = preferences.edit();
+//            editor.remove("dados_usuario").apply();
+//            editor.putString("dados_usuario", jsonString);
+//            editor.commit();
+//        }
+//    }
+//
+//
+//    private Map<String, Object> loadMap() {
+//        Map<String, Object> outputMap = new HashMap<>();
+//        SharedPreferences preferences = getApplicationContext().getSharedPreferences("dados_usuario", Context.MODE_PRIVATE);
+//
+//
+//
+//        try {
+//            if (preferences != null) {
+//                String jsonString = preferences.getString("dados_usuario", (new JSONObject()).toString());
+//                JSONObject jsonObject = new JSONObject(jsonString);
+//                Iterator<String> keysItr = jsonObject.keys();
+//                while (keysItr.hasNext()) {
+//                    String key = keysItr.next();
+//                    outputMap.put(key, jsonObject.get(key));
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return outputMap;
+//    }
 
     // COnfigura  o cabeçalho  baseado na empresa passada
     private void configurarEmpresa(Empresa empresaSelecionada) {
@@ -362,6 +373,9 @@ public class CardapioActivity extends AppCompatActivity {
         usuario = new UsuarioFirebase();
         usuario.setIdUsuario(idUsuarioLogado);
 
+        Bundle bundle = getIntent().getExtras();
+        empresaSelecionada = (Empresa)bundle.getSerializable("empresa");
+
 
 
 
@@ -380,10 +394,10 @@ public class CardapioActivity extends AppCompatActivity {
     }
 
     //Recuperando Produtos da empresa
-    private void recuperarProdutos() {
+    private void recuperarProdutos(String idEmp) {
         referenciaFirestore
                 .collection("produtos")
-                .whereEqualTo("idEmpresa", idEmpresaLogada)
+                .whereEqualTo("idEmpresa", idEmp)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -441,9 +455,11 @@ public class CardapioActivity extends AppCompatActivity {
 
 
 
-   private void recuperarPedido(){
+   private void recuperarPedido(String idEmp){
 
        Task<QuerySnapshot> coletionPedidos =  referenciaFirestore.collection("pedidos")
+               .document(idEmp)
+               .collection(idUsuarioLogado)
                .whereEqualTo("idUsuario", idUsuarioLogado).get()
 
       .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -453,6 +469,18 @@ public class CardapioActivity extends AppCompatActivity {
                   for (QueryDocumentSnapshot document : task.getResult()) {
 
                       pedidoRecuperado = document.toObject(Pedido.class);
+
+//                      if(pedidoRecuperado != null){
+
+                        //  Salvando no SharedPreferences
+//                          Map<String, Object> inputMap = new HashMap<>();
+//                          inputMap.put("idProduto", pedidoRecuperado.getIdProduto());
+//                          inputMap.put("idPedido", pedidoRecuperado.getIdPedido());
+//
+//                          saveMap(inputMap);
+//                   }
+
+
 
                       Log.d("log", document.getId() + " => " + document.getData());
                   }
@@ -488,11 +516,17 @@ public class CardapioActivity extends AppCompatActivity {
                     usuario = novoUsuario;
 
                 }
-                recuperarPedido();
+                if (empresaSelecionada != null){
+                    recuperarPedido(empresaSelecionada.getIdEmpresa());
+                }
+                else{
+                    recuperarPedido(idEmpresaLogada);
+                }
+
             }
         });
 
-        recuperarPedido();
+
 
 
     }
@@ -524,7 +558,7 @@ public class CardapioActivity extends AppCompatActivity {
     protected void onRestart() {
 
         super.onRestart();
-        recuperarProdutos();
+        recuperarProdutos(idEmpresaLogada);
         Log.d("log","Chamou onStarte do Cardápio ");
     }
 
