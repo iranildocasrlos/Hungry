@@ -7,10 +7,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,13 +32,18 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.adapter.AdapterProduto;
@@ -45,7 +52,9 @@ import br.com.localoeste.hungry.helper.UsuarioFirebase;
 import br.com.localoeste.hungry.listener.RecyclerItemClickListener;
 import br.com.localoeste.hungry.model.Empresa;
 import br.com.localoeste.hungry.model.ItemPedido;
+import br.com.localoeste.hungry.model.Pedido;
 import br.com.localoeste.hungry.model.Produto;
+import br.com.localoeste.hungry.model.Usuario;
 import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
 
@@ -71,6 +80,9 @@ public class CardapioActivity extends AppCompatActivity {
     private String stringDate;
     private SimpleDateFormat format = new SimpleDateFormat("HH:mm");
     private AlertDialog dialog;
+    private Pedido pedidoRecuperado;
+    private UsuarioFirebase usuario;
+
 
     //Initializing Calender Object
     private Calendar calendar = Calendar.getInstance();
@@ -89,21 +101,65 @@ public class CardapioActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         inicializarComponentes();
+        recuperarDadosUsuario();
+
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
 
             if (bundle.containsKey("item")){
                 itemPedido = (ItemPedido) bundle.getSerializable("item");
-
                 ItemPedido novoPedido = new ItemPedido();
+
+                Map<String, Object> usuarioShared = loadMap();
+
+
+                   recuperarDadosUsuario();
+
+
                 novoPedido.setIdProduto(itemPedido.getIdProduto());
                 idEmpresaLogada = itemPedido.getIdEmpresa();
                 novoPedido.setNomeProduto(itemPedido.getNomeProduto());
                 novoPedido.setDescricaoProduto(itemPedido.getDescricaoProduto());
                 novoPedido.setPrecoProduto(itemPedido.getPrecoProduto());
                 novoPedido.setQuantidadeProduto(itemPedido.getQuantidadeProduto());
+                novoPedido.setObservacao(itemPedido.getObservacao());
+
+
+
                 itensCarrinho.add(novoPedido);
+
+                //salvar pedido
+                if (pedidoRecuperado == null){
+                    pedidoRecuperado = new Pedido();
+                    if (usuarioShared != null){
+                        //Salvando no SharedPreferences
+//                    Map<String, Object> inputMap = new HashMap<>();
+//                    inputMap.put("nome", novoUsuario.getNome());
+//                    inputMap.put("endereco",  novoUsuario.getEndereco());
+//                    inputMap.put("telefone",  novoUsuario.getTelefone());
+//                    inputMap.put("email", novoUsuario.getEndereco());
+//                    inputMap.put("cpf",  novoUsuario.getCpf());
+//                    saveMap(inputMap);
+                    }
+
+
+                    pedidoRecuperado.setIdEmpresa(itemPedido.getIdEmpresa());
+                    pedidoRecuperado.setIdProduto(itemPedido.getIdProduto());
+                    pedidoRecuperado.setIdUsuario(idUsuarioLogado);
+                    pedidoRecuperado.setEndereco(usuario.getEndereco());
+                    pedidoRecuperado.setMetodoPagemento(1);
+                    pedidoRecuperado.setTotal(itemPedido.getPrecoProduto());
+                    pedidoRecuperado.setItens(itensCarrinho);
+                    pedidoRecuperado.setNome(usuario.getNome());
+
+                    pedidoRecuperado.salvar();
+
+                }else{
+                    Log.d("log", "Já existe um pedido deste usuário");
+                }
+
+
                 pesquisarEmpresa(idEmpresaLogada);
             }else{
 
@@ -142,6 +198,7 @@ public class CardapioActivity extends AppCompatActivity {
                             Intent itDescricao = new Intent(CardapioActivity.this ,DescricaoProdutoActivity.class);
                             itDescricao.putExtra("produto",produtoSelecionado);
                             startActivity(itDescricao);
+                            finish();
                         }
 
                         @Override
@@ -160,13 +217,51 @@ public class CardapioActivity extends AppCompatActivity {
             //Recupera produtos da empresa
             recuperarProdutos();
 
-            //Recupera DADOS Usuario
-            recuperarDadosUsuario();
+
+
+
 
 
         }
 
 
+    }
+
+
+    private void saveMap(Map<String, Object> inputMap) {
+       SharedPreferences preferences = getApplicationContext().getSharedPreferences("dados_usuario", Context.MODE_PRIVATE);
+
+        if (preferences != null) {
+            JSONObject jsonObject = new JSONObject(inputMap);
+            String jsonString = jsonObject.toString();
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.remove("dados_usuario").apply();
+            editor.putString("dados_usuario", jsonString);
+            editor.commit();
+        }
+    }
+
+
+    private Map<String, Object> loadMap() {
+        Map<String, Object> outputMap = new HashMap<>();
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences("dados_usuario", Context.MODE_PRIVATE);
+
+
+
+        try {
+            if (preferences != null) {
+                String jsonString = preferences.getString("dados_usuario", (new JSONObject()).toString());
+                JSONObject jsonObject = new JSONObject(jsonString);
+                Iterator<String> keysItr = jsonObject.keys();
+                while (keysItr.hasNext()) {
+                    String key = keysItr.next();
+                    outputMap.put(key, jsonObject.get(key));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return outputMap;
     }
 
     // COnfigura  o cabeçalho  baseado na empresa passada
@@ -264,6 +359,11 @@ public class CardapioActivity extends AppCompatActivity {
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         storageRef =  ConfiguracaoFirebase.getFirebaseStorage();
         idUsuarioLogado = UsuarioFirebase.getId_Usuario();
+        usuario = new UsuarioFirebase();
+        usuario.setIdUsuario(idUsuarioLogado);
+
+
+
 
         //pega horário atual
         //Initializing the date formatter
@@ -273,7 +373,9 @@ public class CardapioActivity extends AppCompatActivity {
         currentDate = Date.format(calendar.getTime());
         Date date = new Date();
         stringDate = format.format(date);
-        Log.d("hora",stringDate);
+
+
+
 
     }
 
@@ -310,37 +412,6 @@ public class CardapioActivity extends AppCompatActivity {
 
 
 
-   private void recuperarDadosUsuario(){
-
-        dialog = new SpotsDialog.Builder()
-                .setContext(this)
-                .setMessage("Carregando dados!")
-                .setCancelable(false)
-                .build();
-
-        dialog.show();
-
-                DocumentReference docRef =  referenciaFirestore.collection("usuarios")
-               .document(idUsuarioLogado);
-
-                docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            UsuarioFirebase usuarioFirebase = documentSnapshot.toObject(UsuarioFirebase.class);
-                            if (usuarioFirebase != null) {
-
-
-
-                            }
-                            recuperarPedido();
-                        }
-
-                    }
-                });
-
-
-   }
 
 
    //Método par recuperar empresa
@@ -372,8 +443,59 @@ public class CardapioActivity extends AppCompatActivity {
 
    private void recuperarPedido(){
 
+       Task<QuerySnapshot> coletionPedidos =  referenciaFirestore.collection("pedidos")
+               .whereEqualTo("idUsuario", idUsuarioLogado).get()
+
+      .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+          @Override
+          public void onComplete(@NonNull Task<QuerySnapshot> task) {
+              if (task.isSuccessful()) {
+                  for (QueryDocumentSnapshot document : task.getResult()) {
+
+                      pedidoRecuperado = document.toObject(Pedido.class);
+
+                      Log.d("log", document.getId() + " => " + document.getData());
+                  }
+              } else {
+                  Log.d("log", "Error getting documents: ", task.getException());
+              }
+          }
+      });
         dialog.dismiss();
    }
+
+
+
+
+    public  void recuperarDadosUsuario(){
+
+        dialog = new SpotsDialog.Builder()
+                .setContext(this)
+                .setMessage("Carregando dados")
+                .setCancelable( false )
+                .build();
+        dialog.show();
+
+        DocumentReference docRef =  referenciaFirestore.collection("usuarios")
+                .document(idUsuarioLogado);
+
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    UsuarioFirebase novoUsuario = documentSnapshot.toObject(UsuarioFirebase.class);
+
+                    usuario = novoUsuario;
+
+                }
+                recuperarPedido();
+            }
+        });
+
+        recuperarPedido();
+
+
+    }
 
 
     @Override
@@ -403,21 +525,26 @@ public class CardapioActivity extends AppCompatActivity {
 
         super.onRestart();
         recuperarProdutos();
-        Log.d("logs","chamou onRestart");
+        Log.d("log","Chamou onStarte do Cardápio ");
     }
 
     @Override
     protected void onResume() {
+        Log.d("log","Chamou onResume do Cardápio ");
 
         super.onResume();
 
     }
 
+    @Override
+    protected void onStop() {
+        Log.d("log","Chamou onStop do Cardápio ");
 
+        super.onStop();
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
-        finish();
         return true;
     }
 

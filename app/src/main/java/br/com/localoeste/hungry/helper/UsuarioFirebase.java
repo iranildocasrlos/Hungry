@@ -1,16 +1,21 @@
 package br.com.localoeste.hungry.helper;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import br.com.localoeste.hungry.model.Usuario;
+
 
 public class UsuarioFirebase{
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore referenciaFirestore;
 
     private static String idUsuario,nome,email,endereco,telefone,cep,cpf,tipoUsuario;
 
@@ -129,6 +134,8 @@ public class UsuarioFirebase{
 
 
     }
+
+
 
 
 

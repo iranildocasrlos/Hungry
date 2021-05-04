@@ -10,6 +10,7 @@ public class ItemPedido implements Serializable {
     private int quantidadeProduto;
     private Double precoProduto;
     private String descricaoProduto;
+    private String observacao;
 
     public ItemPedido() {
     }
@@ -61,5 +62,14 @@ public class ItemPedido implements Serializable {
 
     public void setIdEmpresa(String idEmpresa) {
         this.idEmpresa = idEmpresa;
+    }
+
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
     }
 }

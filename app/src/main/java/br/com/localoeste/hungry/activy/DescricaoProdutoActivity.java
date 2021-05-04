@@ -27,6 +27,7 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
     private Produto produtoSelecionado ;
     private TextView descricaoProduto;
     private TextView  quantidadeProduto;
+    private TextView observacao;
     private ImageView imagemProduto;
     private String urlProduto;
     private Button  btAdicionar;
@@ -66,11 +67,12 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
                 urlProduto = produtoSelecionado.getUrlImagemProduto();
             }
 
-            if (produtoSelecionado.getPrecoProduto() != null){
+            if (produtoSelecionado.getPrecoProduto() != null) {
                 btAdicionar.setText("Adicionar  " + produtoSelecionado.getPrecoProduto());
 
 
             }
+
 
             idEmpresa = produtoSelecionado.getIdEmpresa();
 
@@ -105,6 +107,12 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
                 itemPedido.setNomeProduto(produtoSelecionado.getNomeProduto());
                 itemPedido.setDescricaoProduto(produtoSelecionado.getDescricaoProduto());
                 itemPedido.setIdEmpresa(idEmpresa);
+                if (observacao.getText().toString() != null){
+                    itemPedido.setObservacao(observacao.getText().toString());
+                }else {
+                    itemPedido.setObservacao("sem observações");
+                }
+
                 if (valor!= 0.0){
                     itemPedido.setPrecoProduto(valor);
                 }else{
@@ -130,7 +138,7 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
         quantidade++;
         btAdicionar.setText("Adicionar  " + (produtoSelecionado.getPrecoProduto()* quantidade));
 
-        valor = valor + produtoSelecionado.getPrecoProduto();
+        valor =  produtoSelecionado.getPrecoProduto() * quantidade;
         quantidadeProduto.setText(String.valueOf(quantidade));
 
     }
@@ -154,6 +162,7 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
 
         descricaoProduto = findViewById(R.id.textViewDescricaoDet);
         quantidadeProduto = findViewById(R.id.textAdicionaQuantidade);
+        observacao = findViewById(R.id.editTextTextMultiDescricao);
         imagemProduto = findViewById(R.id.imageDescricao);
         btAdicionar =  findViewById(R.id.btAdicionarDescricao);
         btnAdd = findViewById(R.id.imageButtonAdd);

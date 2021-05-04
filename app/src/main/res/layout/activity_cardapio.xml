@@ -38,13 +38,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+
     <TextView
         android:id="@+id/textNomeEmCardapio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:text="China in box"
+        android:text="Nome Empresa"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -59,7 +60,7 @@
             android:id="@+id/textCardapioCategoria"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chinesa - " />
+            android:text="Tipo - " />
 
 
         <TextView
@@ -67,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
-            android:text="8:00-19:00" />
+            android:text="Horário" />
 
         <TextView
             android:id="@+id/textCadapioStatus"
@@ -75,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:text="  Fechado" />
+            android:text="status" />
     </LinearLayout>
 </LinearLayout>
 
