@@ -152,6 +152,7 @@ public class Pedido implements Serializable {
 
         Map<String, Object> data = new HashMap<>();
         data.put("itens", getItens());
+        data.put("total",getTotal());
         Task<Void> documentRef = db.collection("pedidos")
                 .document(getIdEmpresa())
                 .collection(getIdUsuario())

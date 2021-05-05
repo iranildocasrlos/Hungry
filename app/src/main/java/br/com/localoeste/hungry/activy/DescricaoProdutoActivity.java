@@ -75,11 +75,14 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
 
             }
 
-            pedidoAnterior = (Pedido) bundle.getSerializable("pedido");
-
-            if (pedidoAnterior.getIdPedido() != null){
-              String  idPedidoAnterior = pedidoAnterior.getIdPedido();
+           if (bundle.containsKey("pedido")){
+               pedidoAnterior = (Pedido) bundle.getSerializable("pedido");
+                if (pedidoAnterior.getIdPedido() != null){
+                    String  idPedidoAnterior = pedidoAnterior.getIdPedido();
+                }
             }
+
+
 
 
             idEmpresa = produtoSelecionado.getIdEmpresa();
@@ -129,14 +132,18 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
 
                 itemPedido.setQuantidadeProduto(quantidade);
 
-                if (pedidoAnterior.getIdPedido() != null){
+                Intent intentCardapio = new Intent(DescricaoProdutoActivity.this, CardapioActivity.class);
+                intentCardapio.putExtra("item",itemPedido);
+
+
+                if (pedidoAnterior != null){
                     pedidoAnterior.getItens().add(itemPedido);
+                    pedidoAnterior.setTotal( (pedidoAnterior.getTotal()+itemPedido.getPrecoProduto()));
+                    intentCardapio.putExtra("pedidoAnterior", pedidoAnterior);
                 }
 
 
-                Intent intentCardapio = new Intent(DescricaoProdutoActivity.this, CardapioActivity.class);
-                intentCardapio.putExtra("item",itemPedido);
-                intentCardapio.putExtra("pedidoAnterior", pedidoAnterior);
+
                 startActivity(intentCardapio);
                 finish();
             }

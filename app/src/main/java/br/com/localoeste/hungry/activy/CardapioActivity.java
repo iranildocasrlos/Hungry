@@ -207,7 +207,10 @@ public class CardapioActivity extends AppCompatActivity {
                             Produto produtoSelecionado = produtos.get(position);
                             Intent itDescricao = new Intent(CardapioActivity.this ,DescricaoProdutoActivity.class);
                             itDescricao.putExtra("produto",produtoSelecionado);
-                            itDescricao.putExtra("pedido", (Serializable) pedidoRecuperado);
+                            if (pedidoRecuperado != null){
+                                itDescricao.putExtra("pedido", (Serializable) pedidoRecuperado);
+                            }
+
                             startActivity(itDescricao);
                             finish();
                         }
