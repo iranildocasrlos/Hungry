@@ -37,6 +37,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -68,6 +69,9 @@ public class CardapioActivity extends AppCompatActivity {
     private TextView horario;
     private TextView status;
     private TextView categoria;
+    private TextView textVerCarrinho;
+    private TextView textQuantidade;
+    private TextView textValor;
     private RecyclerView recyclerViewEmpresaCardapio;
     private Empresa empresaSelecionada;
     private AdapterProduto adapterProduto;
@@ -85,6 +89,8 @@ public class CardapioActivity extends AppCompatActivity {
     private Pedido pedidoRecuperado;
     private Pedido pedidoAnterior;
     private UsuarioFirebase usuario;
+    private int qtdItensCarrinho;
+    private Double totalCarrinho;
 
 
     //Initializing Calender Object
@@ -107,9 +113,10 @@ public class CardapioActivity extends AppCompatActivity {
         recuperarDadosUsuario();
 
 
+
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
-
+            DecimalFormat df = new DecimalFormat("0.00");
             if (bundle.containsKey("item")){
                 itemPedido = (ItemPedido) bundle.getSerializable("item");
                 pedidoAnterior = (Pedido)  bundle.getSerializable("pedidoAnterior");
@@ -150,6 +157,18 @@ public class CardapioActivity extends AppCompatActivity {
                               pedidoRecuperado.setNome(usuario.getNome());
 
                               pedidoRecuperado.salvar();
+                          String numeroFormatato = df.format(pedidoRecuperado.getTotal());
+                          textValor.setText("R$: "+ numeroFormatato);
+
+                          itensCarrinho = pedidoRecuperado.getItens();
+
+                          for (ItemPedido item : itensCarrinho){
+                              int qtde = item.getQuantidadeProduto();
+                              Double preco = item.getPrecoProduto();
+
+                              qtdItensCarrinho += qtde;
+                          }
+
 
 
                       }else{
@@ -158,6 +177,20 @@ public class CardapioActivity extends AppCompatActivity {
                           pedidoRecuperado = new Pedido();
                           pedidoRecuperado.setItens(itensCarrinho);
                           pedidoRecuperado.atualizarPedido(pedidoRecuperado.getIdPedido());
+
+                          itensCarrinho = pedidoRecuperado.getItens();
+
+                          for (ItemPedido item : itensCarrinho){
+                              int qtde = item.getQuantidadeProduto();
+                              Double preco = item.getPrecoProduto();
+
+
+                              qtdItensCarrinho += qtde;
+                          }
+
+                          String numeroFormatato = df.format(pedidoRecuperado.getTotal());
+                          textValor.setText("R$: "+ numeroFormatato);
+
 
                       }
 
@@ -241,6 +274,7 @@ public class CardapioActivity extends AppCompatActivity {
 
     }
 
+  //Sharead Preferences
 
 //    private void saveMap(Map<String, Object> inputMap) {
 //       SharedPreferences preferences = getApplicationContext().getSharedPreferences("dados_usuario", Context.MODE_PRIVATE);
@@ -370,6 +404,9 @@ public class CardapioActivity extends AppCompatActivity {
         horario = findViewById(R.id.textCardapioHorario);
         status = findViewById(R.id.textCadapioStatus);
         categoria = findViewById(R.id.textCardapioCategoria);
+        textQuantidade = findViewById(R.id.textQuantidade);
+        textValor = findViewById(R.id.textValor);
+        textVerCarrinho = findViewById(R.id.textVerCarrinho);
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         storageRef =  ConfiguracaoFirebase.getFirebaseStorage();
         idUsuarioLogado = UsuarioFirebase.getId_Usuario();
@@ -459,7 +496,8 @@ public class CardapioActivity extends AppCompatActivity {
 
 
    private void recuperarPedido(String idEmp){
-
+       qtdItensCarrinho = 0;
+       totalCarrinho = 0.0;
        Task<QuerySnapshot> coletionPedidos =  referenciaFirestore.collection("pedidos")
                .document(idEmp)
                .collection(idUsuarioLogado)
@@ -468,20 +506,35 @@ public class CardapioActivity extends AppCompatActivity {
       .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
           @Override
           public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+
+
               if (task.isSuccessful()) {
                   for (QueryDocumentSnapshot document : task.getResult()) {
 
                       pedidoRecuperado = document.toObject(Pedido.class);
 
-//                      if(pedidoRecuperado != null){
+                      if(pedidoRecuperado != null){
 
-                        //  Salvando no SharedPreferences
-//                          Map<String, Object> inputMap = new HashMap<>();
-//                          inputMap.put("idProduto", pedidoRecuperado.getIdProduto());
-//                          inputMap.put("idPedido", pedidoRecuperado.getIdPedido());
-//
-//                          saveMap(inputMap);
-//                   }
+                          itensCarrinho = pedidoRecuperado.getItens();
+
+                          for (ItemPedido item : itensCarrinho){
+                              int qtde = item.getQuantidadeProduto();
+                              Double preco = item.getPrecoProduto();
+
+                              totalCarrinho += preco;
+                              qtdItensCarrinho += qtde;
+                          }
+
+
+
+                          DecimalFormat df = new DecimalFormat("0.00");
+                          String numeroFormatato = df.format(totalCarrinho);
+
+                          textQuantidade.setText("qdte: "+ String.valueOf(qtdItensCarrinho));
+                          textValor.setText("R$: "+ numeroFormatato);
+
+                   }
 
 
 
@@ -492,6 +545,7 @@ public class CardapioActivity extends AppCompatActivity {
               }
           }
       });
+
         dialog.dismiss();
    }
 

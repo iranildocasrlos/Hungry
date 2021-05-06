@@ -110,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:shadowColor="#FFFFFF"
-                android:text="qtd: 0"
+                android:text="qtde: 0"
                 android:textColor="#FFFFFF" />
 
             <TextView
