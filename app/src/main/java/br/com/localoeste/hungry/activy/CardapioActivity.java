@@ -7,12 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,7 +21,6 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -32,8 +28,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -43,10 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.adapter.AdapterProduto;
@@ -57,7 +48,6 @@ import br.com.localoeste.hungry.model.Empresa;
 import br.com.localoeste.hungry.model.ItemPedido;
 import br.com.localoeste.hungry.model.Pedido;
 import br.com.localoeste.hungry.model.Produto;
-import br.com.localoeste.hungry.model.Usuario;
 import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
 
@@ -272,6 +262,20 @@ public class CardapioActivity extends AppCompatActivity {
         }
 
 
+
+        //Ação do botão verCrrinho
+        textVerCarrinho.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intCarrrinho =  new Intent(CardapioActivity.this, CarrinhoActivity.class);
+                intCarrrinho.putExtra("idEMpresa", idEmpresaLogada);
+                intCarrrinho.putExtra("idUsuario", idUsuarioLogado);
+                intCarrrinho.putExtra("idPedido", pedidoRecuperado.getIdPedido());
+                startActivity(intCarrrinho);
+            }
+        });
+
+
     }
 
   //Sharead Preferences
@@ -406,7 +410,7 @@ public class CardapioActivity extends AppCompatActivity {
         categoria = findViewById(R.id.textCardapioCategoria);
         textQuantidade = findViewById(R.id.textQuantidade);
         textValor = findViewById(R.id.textValor);
-        textVerCarrinho = findViewById(R.id.textVerCarrinho);
+        textVerCarrinho = findViewById(R.id.textFinalizar);
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         storageRef =  ConfiguracaoFirebase.getFirebaseStorage();
         idUsuarioLogado = UsuarioFirebase.getId_Usuario();
@@ -498,6 +502,7 @@ public class CardapioActivity extends AppCompatActivity {
    private void recuperarPedido(String idEmp){
        qtdItensCarrinho = 0;
        totalCarrinho = 0.0;
+       itensCarrinho = new ArrayList<>();
        Task<QuerySnapshot> coletionPedidos =  referenciaFirestore.collection("pedidos")
                .document(idEmp)
                .collection(idUsuarioLogado)
