@@ -16,6 +16,7 @@ public class Produto implements Serializable {
     private Double precoProduto;
     private String idProduto;
     private String idEmpresa;
+    private int quantidade;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
@@ -74,6 +75,13 @@ public class Produto implements Serializable {
         this.idProduto = idProduto;
     }
 
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
 
     public void salvar(){
 

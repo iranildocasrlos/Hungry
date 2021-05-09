@@ -268,7 +268,7 @@ public class CardapioActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intCarrrinho =  new Intent(CardapioActivity.this, CarrinhoActivity.class);
-                intCarrrinho.putExtra("idEMpresa", idEmpresaLogada);
+                intCarrrinho.putExtra("idEmpresa", idEmpresaLogada);
                 intCarrrinho.putExtra("idUsuario", idUsuarioLogado);
                 intCarrrinho.putExtra("idPedido", pedidoRecuperado.getIdPedido());
                 startActivity(intCarrrinho);
@@ -402,7 +402,7 @@ public class CardapioActivity extends AppCompatActivity {
 
     private void inicializarComponentes() {
 
-        recyclerViewEmpresaCardapio = findViewById(R.id.recyclerProdutoCardapio);
+        recyclerViewEmpresaCardapio = findViewById(R.id.recyclerCarrinho);
         nomeEmpresaCadapio = findViewById(R.id.textNomeEmCardapio);
         imagemEmpresaCardapio =  findViewById(R.id.imageCardapioEmpresa);
         horario = findViewById(R.id.textCardapioHorario);
@@ -536,7 +536,7 @@ public class CardapioActivity extends AppCompatActivity {
                           DecimalFormat df = new DecimalFormat("0.00");
                           String numeroFormatato = df.format(totalCarrinho);
 
-                          textQuantidade.setText("qdte: "+ String.valueOf(qtdItensCarrinho));
+                          textQuantidade.setText("quant.: "+ String.valueOf(qtdItensCarrinho));
                           textValor.setText("R$: "+ numeroFormatato);
 
                    }
@@ -606,7 +606,11 @@ public class CardapioActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.menuPedido:
-
+                Intent intCarrrinho =  new Intent(CardapioActivity.this, CarrinhoActivity.class);
+                intCarrrinho.putExtra("idEmpresa", idEmpresaLogada);
+                intCarrrinho.putExtra("idUsuario", idUsuarioLogado);
+                intCarrrinho.putExtra("idPedido", pedidoRecuperado.getIdPedido());
+                startActivity(intCarrrinho);
                 break;
 
         }

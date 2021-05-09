@@ -20,10 +20,15 @@ public class Pedido implements Serializable {
     private String endereco;
     private List<ItemPedido> itens;
     private Double total;
-    private String status = "aguardando";
+    private String status = "selecionado";
     private int metodoPagemento;
     private String observacaoEmpresa;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public static final String STATUS_SELECIONADO = "selecionado";
+    public static final String STATUS_PREPARANDO = "preparando";
+    public static final String STATUS_A_CAMINHO = "A caminho";
+    public static final String STATUS_CHEGOU = "chegou";
+    public static final String STATUS_RECEBIDO = "recebido";
 
 
     public Pedido() {

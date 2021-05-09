@@ -110,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:shadowColor="#FFFFFF"
-                android:text="qtde: 0"
+                android:text="quant.: 0"
                 android:textColor="#FFFFFF" />
 
             <TextView
@@ -123,7 +123,7 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerProdutoCardapio"
+            android:id="@+id/recyclerCarrinho"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"

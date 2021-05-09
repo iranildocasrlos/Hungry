@@ -38,9 +38,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.localoeste.hungry.R;
+import br.com.localoeste.hungry.adapter.AdapterCarrinho;
 import br.com.localoeste.hungry.adapter.AdapterProduto;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
-import br.com.localoeste.hungry.helper.EmpresaFirebase;
 import br.com.localoeste.hungry.model.ItemPedido;
 import br.com.localoeste.hungry.model.Pedido;
 import br.com.localoeste.hungry.model.Produto;
@@ -49,13 +49,12 @@ public class CarrinhoActivity extends AppCompatActivity {
 
     private FirebaseAuth autenticacao;
     private RecyclerView recyclerCarrinho;
-    private AdapterProduto adapterProduto;
+    private AdapterCarrinho adapterProduto;
     private List<Produto> produtos = new ArrayList<>();
     public List<ItemPedido>itensCarrinho = new ArrayList<>();
     private FirebaseFirestore referenciaFirestore;
     private String idEmpresaLogada ,idUsuario, idPedido;
     private StorageReference storageRef;
-    private TextView textVerFinalizarPedido;
     private TextView textQuantidade;
     private TextView textValor;
     private int qtdItensCarrinho;
@@ -72,7 +71,7 @@ public class CarrinhoActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
 
-            if (bundle.containsKey("idEMpresa")){
+            if (bundle.containsKey("idEmpresa")){
 
                 idEmpresaLogada = (String)bundle.getSerializable("idEmpresa");
                 idUsuario = (String)bundle.getSerializable("idUsuario");
@@ -93,7 +92,7 @@ public class CarrinhoActivity extends AppCompatActivity {
         //Configurações do recyclerView
         recyclerCarrinho.setLayoutManager(new LinearLayoutManager(this));
         recyclerCarrinho.setHasFixedSize(true);
-        adapterProduto = new AdapterProduto(produtos,this);
+        adapterProduto = new AdapterCarrinho(produtos,this);
         recyclerCarrinho.setAdapter(adapterProduto);
 
         //Recupera produtos da empresa
@@ -113,7 +112,7 @@ public class CarrinhoActivity extends AppCompatActivity {
         Task<QuerySnapshot> coletionPedidos =  referenciaFirestore.collection("pedidos")
                 .document(idEmpresaLogada)
                 .collection(idUsuario)
-                .whereEqualTo("idPedido", idPedido).get()
+                .whereEqualTo("status",Pedido.STATUS_SELECIONADO).get()
 
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -133,7 +132,10 @@ public class CarrinhoActivity extends AppCompatActivity {
                                     for (ItemPedido item : itensCarrinho){
                                         int qtde = item.getQuantidadeProduto();
                                         Double preco = item.getPrecoProduto();
-
+                                        String id = item.getIdProduto();
+                                        String idEmpresa = item.getIdEmpresa();
+                                        int quantidade = item.getQuantidadeProduto();
+                                        recuperarProdutos(idEmpresa, id, quantidade);
                                         totalCarrinho += preco;
                                         qtdItensCarrinho += qtde;
                                     }
@@ -143,7 +145,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                                     DecimalFormat df = new DecimalFormat("0.00");
                                     String numeroFormatato = df.format(totalCarrinho);
 
-                                    textQuantidade.setText("qdte: "+ String.valueOf(qtdItensCarrinho));
+                                    textQuantidade.setText("quant.: "+ String.valueOf(qtdItensCarrinho));
                                     textValor.setText("R$: "+ numeroFormatato);
 
                                 }
@@ -165,23 +167,60 @@ public class CarrinhoActivity extends AppCompatActivity {
 
     private void inicializarComponentes() {
 
-        recyclerCarrinho = findViewById(R.id.recyclerCarrimho);
-        idEmpresaLogada = EmpresaFirebase.getId_empresa();
+        recyclerCarrinho = findViewById(R.id.recyclerCarrinho);
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         autenticacao = ConfiguracaoFirebase.getReferenciaAutenticacao();
         storageRef =  ConfiguracaoFirebase.getFirebaseStorage();
         textQuantidade = findViewById(R.id.textQuantidadeCarrinho);
         textValor = findViewById(R.id.textValorCarrinho);
-        textVerFinalizarPedido = findViewById(R.id.textFinalizarCarrinho);
+
 
 
     }
+
+    private void recuperarProdutos(String idEmp, String idP, int quantidade) {
+        referenciaFirestore
+                .collection("produtos")
+                .whereEqualTo("idEmpresa", idEmp)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                       // produtos.clear();
+                        if (task.isSuccessful()){
+
+                            for(QueryDocumentSnapshot document : task.getResult()){
+                                if (document.getData() != null){
+                                    Produto produto =  document.toObject(Produto.class);
+                                    if (produto.getUrlImagemProduto() != "" && produto.getUrlImagemProduto() != null){
+                                       if (produto.getIdProduto().equalsIgnoreCase(idP)){
+                                           produto.setQuantidade(quantidade);
+                                           produtos.add(produto);
+                                       }
+
+                                    }
+
+
+                                }
+
+                            }
+
+                        }
+                        adapterProduto.notifyDataSetChanged();
+                    }
+                });
+        adapterProduto.notifyDataSetChanged();
+    }
+
+
+
+
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_usuario, menu);
+        inflater.inflate(R.menu.menu_carrinho, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -228,7 +267,7 @@ public class CarrinhoActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                excluirProduto(viewHolder);
+                excluirPedido(viewHolder);
 
             }
         };
@@ -238,7 +277,7 @@ public class CarrinhoActivity extends AppCompatActivity {
     }
 
 
-    private void excluirProduto(RecyclerView.ViewHolder viewHolder){
+    private void excluirPedido(RecyclerView.ViewHolder viewHolder){
 
         int itemProduto = viewHolder.getAdapterPosition();
         LayoutInflater inflater = getLayoutInflater();
@@ -274,30 +313,30 @@ public class CarrinhoActivity extends AppCompatActivity {
 
                     String id_produto_deletar = produtos.get(itemProduto).getIdProduto();
 
-                    referenciaFirestore.collection("pedidos")
-                            .document(idEmpresaLogada)
-                            .collection(idUsuario)
-                            .document(id_produto_deletar)
-                            .delete()
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-
-
-
-
-                                    exibirMensagem("Produto excluído com sucesso!");
-                                    produtos.remove(id_produto_deletar);
-                                    produtos.clear();
-                                    adapterProduto.notifyDataSetChanged();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    exibirMensagem("Erro ao excluir produto!");
-                                }
-                            });
+//                    referenciaFirestore.collection("pedidos")
+//                            .document(idEmpresaLogada)
+//                            .collection(idUsuario)
+//                            .document(id_produto_deletar)
+//                            .delete()
+//                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                @Override
+//                                public void onSuccess(Void aVoid) {
+//
+//
+//
+//
+//                                    exibirMensagem("Produto excluído com sucesso!");
+//                                    produtos.remove(id_produto_deletar);
+//                                    produtos.clear();
+//                                    adapterProduto.notifyDataSetChanged();
+//                                }
+//                            })
+//                            .addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull Exception e) {
+//                                    exibirMensagem("Erro ao excluir produto!");
+//                                }
+//                            });
 
 
                 }
