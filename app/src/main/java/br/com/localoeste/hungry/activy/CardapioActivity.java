@@ -521,6 +521,8 @@ public class CardapioActivity extends AppCompatActivity {
 
                       if(pedidoRecuperado != null){
 
+
+
                           itensCarrinho = pedidoRecuperado.getItens();
 
                           for (ItemPedido item : itensCarrinho){

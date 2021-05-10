@@ -56,6 +56,7 @@
             android:layout_height="wrap_content"
             android:background="#689F38"
             android:backgroundTint="@color/white"
+            android:onClick="confirmarPedido"
             android:text="Finalizar Pedido"
             app:backgroundTint="#B71C1C" />
 

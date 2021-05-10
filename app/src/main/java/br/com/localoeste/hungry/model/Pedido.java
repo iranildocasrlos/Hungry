@@ -21,7 +21,7 @@ public class Pedido implements Serializable {
     private List<ItemPedido> itens;
     private Double total;
     private String status = "selecionado";
-    private int metodoPagemento;
+    private int metodoPagamento;
     private String observacaoEmpresa;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     public static final String STATUS_SELECIONADO = "selecionado";
@@ -29,6 +29,7 @@ public class Pedido implements Serializable {
     public static final String STATUS_A_CAMINHO = "A caminho";
     public static final String STATUS_CHEGOU = "chegou";
     public static final String STATUS_RECEBIDO = "recebido";
+    public static final String STATUS_AGUARDANDO = "aguardando";
 
 
     public Pedido() {
@@ -123,11 +124,11 @@ public class Pedido implements Serializable {
     }
 
     public int getMetodoPagemento() {
-        return metodoPagemento;
+        return metodoPagamento;
     }
 
     public void setMetodoPagemento(int metodoPagemento) {
-        this.metodoPagemento = metodoPagemento;
+        this.metodoPagamento = metodoPagemento;
     }
 
     public String getObservacaoEmpresa() {
@@ -156,6 +157,17 @@ public class Pedido implements Serializable {
     public void atualizarPedido(String idPedidoSalvo){
 
         Map<String, Object> data = new HashMap<>();
+        data.put("itens", getItens());
+        data.put("total",getTotal());
+        Task<Void> documentRef = db.collection("pedidos")
+                .document(getIdEmpresa())
+                .collection(getIdUsuario())
+                .document(idPedidoSalvo)
+                .update(data);
+
+    }
+    public void atualizarStatusPedido(String idPedidoSalvo , Map<String, Object>  data){
+
         data.put("itens", getItens());
         data.put("total",getTotal());
         Task<Void> documentRef = db.collection("pedidos")
