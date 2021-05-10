@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -245,6 +246,11 @@ public class CarrinhoActivity extends AppCompatActivity {
                 finish();
                 break;
 
+            case R.id.menuCompras:
+                Intent itentCompras = new Intent(CarrinhoActivity.this, ComprasActivity.class);
+                startActivity(itentCompras);
+                break;
+
         }
 
 
@@ -432,6 +438,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                 data.put("status", Pedido.STATUS_AGUARDANDO);
                 data.put("metodoPagamento", metodoPagamento);
                 pedidoRecuperado.atualizarStatusPedido(idPedido, data);
+                pedidoRecuperado = null;
 
 
             }
@@ -468,5 +475,14 @@ public class CarrinhoActivity extends AppCompatActivity {
         super.onRestart();
 
     }
+
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        Log.d("logs","chamou de volta a tela cardápio");
+        finish();
+        return true;
+    }
+
 
 }

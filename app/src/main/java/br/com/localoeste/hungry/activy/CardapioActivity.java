@@ -115,9 +115,11 @@ public class CardapioActivity extends AppCompatActivity {
 //                Map<String, Object> usuarioShared = loadMap();
 
                   if (pedidoAnterior != null){
+                      if (pedidoAnterior.getStatus().equals("selecionado")){
+                          pedidoAnterior.atualizarPedido(pedidoAnterior.getIdPedido());
+                          idEmpresaLogada = pedidoAnterior.getIdEmpresa();
+                      }
 
-                      pedidoAnterior.atualizarPedido(pedidoAnterior.getIdPedido());
-                      idEmpresaLogada = pedidoAnterior.getIdEmpresa();
 
                   }else{
 
@@ -188,7 +190,7 @@ public class CardapioActivity extends AppCompatActivity {
                   }
 
 
-// Está ocorrendo o erro aqui
+
                   if (idEmpresaLogada != null) {
                       pesquisarEmpresa(idEmpresaLogada);
                   }else{
@@ -231,7 +233,10 @@ public class CardapioActivity extends AppCompatActivity {
                             Intent itDescricao = new Intent(CardapioActivity.this ,DescricaoProdutoActivity.class);
                             itDescricao.putExtra("produto",produtoSelecionado);
                             if (pedidoRecuperado != null){
-                                itDescricao.putExtra("pedido", (Serializable) pedidoRecuperado);
+                                if (pedidoRecuperado.getStatus().equals("selecionado")){
+                                    itDescricao.putExtra("pedido", (Serializable) pedidoRecuperado);
+                                }
+
                             }
 
                             startActivity(itDescricao);
@@ -267,11 +272,15 @@ public class CardapioActivity extends AppCompatActivity {
         textVerCarrinho.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intCarrrinho =  new Intent(CardapioActivity.this, CarrinhoActivity.class);
-                intCarrrinho.putExtra("idEmpresa", idEmpresaLogada);
-                intCarrrinho.putExtra("idUsuario", idUsuarioLogado);
-                intCarrrinho.putExtra("idPedido", pedidoRecuperado.getIdPedido());
-                startActivity(intCarrrinho);
+                if (pedidoRecuperado != null) {
+                    Intent intCarrrinho = new Intent(CardapioActivity.this, CarrinhoActivity.class);
+                    intCarrrinho.putExtra("idEmpresa", idEmpresaLogada);
+                    intCarrrinho.putExtra("idUsuario", idUsuarioLogado);
+                    intCarrrinho.putExtra("idPedido", pedidoRecuperado.getIdPedido());
+                    startActivity(intCarrrinho);
+                    totalCarrinho = 0.0;
+                    qtdItensCarrinho = 0;
+                }
             }
         });
 
@@ -519,31 +528,33 @@ public class CardapioActivity extends AppCompatActivity {
 
                       pedidoRecuperado = document.toObject(Pedido.class);
 
-                      if(pedidoRecuperado != null){
 
 
+                      if(pedidoRecuperado != null) {
 
-                          itensCarrinho = pedidoRecuperado.getItens();
+                          if (pedidoRecuperado.getStatus().equalsIgnoreCase("selecionado")) {
 
-                          for (ItemPedido item : itensCarrinho){
-                              int qtde = item.getQuantidadeProduto();
-                              Double preco = item.getPrecoProduto();
 
-                              totalCarrinho += preco;
-                              qtdItensCarrinho += qtde;
+                              itensCarrinho = pedidoRecuperado.getItens();
+
+                              for (ItemPedido item : itensCarrinho) {
+                                  int qtde = item.getQuantidadeProduto();
+                                  Double preco = item.getPrecoProduto();
+
+                                  totalCarrinho += preco;
+                                  qtdItensCarrinho += qtde;
+                              }
+
+
+                              DecimalFormat df = new DecimalFormat("0.00");
+                              String numeroFormatato = df.format(totalCarrinho);
+
+                              textQuantidade.setText("quant.: " + String.valueOf(qtdItensCarrinho));
+                              textValor.setText("R$: " + numeroFormatato);
+
                           }
 
-
-
-                          DecimalFormat df = new DecimalFormat("0.00");
-                          String numeroFormatato = df.format(totalCarrinho);
-
-                          textQuantidade.setText("quant.: "+ String.valueOf(qtdItensCarrinho));
-                          textValor.setText("R$: "+ numeroFormatato);
-
-                   }
-
-
+                      }
 
                       Log.d("log", document.getId() + " => " + document.getData());
                   }
@@ -608,11 +619,20 @@ public class CardapioActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.menuPedido:
-                Intent intCarrrinho =  new Intent(CardapioActivity.this, CarrinhoActivity.class);
-                intCarrrinho.putExtra("idEmpresa", idEmpresaLogada);
-                intCarrrinho.putExtra("idUsuario", idUsuarioLogado);
-                intCarrrinho.putExtra("idPedido", pedidoRecuperado.getIdPedido());
-                startActivity(intCarrrinho);
+
+                if (pedidoRecuperado != null) {
+                    Intent intCarrrinho = new Intent(CardapioActivity.this, CarrinhoActivity.class);
+                    intCarrrinho.putExtra("idEmpresa", idEmpresaLogada);
+                    intCarrrinho.putExtra("idUsuario", idUsuarioLogado);
+                    intCarrrinho.putExtra("idPedido", pedidoRecuperado.getIdPedido());
+                    startActivity(intCarrrinho);
+                    textQuantidade.setText("0");
+                    textValor.setText("0.00");
+                    totalCarrinho = 0.0;
+                    qtdItensCarrinho = 0;
+
+
+                }
                 break;
 
         }

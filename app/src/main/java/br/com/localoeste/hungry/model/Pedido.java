@@ -123,12 +123,12 @@ public class Pedido implements Serializable {
         this.status = status;
     }
 
-    public int getMetodoPagemento() {
+    public int getMetodoPagamento() {
         return metodoPagamento;
     }
 
-    public void setMetodoPagemento(int metodoPagemento) {
-        this.metodoPagamento = metodoPagemento;
+    public void setMetodoPagemento(int metodoPagamento) {
+        this.metodoPagamento = metodoPagamento;
     }
 
     public String getObservacaoEmpresa() {
