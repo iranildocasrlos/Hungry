@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,6 +48,7 @@ import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.adapter.AdapterCarrinho;
 import br.com.localoeste.hungry.adapter.AdapterProduto;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
+import br.com.localoeste.hungry.listener.RecyclerItemClickListener;
 import br.com.localoeste.hungry.model.ItemPedido;
 import br.com.localoeste.hungry.model.Pedido;
 import br.com.localoeste.hungry.model.Produto;
@@ -106,8 +108,68 @@ public class CarrinhoActivity extends AppCompatActivity {
         recuperarPedido();
         swipe();
 
-
-
+        //Configurar evento de clique
+//        recyclerCarrinho.addOnItemTouchListener(
+//                new RecyclerItemClickListener(
+//                        this,
+//                        recyclerCarrinho,
+//                        new RecyclerItemClickListener.OnItemClickListener() {
+//                            @Override
+//                            public void onItemClick(View view, int position) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onLongItemClick(View view, int position) {
+//
+//                             Produto produtoClicado =   produtos.get(position);
+//
+//                                AlertDialog.Builder builder = new AlertDialog.Builder(CarrinhoActivity.this);
+//                                builder.setTitle("Alterar Quantidade");
+//                                builder.setMessage("Digite a quantidade");
+//
+//                                final EditText editQuantidade = new EditText(CarrinhoActivity.this);
+//                                editQuantidade.setText("1");
+//
+//                                builder.setView( editQuantidade );
+//
+//                                builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//
+//                                        String quantidade = editQuantidade.getText().toString();
+//
+//                                        Produto produtoSelecionado = produtos.get(position);
+//                                        ItemPedido itemPedido = new ItemPedido();
+//                                        itemPedido.setIdProduto( produtoSelecionado.getIdProduto() );
+//                                        itemPedido.setQuantidadeProduto( Integer.parseInt(quantidade) );
+//
+//
+//
+//
+//                                    }
+//                                });
+//
+//                                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//
+//                                    }
+//                                });
+//                                AlertDialog dialog = builder.create();
+//                                dialog.show();
+//
+//                            }
+//
+//                            @Override
+//                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//
+//
+//                            }
+//                        }
+//                )
+//        );
 
     }
 
@@ -184,6 +246,7 @@ public class CarrinhoActivity extends AppCompatActivity {
         storageRef =  ConfiguracaoFirebase.getFirebaseStorage();
         textQuantidade = findViewById(R.id.textQuantidadeCarrinho);
         textValor = findViewById(R.id.textValorCarrinho);
+
 
 
 

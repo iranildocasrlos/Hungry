@@ -10,5 +10,11 @@
         android:iconTint="@color/white"
         android:icon="@drawable/ic_baseline_shopping_cart_24"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/menuCompras"
+        android:title="Minhas compras"
+        android:iconTint="@color/white"
+        android:icon="@drawable/sacolas"
+        app:showAsAction="always" />
 
 </menu>

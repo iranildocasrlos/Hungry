@@ -635,6 +635,11 @@ public class CardapioActivity extends AppCompatActivity {
                 }
                 break;
 
+            case R.id.menuCompras:
+                Intent itentCompras = new Intent(CardapioActivity.this, ComprasActivity.class);
+                startActivity(itentCompras);
+                break;
+
         }
 
 
