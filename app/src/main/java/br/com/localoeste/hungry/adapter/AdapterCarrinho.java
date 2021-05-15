@@ -8,6 +8,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ import java.util.List;
 import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.activy.CardapioActivity;
 import br.com.localoeste.hungry.activy.CarrinhoActivity;
+import br.com.localoeste.hungry.listener.RecyclerItemClickListener;
 import br.com.localoeste.hungry.model.Produto;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -40,6 +42,23 @@ public class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.MyView
     private Context context;
     private DecimalFormat df = new DecimalFormat("0.00");
 
+    //Criando a variável do listener
+    private OnRecyclerViewClickListener listener;
+    private int quantidadeEscolhida;
+
+    //Criando a iterface para implementar o listener de clique no Recycler
+    public interface OnRecyclerViewClickListener{
+        void OnItemClick(int position, int quantidadeEscolhida);
+
+    }
+
+  //  Criando o construtor da interface
+    public void OnRecyclerViewClickListener(OnRecyclerViewClickListener listener){
+        this.listener = listener;
+        this.quantidadeEscolhida = quantidadeEscolhida;
+    }
+
+
     public AdapterCarrinho(List<Produto> produtos, Context context) {
         this.produtos = produtos;
         this.context = context;
@@ -49,7 +68,7 @@ public class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.MyView
     @Override
     public MyViewHolder onCreateViewHolder( ViewGroup parent, int i) {
         View itemLista = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_carrinho, parent, false);
-        return new MyViewHolder(itemLista);
+        return new MyViewHolder(itemLista, listener);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -73,6 +92,11 @@ public class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.MyView
                 produto.setQuantidade(produto.getQuantidade()+1);
                 holder.valor.setText("R$ " + df.format(produto.getPrecoProduto()*produto.getQuantidade()));
                 holder.quantidade.setText("Quantidade: "+produto.getQuantidade());
+                holder.nome.setTextColor(Color.RED);
+                holder.nome.setText("CLIQUE AQUI PARA ATUALIZAR TOTAL");
+
+
+
             }
         });
 
@@ -86,6 +110,8 @@ public class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.MyView
                     Double totalProduto = Double.parseDouble(valorLimpo);
                     holder.valor.setText("R$ " + df.format(totalProduto - produto.getPrecoProduto()));
                     holder.quantidade.setText("Quantidade: "+produto.getQuantidade());
+                    holder.nome.setTextColor(Color.RED);
+                    holder.nome.setText("CLIQUE AQUI PARA ATUALIZAR TOTAL");
                 }
 
             }
@@ -102,15 +128,16 @@ public class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.MyView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         CircleImageView imagem;
-        TextView nome;
+        TextView nome, nomeBackup;
         TextView descricao;
         TextView valor;
         TextView quantidade;
         ImageView add;
         ImageView remove;
+        String quant;
 
 
-        public MyViewHolder(View itemView) {
+        public MyViewHolder(View itemView, OnRecyclerViewClickListener listener) {
             super(itemView);
             imagem = itemView.findViewById(R.id.imagemProdutoAdapter);
             nome = itemView.findViewById(R.id.textNomeRefeicao);
@@ -121,10 +148,29 @@ public class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.MyView
             add = itemView.findViewById(R.id.imageAdapterAdd);
             remove = itemView.findViewById(R.id.imageAdapterRemove);
 
+
+
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String numeros = quantidade.getText().toString().substring(11,13).trim();
+                    quantidadeEscolhida = Integer.parseInt(numeros);
+                    if (listener != null && getAdapterPosition() != RecyclerView.NO_POSITION){
+                        listener.OnItemClick(getAdapterPosition(), quantidadeEscolhida);
+                        nome.setTextColor(Color.BLACK);
+                       String nomeProd =  produtos.get(getAdapterPosition()).getNomeProduto();
+                        nome.setText(nomeProd);
+
+                    }
+                }
+            });
+
         }
+
+
     }
 
-
-
-
 }
+
+

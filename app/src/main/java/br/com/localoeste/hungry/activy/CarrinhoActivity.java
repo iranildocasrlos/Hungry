@@ -66,6 +66,7 @@ public class CarrinhoActivity extends AppCompatActivity {
     private TextView textQuantidade;
     private TextView textValor;
     private int qtdItensCarrinho;
+    private int totalItem = 0;
     private Double totalCarrinho;
     private Pedido pedidoRecuperado;
     private int metodoPagamento;
@@ -104,9 +105,28 @@ public class CarrinhoActivity extends AppCompatActivity {
         adapterProduto = new AdapterCarrinho(produtos,this);
         recyclerCarrinho.setAdapter(adapterProduto);
 
+
+        adapterProduto.OnRecyclerViewClickListener(new AdapterCarrinho.OnRecyclerViewClickListener() {
+            @Override
+            public void OnItemClick(int position, int quantidadeEscolhida) {
+                for (ItemPedido pedido: itensCarrinho) {
+
+
+                    if (pedido.getIdProduto() != itensCarrinho.get(position).getIdProduto()){
+                        totalItem += pedido.getQuantidadeProduto();
+                    }
+
+
+                }
+                String valorTotal = String.valueOf(totalItem + quantidadeEscolhida);
+                textQuantidade.setText("quant.: "+valorTotal);
+            }
+        });
+
         //Recupera produtos da empresa
         recuperarPedido();
         swipe();
+
 
         //Configurar evento de clique
 //        recyclerCarrinho.addOnItemTouchListener(
@@ -117,6 +137,7 @@ public class CarrinhoActivity extends AppCompatActivity {
 //                            @Override
 //                            public void onItemClick(View view, int position) {
 //
+//                              //  Log.d("Log", String.valueOf(produtos.get(position).getQuantidade()));
 //                            }
 //
 //                            @Override
@@ -143,6 +164,8 @@ public class CarrinhoActivity extends AppCompatActivity {
 //                                        ItemPedido itemPedido = new ItemPedido();
 //                                        itemPedido.setIdProduto( produtoSelecionado.getIdProduto() );
 //                                        itemPedido.setQuantidadeProduto( Integer.parseInt(quantidade) );
+//                                        int q = Integer.parseInt(quantidade);
+//                                        textQuantidade.setText("quant.: "+ String.valueOf(qtdItensCarrinho +q ));
 //
 //
 //
@@ -164,12 +187,14 @@ public class CarrinhoActivity extends AppCompatActivity {
 //                            @Override
 //                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //
-//
+//                                 Log.d("Log", String.valueOf(produtos.get(position)));
 //
 //                            }
 //                        }
 //                )
 //        );
+
+
 
     }
 
@@ -246,6 +271,7 @@ public class CarrinhoActivity extends AppCompatActivity {
         storageRef =  ConfiguracaoFirebase.getFirebaseStorage();
         textQuantidade = findViewById(R.id.textQuantidadeCarrinho);
         textValor = findViewById(R.id.textValorCarrinho);
+
 
 
 

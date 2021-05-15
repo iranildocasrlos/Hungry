@@ -89,8 +89,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
                 app:srcCompat="@drawable/ic_baseline_remove_24" />
 
             <TextView
@@ -109,7 +107,7 @@
             <ImageView
                 android:id="@+id/imageAdapterAdd"
                 android:layout_width="wrap_content"
-                android:layout_height="21dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
