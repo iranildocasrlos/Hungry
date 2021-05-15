@@ -114,12 +114,15 @@ public class CarrinhoActivity extends AppCompatActivity {
 
                     if (pedido.getIdProduto() != itensCarrinho.get(position).getIdProduto()){
                         totalItem += pedido.getQuantidadeProduto();
+                        itensCarrinho.get(position).setQuantidadeProduto(quantidadeEscolhida);
+
                     }
 
 
                 }
                 String valorTotal = String.valueOf(totalItem + quantidadeEscolhida);
                 textQuantidade.setText("quant.: "+valorTotal);
+                totalItem = 0;
             }
         });
 
