@@ -68,6 +68,7 @@ public class CarrinhoActivity extends AppCompatActivity {
     private int qtdItensCarrinho;
     private int totalItem = 0;
     private Double totalCarrinho;
+    private Double precoDemais = 0.0;
     private Pedido pedidoRecuperado;
     private int metodoPagamento;
 
@@ -108,21 +109,31 @@ public class CarrinhoActivity extends AppCompatActivity {
 
         adapterProduto.OnRecyclerViewClickListener(new AdapterCarrinho.OnRecyclerViewClickListener() {
             @Override
-            public void OnItemClick(int position, int quantidadeEscolhida) {
+            public void OnItemClick(int position, int quantidadeEscolhida, Double precoProduto) {
                 for (ItemPedido pedido: itensCarrinho) {
 
 
                     if (pedido.getIdProduto() != itensCarrinho.get(position).getIdProduto()){
                         totalItem += pedido.getQuantidadeProduto();
+                        precoDemais += pedido.getPrecoProduto();
                         itensCarrinho.get(position).setQuantidadeProduto(quantidadeEscolhida);
+                        itensCarrinho.get(position).setPrecoProduto(precoProduto);
 
                     }
 
 
                 }
-                String valorTotal = String.valueOf(totalItem + quantidadeEscolhida);
-                textQuantidade.setText("quant.: "+valorTotal);
+                String quantidadeTotal = String.valueOf(totalItem + quantidadeEscolhida);
+                textQuantidade.setText("quant.: "+quantidadeTotal);
+
+                DecimalFormat df = new DecimalFormat("0.00");
+
+                String numeroFormatato = df.format(precoDemais + precoProduto);
+                textValor.setText("R$: "+ numeroFormatato);
+
+
                 totalItem = 0;
+                precoDemais = 0.0;
             }
         });
 
@@ -130,72 +141,6 @@ public class CarrinhoActivity extends AppCompatActivity {
         recuperarPedido();
         swipe();
 
-
-        //Configurar evento de clique
-//        recyclerCarrinho.addOnItemTouchListener(
-//                new RecyclerItemClickListener(
-//                        this,
-//                        recyclerCarrinho,
-//                        new RecyclerItemClickListener.OnItemClickListener() {
-//                            @Override
-//                            public void onItemClick(View view, int position) {
-//
-//                              //  Log.d("Log", String.valueOf(produtos.get(position).getQuantidade()));
-//                            }
-//
-//                            @Override
-//                            public void onLongItemClick(View view, int position) {
-//
-//                             Produto produtoClicado =   produtos.get(position);
-//
-//                                AlertDialog.Builder builder = new AlertDialog.Builder(CarrinhoActivity.this);
-//                                builder.setTitle("Alterar Quantidade");
-//                                builder.setMessage("Digite a quantidade");
-//
-//                                final EditText editQuantidade = new EditText(CarrinhoActivity.this);
-//                                editQuantidade.setText("1");
-//
-//                                builder.setView( editQuantidade );
-//
-//                                builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//
-//                                        String quantidade = editQuantidade.getText().toString();
-//
-//                                        Produto produtoSelecionado = produtos.get(position);
-//                                        ItemPedido itemPedido = new ItemPedido();
-//                                        itemPedido.setIdProduto( produtoSelecionado.getIdProduto() );
-//                                        itemPedido.setQuantidadeProduto( Integer.parseInt(quantidade) );
-//                                        int q = Integer.parseInt(quantidade);
-//                                        textQuantidade.setText("quant.: "+ String.valueOf(qtdItensCarrinho +q ));
-//
-//
-//
-//
-//                                    }
-//                                });
-//
-//                                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//
-//                                    }
-//                                });
-//                                AlertDialog dialog = builder.create();
-//                                dialog.show();
-//
-//                            }
-//
-//                            @Override
-//                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                                 Log.d("Log", String.valueOf(produtos.get(position)));
-//
-//                            }
-//                        }
-//                )
-//        );
 
 
 
@@ -502,48 +447,59 @@ public class CarrinhoActivity extends AppCompatActivity {
 
     public void confirmarPedido(View view) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Selecione um método de pagamento");
 
-        CharSequence[] itens = new CharSequence[]{
-                "Dinheiro", "Máquina cartão"
-        };
-        builder.setSingleChoiceItems(itens, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                metodoPagamento = which;
-            }
-        });
+        Double valorAtualizado =  Double.parseDouble(textValor.getText().toString().substring(3,8));
+        if (pedidoRecuperado.getTotal() != valorAtualizado){
+            pedidoRecuperado.setTotal(valorAtualizado);
+        }else{
 
-        final EditText editObservacao = new EditText(this);
-        editObservacao.setHint("Digite uma observação");
-        builder.setView( editObservacao );
-
-        builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                Map<String, Object> data = new HashMap<>();
-                String observacao = editObservacao.getText().toString();
-
-                data.put("observacaoEmpresa", observacao);
-                data.put("status", Pedido.STATUS_AGUARDANDO);
-                data.put("metodoPagamento", metodoPagamento);
-                pedidoRecuperado.atualizarStatusPedido(idPedido, data);
-                pedidoRecuperado = null;
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Selecione um método de pagamento");
 
 
-            }
-        });
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+            CharSequence[] itens = new CharSequence[]{
+                    "Dinheiro", "Máquina cartão"
+            };
+            builder.setSingleChoiceItems(itens, 0, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    metodoPagamento = which;
+                }
+            });
 
-            }
-        });
+            final EditText editObservacao = new EditText(this);
+            editObservacao.setHint("Digite uma observação");
+            builder.setView( editObservacao );
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+            builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Map<String, Object> data = new HashMap<>();
+                    String observacao = editObservacao.getText().toString();
+
+                    data.put("observacaoEmpresa", observacao);
+                    data.put("status", Pedido.STATUS_AGUARDANDO);
+                    data.put("metodoPagamento", metodoPagamento);
+
+                    pedidoRecuperado.atualizarStatusPedido(idPedido, data);
+                    pedidoRecuperado = null;
+
+
+                }
+            });
+            builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        }
+
 
     }
 

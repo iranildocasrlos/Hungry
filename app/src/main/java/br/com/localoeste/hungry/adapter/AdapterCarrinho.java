@@ -45,10 +45,11 @@ public class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.MyView
     //Criando a variável do listener
     private OnRecyclerViewClickListener listener;
     private int quantidadeEscolhida;
+    private Double precoProduto;
 
     //Criando a iterface para implementar o listener de clique no Recycler
     public interface OnRecyclerViewClickListener{
-        void OnItemClick(int position, int quantidadeEscolhida);
+        void OnItemClick(int position, int quantidadeEscolhida, Double precoProduto);
 
     }
 
@@ -56,6 +57,7 @@ public class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.MyView
     public void OnRecyclerViewClickListener(OnRecyclerViewClickListener listener){
         this.listener = listener;
         this.quantidadeEscolhida = quantidadeEscolhida;
+        this.precoProduto = precoProduto;
     }
 
 
@@ -94,7 +96,7 @@ public class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.MyView
                 holder.quantidade.setText("Quantidade: "+produto.getQuantidade());
                 holder.nome.setTextColor(Color.RED);
                 holder.nome.setText("CLIQUE AQUI PARA ATUALIZAR TOTAL");
-
+                precoProduto = Double.parseDouble(df.format(produto.getPrecoProduto()*produto.getQuantidade()));
 
 
             }
@@ -112,6 +114,7 @@ public class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.MyView
                     holder.quantidade.setText("Quantidade: "+produto.getQuantidade());
                     holder.nome.setTextColor(Color.RED);
                     holder.nome.setText("CLIQUE AQUI PARA ATUALIZAR TOTAL");
+                    precoProduto = Double.parseDouble(String.valueOf((totalProduto - produto.getPrecoProduto())));
                 }
 
             }
@@ -147,6 +150,8 @@ public class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.MyView
             df.setRoundingMode(RoundingMode.HALF_UP);
             add = itemView.findViewById(R.id.imageAdapterAdd);
             remove = itemView.findViewById(R.id.imageAdapterRemove);
+            String valorUnitario = valor.getText().toString().substring(3,8);
+            precoProduto = Double.parseDouble(valorUnitario);
 
 
 
@@ -157,7 +162,7 @@ public class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.MyView
                     String numeros = quantidade.getText().toString().substring(11,13).trim();
                     quantidadeEscolhida = Integer.parseInt(numeros);
                     if (listener != null && getAdapterPosition() != RecyclerView.NO_POSITION){
-                        listener.OnItemClick(getAdapterPosition(), quantidadeEscolhida);
+                        listener.OnItemClick(getAdapterPosition(), quantidadeEscolhida,precoProduto);
                         nome.setTextColor(Color.BLACK);
                        String nomeProd =  produtos.get(getAdapterPosition()).getNomeProduto();
                         nome.setText(nomeProd);
