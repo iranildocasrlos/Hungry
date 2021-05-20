@@ -17,6 +17,7 @@ public class Produto implements Serializable {
     private String idProduto;
     private String idEmpresa;
     private int quantidade;
+    private Double precoUnidade;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
@@ -67,6 +68,14 @@ public class Produto implements Serializable {
         this.precoProduto = precoProduto;
     }
 
+    public Double getPrecoUnidade() {
+        return precoUnidade;
+    }
+
+    public void setPrecoUnidade(Double precoUnidade) {
+        this.precoUnidade = precoUnidade;
+    }
+
     public String getIdProduto() {
         return idProduto;
     }
@@ -85,12 +94,16 @@ public class Produto implements Serializable {
 
     public void salvar(){
 
-        DocumentReference documentRef = db.collection("produtos").document(getIdProduto());
+        DocumentReference documentRef = db.collection("produtos")
+                .document(getIdEmpresa())
+                .collection("produtos_disponiveis")
+                .document(getIdProduto());
         Map<String, Object> data = new HashMap<>();
         data.put("urlImagemProduto",urlImagemProduto);
         data.put("nomeProduto",nomeProduto);
         data.put("descricaoProduto",descricaoProduto);
         data.put("precoProduto",precoProduto);
+        data.put("precoUnidade",precoUnidade);
         data.put("idEmpresa",idEmpresa);
         data.put("idProduto", idProduto);
         documentRef.set(data);
@@ -112,7 +125,10 @@ public class Produto implements Serializable {
 
 
     public void salvarFoto(){
-        DocumentReference documentRef = db.collection("produtos").document(getIdProduto());
+        DocumentReference documentRef = db.collection("produtos")
+                .document(idEmpresa)
+                .collection("produtos_disponiveis")
+                .document(getIdProduto());
         Map<String, Object> data = new HashMap<>();
 
         data.put("urlImagemProduto", urlImagemProduto);

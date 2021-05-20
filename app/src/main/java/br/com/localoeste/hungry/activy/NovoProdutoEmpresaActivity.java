@@ -147,6 +147,7 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
                     produto.setNomeProduto(nomeProduto);
                     produto.setDescricaoProduto(descricaoProduto);
                     produto.setPrecoProduto(Double.parseDouble(precoProduto));
+                    produto.setPrecoUnidade(Double.parseDouble(precoProduto));
                     produto.setUrlImagemProduto(urlImagemSelecionada);
                     produto.salvar();
                     salvarImagem();
@@ -205,6 +206,7 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
                             if (urlImagemSelecionada != ""){
                                 Produto produto = new Produto();
                                 produto.setIdProduto(idProduto);
+                                produto.setIdEmpresa(idUsuarioLogado);
                                 produto.setUrlImagemProduto(urlImagemSelecionada);
                                 produto.salvarFoto();
 

@@ -179,7 +179,8 @@ public class CarrinhoActivity extends AppCompatActivity {
                                         String id = item.getIdProduto();
                                         String idEmpresa = item.getIdEmpresa();
                                         int quantidade = item.getQuantidadeProduto();
-                                        recuperarProdutos(idEmpresa, id, quantidade);
+                                        Double precoAtualizado = item.getPrecoProduto();
+                                        recuperarProdutos(idEmpresa, id, quantidade, precoAtualizado);
                                         totalCarrinho += preco;
                                         qtdItensCarrinho += qtde;
                                     }
@@ -228,10 +229,11 @@ public class CarrinhoActivity extends AppCompatActivity {
 
 
 
-    private void recuperarProdutos(String idEmp, String idP, int quantidade) {
+    private void recuperarProdutos(String idEmp, String idP, int quantidade, Double preco) {
         referenciaFirestore
                 .collection("produtos")
-                .whereEqualTo("idEmpresa", idEmp)
+                .document( idEmp)
+                .collection("produtos_disponiveis")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -245,6 +247,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                                     if (produto.getUrlImagemProduto() != "" && produto.getUrlImagemProduto() != null){
                                        if (produto.getIdProduto().equalsIgnoreCase(idP)){
                                            produto.setQuantidade(quantidade);
+                                           produto.setPrecoProduto(preco);
                                            produtos.add(produto);
                                        }
 
@@ -446,12 +449,13 @@ public class CarrinhoActivity extends AppCompatActivity {
 
 
     public void confirmarPedido(View view) {
-
-
-        Double valorAtualizado =  Double.parseDouble(textValor.getText().toString().substring(3,8));
+        DecimalFormat df = new DecimalFormat("00.00");
+        String valorExtraido = textValor.getText().toString().replaceAll(",",".");
+        Double valorAtualizado = Double.parseDouble( valorExtraido.substring(3,9).trim());
         if (pedidoRecuperado.getTotal() != valorAtualizado){
             pedidoRecuperado.setTotal(valorAtualizado);
-        }else{
+            pedidoRecuperado.atualizarPedido(idPedido);
+        }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Selecione um método de pagamento");
@@ -501,7 +505,7 @@ public class CarrinhoActivity extends AppCompatActivity {
         }
 
 
-    }
+
 
 
 

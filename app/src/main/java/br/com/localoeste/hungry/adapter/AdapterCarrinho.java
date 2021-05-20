@@ -96,7 +96,8 @@ public class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.MyView
                 holder.quantidade.setText("Quantidade: "+produto.getQuantidade());
                 holder.nome.setTextColor(Color.RED);
                 holder.nome.setText("CLIQUE AQUI PARA ATUALIZAR TOTAL");
-                precoProduto = Double.parseDouble(df.format(produto.getPrecoProduto()*produto.getQuantidade()));
+                Double resultado = produto.getPrecoProduto()*produto.getQuantidade();
+                precoProduto = resultado;
 
 
             }
@@ -108,9 +109,9 @@ public class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.MyView
                 if (produto.getQuantidade() > 1){
                     produto.setQuantidade(produto.getQuantidade()-1);
                     String valor = holder.valor.getText().toString();
-                    String valorLimpo = valor.substring(3,7);
+                    String valorLimpo = valor.substring(3,7).replaceAll(",",".");
                     Double totalProduto = Double.parseDouble(valorLimpo);
-                    holder.valor.setText("R$ " + df.format(totalProduto - produto.getPrecoProduto()));
+                    holder.valor.setText("R$ " + df.format(totalProduto - produto.getPrecoUnidade()));
                     holder.quantidade.setText("Quantidade: "+produto.getQuantidade());
                     holder.nome.setTextColor(Color.RED);
                     holder.nome.setText("CLIQUE AQUI PARA ATUALIZAR TOTAL");

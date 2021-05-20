@@ -90,7 +90,8 @@ public class EmpresaActivity extends AppCompatActivity {
     private void recuperarProdutos() {
         referenciaFirestore
                 .collection("produtos")
-                .whereEqualTo("idEmpresa", idEmpresaLogada)
+                .document(idEmpresaLogada)
+                .collection("produtos_disponiveis")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -296,7 +297,7 @@ public class EmpresaActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-
+        adapterProduto.notifyDataSetChanged();
         super.onStart();
 
     }
@@ -304,7 +305,7 @@ public class EmpresaActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         recuperarProdutos();
-        adapterProduto.notifyDataSetChanged();
+
         super.onRestart();
 
     }

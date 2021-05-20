@@ -450,7 +450,8 @@ public class CardapioActivity extends AppCompatActivity {
     private void recuperarProdutos(String idEmp) {
         referenciaFirestore
                 .collection("produtos")
-                .whereEqualTo("idEmpresa", idEmp)
+                .document(idEmp)
+                .collection("produtos_disponiveis")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -672,6 +673,7 @@ public class CardapioActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
+        finish();
         return true;
     }
 
