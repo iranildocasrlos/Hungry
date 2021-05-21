@@ -450,12 +450,17 @@ public class CarrinhoActivity extends AppCompatActivity {
 
     public void confirmarPedido(View view) {
         DecimalFormat df = new DecimalFormat("00.00");
+
+
         String valorExtraido = textValor.getText().toString().replaceAll(",",".");
-        Double valorAtualizado = Double.parseDouble( valorExtraido.substring(3,9).trim());
-        if (pedidoRecuperado.getTotal() != valorAtualizado){
-            pedidoRecuperado.setTotal(valorAtualizado);
-            pedidoRecuperado.atualizarPedido(idPedido);
-        }
+
+        if (valorExtraido.length() > 6){
+
+            Double valorAtualizado = Double.parseDouble( valorExtraido.substring(3,9).trim());
+            if (pedidoRecuperado.getTotal() != valorAtualizado){
+                pedidoRecuperado.setTotal(valorAtualizado);
+                pedidoRecuperado.atualizarPedido(idPedido);
+            }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Selecione um método de pagamento");
@@ -487,8 +492,12 @@ public class CarrinhoActivity extends AppCompatActivity {
                     data.put("metodoPagamento", metodoPagamento);
 
                     pedidoRecuperado.atualizarStatusPedido(idPedido, data);
-                    pedidoRecuperado = null;
 
+                    Intent itentAndamento = new Intent(CarrinhoActivity.this, ComprasActivity.class);
+                    itentAndamento.putExtra("status_aguardando", pedidoRecuperado);
+                    startActivity(itentAndamento);
+                    pedidoRecuperado = null;
+                    finish();
 
                 }
             });
@@ -501,6 +510,11 @@ public class CarrinhoActivity extends AppCompatActivity {
 
             AlertDialog dialog = builder.create();
             dialog.show();
+
+        }
+
+
+
 
         }
 

@@ -280,6 +280,7 @@ public class CardapioActivity extends AppCompatActivity {
                     startActivity(intCarrrinho);
                     totalCarrinho = 0.0;
                     qtdItensCarrinho = 0;
+
                 }
             }
         });
@@ -652,7 +653,7 @@ public class CardapioActivity extends AppCompatActivity {
     protected void onRestart() {
 
         super.onRestart();
-        recuperarProdutos(idEmpresaLogada);
+        recuperarPedido(idEmpresaLogada);
         Log.d("log","Chamou onStarte do Cardápio ");
     }
 
