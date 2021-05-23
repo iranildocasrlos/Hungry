@@ -412,7 +412,7 @@ public class CardapioActivity extends AppCompatActivity {
 
     private void inicializarComponentes() {
 
-        recyclerViewEmpresaCardapio = findViewById(R.id.recyclerCarrinho);
+        recyclerViewEmpresaCardapio = findViewById(R.id.recyclerCompras);
         nomeEmpresaCadapio = findViewById(R.id.textNomeEmCardapio);
         imagemEmpresaCardapio =  findViewById(R.id.imageCardapioEmpresa);
         horario = findViewById(R.id.textCardapioHorario);

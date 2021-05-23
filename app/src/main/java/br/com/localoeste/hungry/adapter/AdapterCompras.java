@@ -13,8 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextClock;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import java.math.RoundingMode;
@@ -22,17 +27,23 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import br.com.localoeste.hungry.R;
+import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 import br.com.localoeste.hungry.model.Empresa;
+import br.com.localoeste.hungry.model.ItemPedido;
 import br.com.localoeste.hungry.model.Pedido;
 import br.com.localoeste.hungry.model.Produto;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHolder> {
 
-    private List<Empresa> pedidos;
+    private List<Pedido> pedidos;
+    private Context context;
+    private FirebaseFirestore referenciaFirestore;
+    private  String  url;
 
-    public AdapterCompras(List<Empresa> pedidos) {
+    public AdapterCompras(List<Pedido> pedidos, Context context) {
         this.pedidos = pedidos;
+        this.context = context;
     }
 
     @NonNull
@@ -44,15 +55,29 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull AdapterCompras.MyViewHolder holder, int i) {
-//        Pedido pedido = pedidos.get(i);
-//        holder.nomeEmpresa.setText(pedido.getNome());
-//        holder.categoria.setText(empresa.getCategoria() + " - ");
-//        holder.tempo.setText(empresa.getTempoEntrega() + " Min");
-//        holder.entrega.setText("R$ " + empresa.getTaxaEntrega().toString());
-//
-//        //Carregar imagem
-//        String urlImagem = empresa.getUrlImagem();
-//        Picasso.get().load( urlImagem ).into( holder.imagemEmpresa );
+        Pedido pedido = pedidos.get(i);
+        //Carregar imagem
+        String idEmpresa = pedido.getIdEmpresa();
+
+
+        if (pedido.getStatus().equals("aguardando")){
+            Picasso.get().load( R.drawable.aguardando ).into( holder.imagemEmpresa );
+        }
+        String[] nomes = new String[pedido.getItens().size()];
+        for (ItemPedido nome: pedido.getItens()) {
+            nomes[i] = nome.getNomeProduto();
+        }
+
+        holder.nomeEmpresa.setText("Pedido: \n"+nomes);
+        holder.quantidade.setText("Total de itens: "+String.valueOf(pedido.getItens().size()));
+        holder.descricao.setText("Obserrvações: "+pedido.getObservacaoEmpresa());
+        holder.preco.setText("R$ " + pedido.getTotal());
+        holder.status.setText("Status : "+pedido.getStatus().toUpperCase());
+
+
+
+
+
 
     }
 
@@ -65,18 +90,53 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
 
         ImageView imagemEmpresa;
         TextView nomeEmpresa;
-        TextView categoria;
-        TextView tempo;
-        TextView entrega;
+        TextView quantidade;
+        TextView descricao;
+        TextView status;
+        TextView preco;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            nomeEmpresa = itemView.findViewById(R.id.textNomeEmpresa);
-            categoria = itemView.findViewById(R.id.textCategoriaEmpresa);
-            tempo = itemView.findViewById(R.id.textTempoEmpresa);
-            entrega = itemView.findViewById(R.id.textEntregaEmpresa);
-            imagemEmpresa = itemView.findViewById(R.id.imageEmpresa);
+            nomeEmpresa = itemView.findViewById(R.id.textNomeCompras);
+            descricao = itemView.findViewById(R.id.textDescricaoCompras);
+            quantidade = itemView.findViewById(R.id.quantidade_Compras);
+            status = itemView.findViewById(R.id.status_compras);
+            imagemEmpresa = itemView.findViewById(R.id.imagemCompras);
+            preco = itemView.findViewById(R.id.textPrecoCompras);
         }
     }
+
+
+
+    //Método par recuperar empresa
+    private void pesquisarEmpresa(String id) {
+
+        referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
+        DocumentReference empresaRef = referenciaFirestore
+                .collection("empresas")
+                .document(id);
+
+        empresaRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    Empresa dadosEmpresa = documentSnapshot.toObject(Empresa.class);
+                    if (dadosEmpresa != null){
+                        if (dadosEmpresa.getUrlImagem()!= null){
+                           url = dadosEmpresa.getUrlImagem();
+
+
+                        }
+
+                    }
+                }
+            }
+        });
+
+
+    }
+
+
+
 }

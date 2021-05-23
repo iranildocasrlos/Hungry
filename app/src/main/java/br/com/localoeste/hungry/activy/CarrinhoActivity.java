@@ -20,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -46,9 +45,7 @@ import java.util.Map;
 
 import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.adapter.AdapterCarrinho;
-import br.com.localoeste.hungry.adapter.AdapterProduto;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
-import br.com.localoeste.hungry.listener.RecyclerItemClickListener;
 import br.com.localoeste.hungry.model.ItemPedido;
 import br.com.localoeste.hungry.model.Pedido;
 import br.com.localoeste.hungry.model.Produto;
@@ -214,15 +211,12 @@ public class CarrinhoActivity extends AppCompatActivity {
 
     private void inicializarComponentes() {
 
-        recyclerCarrinho = findViewById(R.id.recyclerCarrinho);
+        recyclerCarrinho = findViewById(R.id.recyclerCompras);
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         autenticacao = ConfiguracaoFirebase.getReferenciaAutenticacao();
         storageRef =  ConfiguracaoFirebase.getFirebaseStorage();
         textQuantidade = findViewById(R.id.textQuantidadeCarrinho);
         textValor = findViewById(R.id.textValorCarrinho);
-
-
-
 
 
     }
@@ -287,8 +281,9 @@ public class CarrinhoActivity extends AppCompatActivity {
                 break;
 
             case R.id.menuCompras:
-                Intent itentCompras = new Intent(CarrinhoActivity.this, ComprasActivity.class);
-                startActivity(itentCompras);
+                Intent itentAndamento = new Intent(CarrinhoActivity.this, ComprasActivity.class);
+                itentAndamento.putExtra("status_aguardando", pedidoRecuperado);
+                startActivity(itentAndamento);
                 break;
 
         }
@@ -496,6 +491,17 @@ public class CarrinhoActivity extends AppCompatActivity {
                     Intent itentAndamento = new Intent(CarrinhoActivity.this, ComprasActivity.class);
                     itentAndamento.putExtra("status_aguardando", pedidoRecuperado);
                     startActivity(itentAndamento);
+
+                    //Cria o nó peus pedidos
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    Map<String, Object> dados = new HashMap<>();
+                    dados.put("idEmpresa", pedidoRecuperado.getIdEmpresa());
+                    dados.put("idPedido",pedidoRecuperado.getIdPedido());
+                    Task<Void> documentRef = db.collection("meus_pedidos")
+                            .document("usuarios")
+                            .collection(idUsuario)
+                            .document(idPedido).set(dados);
+
                     pedidoRecuperado = null;
                     finish();
 

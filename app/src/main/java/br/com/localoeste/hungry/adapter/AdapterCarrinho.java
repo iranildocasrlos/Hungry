@@ -4,22 +4,17 @@ package br.com.localoeste.hungry.adapter;
  * Local Oeste Software House
  */
 
-import android.app.Application;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -29,9 +24,6 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import br.com.localoeste.hungry.R;
-import br.com.localoeste.hungry.activy.CardapioActivity;
-import br.com.localoeste.hungry.activy.CarrinhoActivity;
-import br.com.localoeste.hungry.listener.RecyclerItemClickListener;
 import br.com.localoeste.hungry.model.Produto;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -143,11 +135,11 @@ public class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.MyView
 
         public MyViewHolder(View itemView, OnRecyclerViewClickListener listener) {
             super(itemView);
-            imagem = itemView.findViewById(R.id.imagemProdutoAdapter);
-            nome = itemView.findViewById(R.id.textNomeRefeicao);
-            descricao = itemView.findViewById(R.id.textDescricaoRefeicao);
-            valor = itemView.findViewById(R.id.textPreco);
-            quantidade = itemView.findViewById(R.id.quantidade_Carrinho_Adapter);
+            imagem = itemView.findViewById(R.id.imagemCompras);
+            nome = itemView.findViewById(R.id.textNomeCompras);
+            descricao = itemView.findViewById(R.id.textDescricaoCompras);
+            valor = itemView.findViewById(R.id.textPrecoCompras);
+            quantidade = itemView.findViewById(R.id.status_compras);
             df.setRoundingMode(RoundingMode.HALF_UP);
             add = itemView.findViewById(R.id.imageAdapterAdd);
             remove = itemView.findViewById(R.id.imageAdapterRemove);
