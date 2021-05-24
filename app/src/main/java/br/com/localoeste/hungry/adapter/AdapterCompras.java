@@ -56,19 +56,31 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull AdapterCompras.MyViewHolder holder, int i) {
         Pedido pedido = pedidos.get(i);
-        //Carregar imagem
+
         String idEmpresa = pedido.getIdEmpresa();
 
-
-        if (pedido.getStatus().equals("aguardando")){
+        //Carregar imagens
+        if (pedido.getStatus().equals(Pedido.STATUS_AGUARDANDO)){
             Picasso.get().load( R.drawable.aguardando ).into( holder.imagemEmpresa );
-        }
-        String[] nomes = new String[pedido.getItens().size()];
-        for (ItemPedido nome: pedido.getItens()) {
-            nomes[i] = nome.getNomeProduto();
+        }else if (pedido.getStatus().equals(Pedido.STATUS_PREPARANDO)){
+            Picasso.get().load( R.drawable.cooking ).into( holder.imagemEmpresa );
+        }else if (pedido.getStatus().equals(Pedido.STATUS_A_CAMINHO)){
+            Picasso.get().load( R.drawable.delivery ).into( holder.imagemEmpresa );
+        }else if (pedido.getStatus().equals(Pedido.STATUS_CHEGOU)){
+            Picasso.get().load( R.drawable.chegou ).into( holder.imagemEmpresa );
+        }else if (pedido.getStatus().equals(Pedido.STATUS_RECEBIDO)){
+            Picasso.get().load( R.drawable.entregue ).into( holder.imagemEmpresa );
         }
 
-        holder.nomeEmpresa.setText("Pedido: \n"+nomes);
+
+        String nomeProdutos = "";
+
+        for (int x = 0 ; x < pedido.getItens().size(); x++) {
+           ItemPedido item = pedido.getItens().get(x);
+            nomeProdutos += "\n"+item.getNomeProduto();
+        }
+
+        holder.nomeEmpresa.setText("Pedido: "+nomeProdutos);
         holder.quantidade.setText("Total de itens: "+String.valueOf(pedido.getItens().size()));
         holder.descricao.setText("Obserrvações: "+pedido.getObservacaoEmpresa());
         holder.preco.setText("R$ " + pedido.getTotal());

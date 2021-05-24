@@ -133,7 +133,7 @@ public class ComprasActivity extends AppCompatActivity {
         referenciaFirestore.collection("pedidos")
                 .document(idEmpresaLogada)
                 .collection(idUsuario)
-                .whereEqualTo("status",Pedido.STATUS_AGUARDANDO).get()
+                .whereLessThan("status",Pedido.STATUS_SELECIONADO).get()
 
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -150,7 +150,7 @@ public class ComprasActivity extends AppCompatActivity {
                                      String status  = pedidoRecuperado.getStatus();
                                      String observacao = pedidoRecuperado.getObservacaoEmpresa();
                                      int quantidade = pedidoRecuperado.getItens().size();
-                                     String encerecoEntrega = pedidoRecuperado.getEndereco();
+                                     String enderecoEntrega = pedidoRecuperado.getEndereco();
 
                                      pedidos.add(pedidoRecuperado);
 

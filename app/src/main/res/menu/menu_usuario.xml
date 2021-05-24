@@ -9,6 +9,22 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/menuComprasHome"
+        android:title="Minhas compras"
+        android:iconTint="@color/white"
+        android:icon="@drawable/sacolas"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menuPedidoHome"
+        android:title="Confirmar Pedido"
+        android:iconTint="@color/white"
+        android:icon="@drawable/ic_baseline_shopping_cart_24"
+        app:showAsAction="always" />
+
+
+
+    <item
         android:id="@+id/menuConfiguracoes"
         android:title="Configurações"
         app:showAsAction="never" />

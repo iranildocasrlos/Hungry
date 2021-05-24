@@ -26,7 +26,7 @@ public class Pedido implements Serializable {
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     public static final String STATUS_SELECIONADO = "selecionado";
     public static final String STATUS_PREPARANDO = "preparando";
-    public static final String STATUS_A_CAMINHO = "A caminho";
+    public static final String STATUS_A_CAMINHO = "a caminho";
     public static final String STATUS_CHEGOU = "chegou";
     public static final String STATUS_RECEBIDO = "recebido";
     public static final String STATUS_AGUARDANDO = "aguardando";
