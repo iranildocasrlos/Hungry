@@ -41,6 +41,7 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
     private Bitmap imagemParaSalvar = null;
     private CircleImageView imagemProduto;
     private String urlImagemSelecionada = "";
+    private String urlImagemEmpresa = "";
     private static final int SELECAO_GALERIA = 200;
     private StorageReference storageReference;
     private FirebaseFirestore referenciaFirestore;
@@ -48,6 +49,7 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
     private String idUsuarioLogado ;
     private String idProduto ="";
     private Produto produto = new Produto();
+    private String nomeRecuperadoEmpresa;
 
 
     @Override
@@ -76,7 +78,7 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         storageReference = ConfiguracaoFirebase.getFirebaseStorage();
 
-
+        pesquisarEmpresa(idUsuarioLogado);
 
         imagemProduto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,6 +151,8 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
                     produto.setPrecoProduto(Double.parseDouble(precoProduto));
                     produto.setPrecoUnidade(Double.parseDouble(precoProduto));
                     produto.setUrlImagemProduto(urlImagemSelecionada);
+                    produto.setNomeEmpresa(nomeRecuperadoEmpresa);
+                    produto.setUrlImagemEmpresa(urlImagemEmpresa);
                     produto.salvar();
                     salvarImagem();
                     exibirMensagem("Produto salvo com sucesso");
@@ -254,6 +258,36 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
                 erro.printStackTrace();
             }
         }
+    }
+
+
+    //Método par recuperar empresa
+    private void pesquisarEmpresa(String id) {
+
+        String urlLogo = "";
+
+        referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
+        DocumentReference empresaRef = referenciaFirestore
+                .collection("empresas")
+                .document(id);
+
+        empresaRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    Empresa dadosEmpresa = documentSnapshot.toObject(Empresa.class);
+                    if (dadosEmpresa != null){
+                        if (dadosEmpresa.getUrlImagem()!= null){
+                            urlImagemEmpresa = dadosEmpresa.getUrlImagem();
+                            nomeRecuperadoEmpresa = dadosEmpresa.getNomeFantasia();
+
+                        }
+
+                    }
+                }
+            }
+        });
+
     }
 
     private  void exibirMensagem(String texto){

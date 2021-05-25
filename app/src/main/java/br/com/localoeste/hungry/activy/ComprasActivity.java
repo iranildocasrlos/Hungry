@@ -51,7 +51,7 @@ public class ComprasActivity extends AppCompatActivity {
 
         //Configurações da Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Status do pedido");
+        toolbar.setTitle("Minhas Compras");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

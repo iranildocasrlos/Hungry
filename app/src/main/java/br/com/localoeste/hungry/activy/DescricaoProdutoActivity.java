@@ -118,6 +118,9 @@ public class DescricaoProdutoActivity extends AppCompatActivity {
                 itemPedido.setNomeProduto(produtoSelecionado.getNomeProduto());
                 itemPedido.setDescricaoProduto(produtoSelecionado.getDescricaoProduto());
                 itemPedido.setIdEmpresa(idEmpresa);
+                itemPedido.setNomeEmpresa(produtoSelecionado.getNomeEmpresa());
+                itemPedido.setUrlLogo(produtoSelecionado.getUrlImagemEmpresa());
+
                 if (observacao.getText().toString() != null){
                     itemPedido.setObservacao(observacao.getText().toString());
                 }else {

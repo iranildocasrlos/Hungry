@@ -485,6 +485,8 @@ public class CarrinhoActivity extends AppCompatActivity {
                     data.put("observacaoEmpresa", observacao);
                     data.put("status", Pedido.STATUS_AGUARDANDO);
                     data.put("metodoPagamento", metodoPagamento);
+                    data.put("urlLogo",pedidoRecuperado.getUrlLogo());
+                    data.put("nomeEmpresa",pedidoRecuperado.getNomeEmpresa());
 
                     pedidoRecuperado.atualizarStatusPedido(idPedido, data);
 

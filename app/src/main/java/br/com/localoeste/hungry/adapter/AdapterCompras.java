@@ -39,11 +39,12 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
     private List<Pedido> pedidos;
     private Context context;
     private FirebaseFirestore referenciaFirestore;
-    private  String  url;
+    private  String  url,nomeRecuperadoEmpresa;
 
     public AdapterCompras(List<Pedido> pedidos, Context context) {
         this.pedidos = pedidos;
         this.context = context;
+        
     }
 
     @NonNull
@@ -59,6 +60,8 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
 
         String idEmpresa = pedido.getIdEmpresa();
 
+
+
         //Carregar imagens
         if (pedido.getStatus().equals(Pedido.STATUS_AGUARDANDO)){
             Picasso.get().load( R.drawable.aguardando ).into( holder.imagemEmpresa );
@@ -73,6 +76,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
         }
 
 
+
         String nomeProdutos = "";
 
         for (int x = 0 ; x < pedido.getItens().size(); x++) {
@@ -80,13 +84,18 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
             nomeProdutos += "\n"+item.getNomeProduto();
         }
 
+
+
+        holder.nomeEmpresaCompras.setText(pedido.getNomeEmpresa());
         holder.nomeEmpresa.setText("Pedido: "+nomeProdutos);
         holder.quantidade.setText("Total de itens: "+String.valueOf(pedido.getItens().size()));
         holder.descricao.setText("Obserrvações: "+pedido.getObservacaoEmpresa());
         holder.preco.setText("R$ " + pedido.getTotal());
         holder.status.setText("Status : "+pedido.getStatus().toUpperCase());
 
-
+        if (pedido.getUrlLogo() != null){
+            Picasso.get().load( pedido.getUrlLogo()).into( holder.imagemEmpresaCompras );
+        }
 
 
 
@@ -102,6 +111,8 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
 
         ImageView imagemEmpresa;
         TextView nomeEmpresa;
+        ImageView imagemEmpresaCompras;
+        TextView nomeEmpresaCompras;
         TextView quantidade;
         TextView descricao;
         TextView status;
@@ -116,13 +127,17 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
             status = itemView.findViewById(R.id.status_compras);
             imagemEmpresa = itemView.findViewById(R.id.imagemCompras);
             preco = itemView.findViewById(R.id.textPrecoCompras);
+            imagemEmpresaCompras = itemView.findViewById(R.id.imagemEmpresaCompras);
+            nomeEmpresaCompras = itemView.findViewById(R.id.textNomeEmpresaCompras);
         }
     }
 
 
 
     //Método par recuperar empresa
-    private void pesquisarEmpresa(String id) {
+    private String pesquisarEmpresa(String id) {
+
+        String urlLogo = "";
 
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         DocumentReference empresaRef = referenciaFirestore
@@ -137,7 +152,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
                     if (dadosEmpresa != null){
                         if (dadosEmpresa.getUrlImagem()!= null){
                            url = dadosEmpresa.getUrlImagem();
-
+                           nomeRecuperadoEmpresa = dadosEmpresa.getNomeFantasia();
 
                         }
 
@@ -145,7 +160,10 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
                 }
             }
         });
+        urlLogo = url;
 
+
+        return urlLogo;
 
     }
 

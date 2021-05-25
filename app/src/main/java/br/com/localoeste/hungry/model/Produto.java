@@ -11,11 +11,14 @@ import java.util.Map;
 public class Produto implements Serializable {
 
     private String urlImagemProduto;
+    private String urlImagemEmpresa;
     private String nomeProduto;
+    private String nomeEmpresa;
     private String descricaoProduto;
     private Double precoProduto;
     private String idProduto;
     private String idEmpresa;
+
     private int quantidade;
     private Double precoUnidade;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -27,6 +30,22 @@ public class Produto implements Serializable {
 
     //Métodos Getters e Setters
 
+
+    public String getUrlImagemEmpresa() {
+        return urlImagemEmpresa;
+    }
+
+    public void setUrlImagemEmpresa(String urlImagemEmpresa) {
+        this.urlImagemEmpresa = urlImagemEmpresa;
+    }
+
+    public String getNomeEmpresa() {
+        return nomeEmpresa;
+    }
+
+    public void setNomeEmpresa(String nomeEmpresa) {
+        this.nomeEmpresa = nomeEmpresa;
+    }
 
     public String getIdEmpresa() {
         return idEmpresa;
@@ -106,6 +125,8 @@ public class Produto implements Serializable {
         data.put("precoUnidade",precoUnidade);
         data.put("idEmpresa",idEmpresa);
         data.put("idProduto", idProduto);
+        data.put("urlImagemEmpresa", urlImagemEmpresa);
+        data.put("nomeEmpresa", nomeEmpresa);
         documentRef.set(data);
 
     }

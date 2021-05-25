@@ -11,8 +11,27 @@ public class ItemPedido implements Serializable{
     private Double precoProduto;
     private String descricaoProduto;
     private String observacao;
+    private String nomeEmpresa;
+    private String urlLogo;
 
     public ItemPedido() {
+    }
+
+
+    public String getNomeEmpresa() {
+        return nomeEmpresa;
+    }
+
+    public void setNomeEmpresa(String nomeEmpresa) {
+        this.nomeEmpresa = nomeEmpresa;
+    }
+
+    public String getUrlLogo() {
+        return urlLogo;
+    }
+
+    public void setUrlLogo(String urlLogo) {
+        this.urlLogo = urlLogo;
     }
 
     public String getIdProduto() {

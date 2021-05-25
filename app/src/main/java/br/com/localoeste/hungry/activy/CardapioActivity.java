@@ -147,6 +147,8 @@ public class CardapioActivity extends AppCompatActivity {
                               pedidoRecuperado.setTotal(itemPedido.getPrecoProduto());
                               pedidoRecuperado.setItens(itensCarrinho);
                               pedidoRecuperado.setNome(usuario.getNome());
+                              pedidoRecuperado.setNomeEmpresa(itemPedido.getNomeEmpresa());
+                              pedidoRecuperado.setUrlLogo(itemPedido.getUrlLogo());
 
                               pedidoRecuperado.salvar();
                           String numeroFormatato = df.format(pedidoRecuperado.getTotal());

@@ -17,6 +17,8 @@ public class Pedido implements Serializable {
     private String idProduto;
     private String idPedido;
     private String nome;
+    private String nomeEmpresa;
+    private String urlLogo;
     private String endereco;
     private List<ItemPedido> itens;
     private Double total;
@@ -48,6 +50,26 @@ public class Pedido implements Serializable {
 
         documentRef.set(data);
 
+    }
+
+    public String getNomeEmpresa() {
+        return nomeEmpresa;
+    }
+
+    public void setNomeEmpresa(String nomeEmpresa) {
+        this.nomeEmpresa = nomeEmpresa;
+    }
+
+    public String getUrlLogo() {
+        return urlLogo;
+    }
+
+    public void setUrlLogo(String urlLogo) {
+        this.urlLogo = urlLogo;
+    }
+
+    public void setMetodoPagamento(int metodoPagamento) {
+        this.metodoPagamento = metodoPagamento;
     }
 
     public String getIdEmpresa() {
