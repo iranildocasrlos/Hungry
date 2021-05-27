@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 
@@ -40,6 +41,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
     private Context context;
     private FirebaseFirestore referenciaFirestore;
     private  String  url,nomeRecuperadoEmpresa;
+    private LinearLayout layout;
 
     public AdapterCompras(List<Pedido> pedidos, Context context) {
         this.pedidos = pedidos;
@@ -58,21 +60,46 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
     public void onBindViewHolder(@NonNull AdapterCompras.MyViewHolder holder, int i) {
         Pedido pedido = pedidos.get(i);
 
+
         String idEmpresa = pedido.getIdEmpresa();
 
 
 
         //Carregar imagens
         if (pedido.getStatus().equals(Pedido.STATUS_AGUARDANDO)){
+
             Picasso.get().load( R.drawable.aguardando ).into( holder.imagemEmpresa );
+           holder.linearLayout.setBackgroundColor(Color.GRAY);
+           holder.status.setBackgroundColor(Color.GRAY);
+           holder.status.setTextColor(Color.WHITE);
+
         }else if (pedido.getStatus().equals(Pedido.STATUS_PREPARANDO)){
+
             Picasso.get().load( R.drawable.cooking ).into( holder.imagemEmpresa );
+            holder.linearLayout.setBackgroundColor(Color.YELLOW);
+            holder.status.setBackgroundColor(Color.YELLOW);
+
+
         }else if (pedido.getStatus().equals(Pedido.STATUS_A_CAMINHO)){
+
             Picasso.get().load( R.drawable.delivery ).into( holder.imagemEmpresa );
+            holder.linearLayout.setBackgroundColor(Color.argb(255,255,99,71));
+            holder.status.setBackgroundColor(Color.argb(255,255,99,71));
+            holder.status.setTextColor(Color.WHITE);
+
         }else if (pedido.getStatus().equals(Pedido.STATUS_CHEGOU)){
+
             Picasso.get().load( R.drawable.chegou ).into( holder.imagemEmpresa );
+            holder.status.setBackgroundColor(Color.argb(255,0,191,255));
+            holder.linearLayout.setBackgroundColor(Color.argb(255,0,191,255));
+            holder.status.setTextColor(Color.WHITE);
+
         }else if (pedido.getStatus().equals(Pedido.STATUS_RECEBIDO)){
+
             Picasso.get().load( R.drawable.entregue ).into( holder.imagemEmpresa );
+            holder.linearLayout.setBackgroundColor(Color.argb(255,0,255,127));
+            holder.status.setBackgroundColor(Color.argb(255,0,255,127));
+
         }
 
 
@@ -117,6 +144,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
         TextView descricao;
         TextView status;
         TextView preco;
+        LinearLayout linearLayout;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -129,6 +157,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
             preco = itemView.findViewById(R.id.textPrecoCompras);
             imagemEmpresaCompras = itemView.findViewById(R.id.imagemEmpresaCompras);
             nomeEmpresaCompras = itemView.findViewById(R.id.textNomeEmpresaCompras);
+            linearLayout = itemView.findViewById(R.id.linearLayoutNomeEmpresa);
         }
     }
 

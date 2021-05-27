@@ -129,30 +129,30 @@ public class ComprasActivity extends AppCompatActivity {
 
     //Recuperando Produtos da empresa
     private void recuperarPedido() {
-
-        referenciaFirestore.collection("pedidos")
-                .document(idEmpresaLogada)
+        Log.d("log","Chamou recuperarPedido");
+        referenciaFirestore.collection("meus_pedidos")
+                .document("usuarios")
                 .collection(idUsuario)
                 .whereLessThan("status",Pedido.STATUS_SELECIONADO).get()
 
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
+                       pedidos.clear();
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
                                 pedidoRecuperado = document.toObject(Pedido.class);
 
+
                                 if(pedidoRecuperado != null){
 
                                      itensCompras = pedidoRecuperado.getItens();
-                                     String status  = pedidoRecuperado.getStatus();
-                                     String observacao = pedidoRecuperado.getObservacaoEmpresa();
-                                     int quantidade = pedidoRecuperado.getItens().size();
-                                     String enderecoEntrega = pedidoRecuperado.getEndereco();
 
-                                     pedidos.add(pedidoRecuperado);
+                                         pedidos.add(pedidoRecuperado);
+                                         pedidoRecuperado = null;
+
+
 
                                 }
 
@@ -167,7 +167,7 @@ public class ComprasActivity extends AppCompatActivity {
                     }
 
                 });
-        adapterPedidos.notifyDataSetChanged();
+
 
 
     }

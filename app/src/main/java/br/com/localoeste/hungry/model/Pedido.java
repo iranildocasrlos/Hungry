@@ -175,6 +175,19 @@ public class Pedido implements Serializable {
 
 
     }
+    public void salvarPedidoUsuario(){
+
+        setIdPedido(getIdPedido());
+        setStatus(Pedido.STATUS_AGUARDANDO);
+        Task<Void> documentRef = db.collection("meus_pedidos")
+                .document("usuarios")
+                .collection(idUsuario)
+                .document(getIdPedido()).set(this);
+
+
+
+
+    }
 
     public void atualizarPedido(String idPedidoSalvo){
 

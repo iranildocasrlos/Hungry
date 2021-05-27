@@ -448,10 +448,17 @@ public class CarrinhoActivity extends AppCompatActivity {
 
 
         String valorExtraido = textValor.getText().toString().replaceAll(",",".");
+            Log.d("Log",String.valueOf(valorExtraido.length()));
+        if (valorExtraido.length() > 6 ){
 
-        if (valorExtraido.length() > 6){
+            Double valorAtualizado;
+            if (valorExtraido.length() > 6 && valorExtraido.length() < 9){
+                 valorAtualizado = Double.parseDouble( valorExtraido.substring(3,8).trim());
+            }else{
+                valorAtualizado = Double.parseDouble( valorExtraido.substring(3,9).trim());
+            }
 
-            Double valorAtualizado = Double.parseDouble( valorExtraido.substring(3,9).trim());
+
             if (pedidoRecuperado.getTotal() != valorAtualizado){
                 pedidoRecuperado.setTotal(valorAtualizado);
                 pedidoRecuperado.atualizarPedido(idPedido);
@@ -487,22 +494,18 @@ public class CarrinhoActivity extends AppCompatActivity {
                     data.put("metodoPagamento", metodoPagamento);
                     data.put("urlLogo",pedidoRecuperado.getUrlLogo());
                     data.put("nomeEmpresa",pedidoRecuperado.getNomeEmpresa());
+                    //adicionar data
 
                     pedidoRecuperado.atualizarStatusPedido(idPedido, data);
+                    //Cria o nó peus pedidos
+                    pedidoRecuperado.salvarPedidoUsuario();
+
 
                     Intent itentAndamento = new Intent(CarrinhoActivity.this, ComprasActivity.class);
                     itentAndamento.putExtra("status_aguardando", pedidoRecuperado);
                     startActivity(itentAndamento);
 
-                    //Cria o nó peus pedidos
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    Map<String, Object> dados = new HashMap<>();
-                    dados.put("idEmpresa", pedidoRecuperado.getIdEmpresa());
-                    dados.put("idPedido",pedidoRecuperado.getIdPedido());
-                    Task<Void> documentRef = db.collection("meus_pedidos")
-                            .document("usuarios")
-                            .collection(idUsuario)
-                            .document(idPedido).set(dados);
+
 
                     pedidoRecuperado = null;
                     finish();
