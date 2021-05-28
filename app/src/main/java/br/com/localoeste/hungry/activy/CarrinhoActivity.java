@@ -286,6 +286,20 @@ public class CarrinhoActivity extends AppCompatActivity {
                 startActivity(itentAndamento);
                 break;
 
+            case R.id.menuComprasHome:
+                if (pedidoRecuperado != null) {
+                    Intent intCarrrinho = new Intent(this, CarrinhoActivity.class);
+                    intCarrrinho.putExtra("idEmpresa", idEmpresaLogada);
+                    intCarrrinho.putExtra("idUsuario", idUsuario);
+                    intCarrrinho.putExtra("idPedido", pedidoRecuperado.getIdPedido());
+                    startActivity(intCarrrinho);
+                    textQuantidade.setText("0");
+                    textValor.setText("0.00");
+                    totalCarrinho = 0.0;
+                    qtdItensCarrinho = 0;
+                    break;
+                }
+
         }
 
 

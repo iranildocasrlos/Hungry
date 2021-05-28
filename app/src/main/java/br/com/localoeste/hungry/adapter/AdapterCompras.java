@@ -108,7 +108,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
 
         for (int x = 0 ; x < pedido.getItens().size(); x++) {
            ItemPedido item = pedido.getItens().get(x);
-            nomeProdutos += "\n"+item.getNomeProduto();
+            nomeProdutos += "\n"+(x+1)+": "+item.getNomeProduto();
         }
 
 

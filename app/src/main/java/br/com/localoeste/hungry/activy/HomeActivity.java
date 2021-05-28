@@ -214,22 +214,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 break;
 
-            case R.id.menuPedidoHome:
 
-//                if (pedidoRecuperado != null) {
-//                    Intent intCarrrinho = new Intent(CardapioActivity.this, CarrinhoActivity.class);
-//                    intCarrrinho.putExtra("idEmpresa", idEmpresaLogada);
-//                    intCarrrinho.putExtra("idUsuario", idUsuarioLogado);
-//                    intCarrrinho.putExtra("idPedido", pedidoRecuperado.getIdPedido());
-//                    startActivity(intCarrrinho);
-//                    textQuantidade.setText("0");
-//                    textValor.setText("0.00");
-//                    totalCarrinho = 0.0;
-//                    qtdItensCarrinho = 0;
-//
-//
-//                }
-                break;
 
             case R.id.menuComprasHome:
                 Intent itentCompras = new Intent(HomeActivity.this, ComprasActivity.class);
