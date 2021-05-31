@@ -16,7 +16,6 @@ import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.activy.EmpresaActivity;
 import br.com.localoeste.hungry.helper.EmpresaFirebase;
 import br.com.localoeste.hungry.helper.UsuarioFirebase;
-import br.com.localoeste.hungry.model.Empresa;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -85,10 +84,10 @@ public class EmpresaFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_empresa, container, false);
 
-        nomeEmpresa = view.findViewById(R.id.nomeEmpresa);
-        enderecoEmpresa = view.findViewById(R.id.enderecoEmpresa);
-        emailEmpresa = view.findViewById(R.id.emailEmpresa);
-        telefoneEmpresa = view.findViewById(R.id.telefoneEmpresa);
+        nomeEmpresa = view.findViewById(R.id.nomeUsuario);
+        enderecoEmpresa = view.findViewById(R.id.enderecoUsuario);
+        emailEmpresa = view.findViewById(R.id.emailUsuario);
+        telefoneEmpresa = view.findViewById(R.id.telefoneUsuario);
         cnpjEmpresa = view.findViewById(R.id.cnpjEmpresa);
         btnSalvar = view.findViewById(R.id.buttonEmpresa);
         imageEmpresaOK = view.findViewById(R.id.imageEmpresaOK);

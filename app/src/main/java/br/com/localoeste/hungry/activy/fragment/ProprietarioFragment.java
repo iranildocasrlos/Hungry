@@ -80,11 +80,11 @@ public class ProprietarioFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_proprietario, container, false);
         // Inflate the layout for this fragment
-        editNomeProprietario = view.findViewById(R.id.nomeEmpresa);
-        editEmailProprietario = view.findViewById(R.id.emailEmpresa);
-        editEnderecoProprietario = view.findViewById(R.id.enderecoEmpresa);
-        editTelefoneProprietario = view.findViewById(R.id.telefoneEmpresa);
-        editCpfProprietario = view.findViewById(R.id.cpfProprietario);
+        editNomeProprietario = view.findViewById(R.id.nomeUsuario);
+        editEmailProprietario = view.findViewById(R.id.emailUsuario);
+        editEnderecoProprietario = view.findViewById(R.id.enderecoUsuario);
+        editTelefoneProprietario = view.findViewById(R.id.telefoneUsuario);
+        editCpfProprietario = view.findViewById(R.id.cpfUsuario);
         botaoSalvar = view.findViewById(R.id.btnSalvarProp);
         imageOK =  view.findViewById(R.id.imageOK);
 

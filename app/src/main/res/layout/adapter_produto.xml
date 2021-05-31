@@ -12,7 +12,7 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
 
-        android:id="@+id/imagemCompras"
+        android:id="@+id/imagemStatusPedido"
         android:layout_width="121dp"
         android:layout_height="126dp"
         android:layout_gravity="center"
@@ -23,7 +23,7 @@
         android:src="@drawable/food2" />
 
     <TextView
-        android:id="@+id/textNomeCompras"
+        android:id="@+id/textNomePedidoEmpresa"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="8dp"
@@ -43,7 +43,7 @@
 
 
     <TextView
-        android:id="@+id/textDescricaoCompras"
+        android:id="@+id/textDescricaoPedido"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -57,7 +57,7 @@
         android:textSize="14sp" />
 
     <TextView
-        android:id="@+id/textPrecoCompras"
+        android:id="@+id/textPrecoPedido"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

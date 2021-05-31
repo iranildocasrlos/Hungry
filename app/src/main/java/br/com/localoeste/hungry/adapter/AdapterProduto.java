@@ -73,10 +73,10 @@ public class AdapterProduto extends RecyclerView.Adapter<AdapterProduto.MyViewHo
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            imagem = itemView.findViewById(R.id.imagemCompras);
-            nome = itemView.findViewById(R.id.textNomeCompras);
-            descricao = itemView.findViewById(R.id.textDescricaoCompras);
-            valor = itemView.findViewById(R.id.textPrecoCompras);
+            imagem = itemView.findViewById(R.id.imagemStatusPedido);
+            nome = itemView.findViewById(R.id.textNomePedidoEmpresa);
+            descricao = itemView.findViewById(R.id.textDescricaoPedido);
+            valor = itemView.findViewById(R.id.textPrecoPedido);
             df.setRoundingMode(RoundingMode.HALF_UP);
         }
     }

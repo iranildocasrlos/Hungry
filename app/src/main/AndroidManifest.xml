@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/icone_hungry"
         android:supportsRtl="true"
         android:theme="@style/Theme.Hungry">
-        <activity android:name=".adapter.AdapterCompras"></activity>
+
+        <activity android:name=".activy.PedidosActivity"
+            android:parentActivityName=".activy.EmpresaActivity"/>
+
         <activity
             android:name=".activy.ComprasActivity"
             android:parentActivityName=".activy.CarrinhoActivity" />

@@ -1,31 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activy.ComprasActivity"
-    android:orientation="vertical">
-
+    tools:context=".activy.PedidosActivity">
 
     <include
         android:id="@+id/include"
         layout="@layout/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
+         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerPedidosAtendimento"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp" />
-
 </LinearLayout>

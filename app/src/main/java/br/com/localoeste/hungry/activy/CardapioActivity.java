@@ -48,6 +48,7 @@ import br.com.localoeste.hungry.model.Empresa;
 import br.com.localoeste.hungry.model.ItemPedido;
 import br.com.localoeste.hungry.model.Pedido;
 import br.com.localoeste.hungry.model.Produto;
+import br.com.localoeste.hungry.model.Usuario;
 import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
 
@@ -78,7 +79,7 @@ public class CardapioActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private Pedido pedidoRecuperado;
     private Pedido pedidoAnterior;
-    private UsuarioFirebase usuario;
+    private Usuario usuario;
     private int qtdItensCarrinho;
     private Double totalCarrinho;
 
@@ -125,6 +126,7 @@ public class CardapioActivity extends AppCompatActivity {
 
                       novoPedido.setIdProduto(itemPedido.getIdProduto());
                       idEmpresaLogada = itemPedido.getIdEmpresa();
+
                       novoPedido.setNomeProduto(itemPedido.getNomeProduto());
                       novoPedido.setDescricaoProduto(itemPedido.getDescricaoProduto());
                       novoPedido.setPrecoProduto(itemPedido.getPrecoProduto());
@@ -414,7 +416,7 @@ public class CardapioActivity extends AppCompatActivity {
 
     private void inicializarComponentes() {
 
-        recyclerViewEmpresaCardapio = findViewById(R.id.recyclerCompras);
+        recyclerViewEmpresaCardapio = findViewById(R.id.recyclerPedidosAtendimento);
         nomeEmpresaCadapio = findViewById(R.id.textNomeEmCardapio);
         imagemEmpresaCardapio =  findViewById(R.id.imageCardapioEmpresa);
         horario = findViewById(R.id.textCardapioHorario);
@@ -426,7 +428,7 @@ public class CardapioActivity extends AppCompatActivity {
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         storageRef =  ConfiguracaoFirebase.getFirebaseStorage();
         idUsuarioLogado = UsuarioFirebase.getId_Usuario();
-        usuario = new UsuarioFirebase();
+        usuario = new Usuario();
         usuario.setIdUsuario(idUsuarioLogado);
 
         Bundle bundle = getIntent().getExtras();
@@ -518,7 +520,7 @@ public class CardapioActivity extends AppCompatActivity {
        itensCarrinho = new ArrayList<>();
        Task<QuerySnapshot> coletionPedidos =  referenciaFirestore.collection("pedidos")
                .document(idEmp)
-               .collection(idUsuarioLogado)
+               .collection("aguardando")
                .whereEqualTo("idUsuario", idUsuarioLogado).get()
 
       .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -590,7 +592,7 @@ public class CardapioActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
-                    UsuarioFirebase novoUsuario = documentSnapshot.toObject(UsuarioFirebase.class);
+                    Usuario novoUsuario = documentSnapshot.toObject(Usuario.class);
 
                     usuario = novoUsuario;
 

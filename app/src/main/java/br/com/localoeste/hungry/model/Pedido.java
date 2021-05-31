@@ -168,7 +168,7 @@ public class Pedido implements Serializable {
         setIdPedido(uuidAsString);
         Task<Void> documentRef = db.collection("pedidos")
                 .document(getIdEmpresa())
-                .collection(idUsuario)
+                .collection("aguardando")
                 .document(getIdPedido()).set(this);
 
 
@@ -196,7 +196,7 @@ public class Pedido implements Serializable {
         data.put("total",getTotal());
         Task<Void> documentRef = db.collection("pedidos")
                 .document(getIdEmpresa())
-                .collection(getIdUsuario())
+                .collection("aguardando")
                 .document(idPedidoSalvo)
                 .update(data);
 
@@ -207,7 +207,7 @@ public class Pedido implements Serializable {
         data.put("total",getTotal());
         Task<Void> documentRef = db.collection("pedidos")
                 .document(getIdEmpresa())
-                .collection(getIdUsuario())
+                .collection("aguardando")
                 .document(idPedidoSalvo)
                 .update(data);
 

@@ -29,7 +29,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/nomeEmpresa"
+            android:id="@+id/nomeUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -38,45 +38,49 @@
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
+            android:clickable="true"
             android:ems="10"
             android:hint="Nome"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="Iranildo" />
 
         <EditText
-            android:id="@+id/emailEmpresa"
+            android:id="@+id/emailUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            android:clickable="true"
             android:ems="10"
             android:hint="E-mail"
-            android:inputType="textPersonName" />
+            android:inputType="textWebEmailAddress|textEmailAddress"
+            android:text="iranildocarlos@gmail.com" />
 
         <EditText
-            android:id="@+id/enderecoEmpresa"
+            android:id="@+id/enderecoUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:ems="10"
             android:hint="Endereço"
-            android:inputType="textPersonName" />
+            android:inputType="text" />
 
         <EditText
-            android:id="@+id/telefoneEmpresa"
+            android:id="@+id/telefoneUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:ems="10"
             android:hint="Telefone"
-            android:inputType="textPersonName" />
+            android:inputType="number" />
 
         <EditText
-            android:id="@+id/cpfProprietario"
+            android:id="@+id/cpfUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:ems="10"
             android:hint="CPF"
-            android:inputType="textPersonName" />
+            android:inputType="number" />
 
         <Button
             android:id="@+id/buttonCriarUconta"

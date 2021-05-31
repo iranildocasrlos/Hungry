@@ -6,6 +6,7 @@ public class ItemPedido implements Serializable{
 
     private String idProduto;
     private String idEmpresa;
+
     private String nomeProduto;
     private int quantidadeProduto;
     private Double precoProduto;
@@ -16,6 +17,7 @@ public class ItemPedido implements Serializable{
 
     public ItemPedido() {
     }
+
 
 
     public String getNomeEmpresa() {

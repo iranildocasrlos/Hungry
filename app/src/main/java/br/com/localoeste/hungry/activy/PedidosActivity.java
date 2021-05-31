@@ -30,58 +30,46 @@ import br.com.localoeste.hungry.helper.UsuarioFirebase;
 import br.com.localoeste.hungry.model.ItemPedido;
 import br.com.localoeste.hungry.model.Pedido;
 
-public class ComprasActivity extends AppCompatActivity {
+public class PedidosActivity extends AppCompatActivity {
 
 
     private FirebaseAuth autenticacao;
-    private RecyclerView recyclerCompras;
+    private RecyclerView recyclerPedidos;
     private AdapterCompras adapterPedidos;
     private List<Pedido> pedidos = new ArrayList<>();
-    public List<ItemPedido>itensCompras = new ArrayList<>();
+    public List<ItemPedido>itensPedidos = new ArrayList<>();
     private FirebaseFirestore referenciaFirestore;
-    private String idEmpresaLogada ,idUsuario, idPedido;
+    private String idEmpresa ,idUsuario, idPedido;
     private StorageReference storageRef;
     private Pedido pedidoRecuperado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compras);
+        setContentView(R.layout.activity_pedidos);
 
         //Configurações da Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Minhas Compras");
+        toolbar.setTitle("Pedidos");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         inicializarComponentes();
 
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null){
 
-            if (bundle.containsKey("status_aguardando")){
+            idEmpresa = UsuarioFirebase.getId_Usuario();
 
-                idEmpresaLogada = (String)bundle.getSerializable("idEmpresa");
-                idUsuario = (String)bundle.getSerializable("idUsuario");
-                idPedido = (String)bundle.getSerializable("idPedido");
-
-            }
-
-
-        }else {
-            idUsuario = UsuarioFirebase.getId_Usuario();
-        }
 
 
 
         //Configurações do recyclerView
-        recyclerCompras.setLayoutManager(new LinearLayoutManager(this));
-        recyclerCompras.setHasFixedSize(true);
+        recyclerPedidos.setLayoutManager(new LinearLayoutManager(this));
+        recyclerPedidos.setHasFixedSize(true);
         adapterPedidos = new AdapterCompras(pedidos , this);
-        recyclerCompras.setAdapter(adapterPedidos);
+        recyclerPedidos.setAdapter(adapterPedidos);
 
-        recuperaEmpresa();
+        recuperarPedido();
+        recuperaUsuario();
 
     }
 
@@ -89,7 +77,7 @@ public class ComprasActivity extends AppCompatActivity {
 
     private void inicializarComponentes() {
 
-        recyclerCompras = findViewById(R.id.recyclerPedidosAtendimento);
+        recyclerPedidos = findViewById(R.id.recyclerPedidosAtendimento);
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         autenticacao = ConfiguracaoFirebase.getReferenciaAutenticacao();
         storageRef =  ConfiguracaoFirebase.getFirebaseStorage();
@@ -97,10 +85,9 @@ public class ComprasActivity extends AppCompatActivity {
     }
 
 
-    private void recuperaEmpresa(){
-        referenciaFirestore.collection("meus_pedidos")
-                .document("usuarios")
-                .collection(idUsuario)
+    private void recuperaUsuario(){
+        referenciaFirestore.collection("pedidos")
+                .whereArrayContains("idEmpresa",idEmpresa)
                 .get()
 
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -112,7 +99,7 @@ public class ComprasActivity extends AppCompatActivity {
                                 Map<String,Object> resultado = document.getData();
 
                                 if (resultado.get("idEmpresa") != null) {
-                                    idEmpresaLogada = resultado.get("idEmpresa").toString();
+                                    idUsuario = resultado.get("idUsuario").toString();
                                     recuperarPedido();
                                 }
 
@@ -128,16 +115,16 @@ public class ComprasActivity extends AppCompatActivity {
 
     //Recuperando Produtos da empresa
     private void recuperarPedido() {
-        Log.d("log","Chamou recuperarPedido");
-        referenciaFirestore.collection("meus_pedidos")
-                .document("usuarios")
-                .collection(idUsuario)
-                .whereLessThan("status",Pedido.STATUS_SELECIONADO).get()
+
+        referenciaFirestore.collection("pedidos")
+                .document(idEmpresa)
+                .collection("aguardando")
+                .get()
 
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                       pedidos.clear();
+                        pedidos.clear();
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
@@ -146,10 +133,10 @@ public class ComprasActivity extends AppCompatActivity {
 
                                 if(pedidoRecuperado != null){
 
-                                     itensCompras = pedidoRecuperado.getItens();
+                                    itensPedidos = pedidoRecuperado.getItens();
 
-                                         pedidos.add(pedidoRecuperado);
-                                         pedidoRecuperado = null;
+                                    pedidos.add(pedidoRecuperado);
+                                    pedidoRecuperado = null;
 
 
 
@@ -169,14 +156,20 @@ public class ComprasActivity extends AppCompatActivity {
 
 
 
-    }
+
+
+
+}
+
 
 
 
     @Override
     public boolean onSupportNavigateUp() {
+
         finish();
         return true;
     }
+
 
 }

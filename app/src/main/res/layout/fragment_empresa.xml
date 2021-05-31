@@ -31,7 +31,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/nomeEmpresa"
+            android:id="@+id/nomeUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -44,7 +44,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewCadastroUsuarrio" />
 
         <EditText
-            android:id="@+id/emailEmpresa"
+            android:id="@+id/emailUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -54,10 +54,10 @@
             android:text="contato@localoeste.com.br"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nomeEmpresa" />
+            app:layout_constraintTop_toBottomOf="@+id/nomeUsuario" />
 
         <EditText
-            android:id="@+id/enderecoEmpresa"
+            android:id="@+id/enderecoUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -67,10 +67,10 @@
             android:text="Rua pedro Bolgione 116"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emailEmpresa" />
+            app:layout_constraintTop_toBottomOf="@+id/emailUsuario" />
 
         <EditText
-            android:id="@+id/telefoneEmpresa"
+            android:id="@+id/telefoneUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -80,7 +80,7 @@
             android:text="1147739605"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/enderecoEmpresa" />
+            app:layout_constraintTop_toBottomOf="@+id/enderecoUsuario" />
 
         <EditText
             android:id="@+id/cnpjEmpresa"
@@ -93,7 +93,7 @@
             android:text="13056456/0001-15"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/telefoneEmpresa" />
+            app:layout_constraintTop_toBottomOf="@+id/telefoneUsuario" />
 
         <Button
             android:id="@+id/buttonEmpresa"

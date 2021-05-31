@@ -148,6 +148,13 @@ public class EmpresaActivity extends AppCompatActivity {
             case R.id.menuConfiguracoes:
                 abrirConfiguracoes();
                 break;
+
+            case R.id.carrinhoFull:
+                Intent it = new Intent(EmpresaActivity.this, PedidosActivity.class);
+                startActivity(it);
+                break;
+
+
             case R.id.menuNovoProduto:
                 abrirNovoProduto();
                 break;

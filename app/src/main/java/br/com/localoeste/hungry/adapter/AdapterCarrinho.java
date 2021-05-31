@@ -135,11 +135,11 @@ public class AdapterCarrinho extends RecyclerView.Adapter<AdapterCarrinho.MyView
 
         public MyViewHolder(View itemView, OnRecyclerViewClickListener listener) {
             super(itemView);
-            imagem = itemView.findViewById(R.id.imagemCompras);
-            nome = itemView.findViewById(R.id.textNomeCompras);
-            descricao = itemView.findViewById(R.id.textDescricaoCompras);
-            valor = itemView.findViewById(R.id.textPrecoCompras);
-            quantidade = itemView.findViewById(R.id.status_compras);
+            imagem = itemView.findViewById(R.id.imagemStatusPedido);
+            nome = itemView.findViewById(R.id.textNomePedidoEmpresa);
+            descricao = itemView.findViewById(R.id.textDescricaoPedido);
+            valor = itemView.findViewById(R.id.textPrecoPedido);
+            quantidade = itemView.findViewById(R.id.status_pedidos_empresa);
             df.setRoundingMode(RoundingMode.HALF_UP);
             add = itemView.findViewById(R.id.imageAdapterAdd);
             remove = itemView.findViewById(R.id.imageAdapterRemove);

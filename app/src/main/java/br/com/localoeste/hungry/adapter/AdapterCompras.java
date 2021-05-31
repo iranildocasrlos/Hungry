@@ -1,30 +1,29 @@
 package br.com.localoeste.hungry.adapter;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextClock;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import br.com.localoeste.hungry.R;
@@ -33,20 +32,21 @@ import br.com.localoeste.hungry.model.Empresa;
 import br.com.localoeste.hungry.model.ItemPedido;
 import br.com.localoeste.hungry.model.Pedido;
 import br.com.localoeste.hungry.model.Produto;
-import de.hdodenhof.circleimageview.CircleImageView;
+import br.com.localoeste.hungry.model.Usuario;
 
 public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHolder> {
 
     private List<Pedido> pedidos;
     private Context context;
     private FirebaseFirestore referenciaFirestore;
-    private  String  url,nomeRecuperadoEmpresa;
+    private  String  url,nomeRecuperadoUsuario;
+    private Usuario usuario;
     private LinearLayout layout;
 
     public AdapterCompras(List<Pedido> pedidos, Context context) {
         this.pedidos = pedidos;
         this.context = context;
-        
+
     }
 
     @NonNull
@@ -61,7 +61,8 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
         Pedido pedido = pedidos.get(i);
 
 
-        String idEmpresa = pedido.getIdEmpresa();
+        String idUsuario = pedido.getIdUsuario();
+        pesquisarUsuario(idUsuario);
 
 
 
@@ -112,8 +113,12 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
         }
 
 
+        if (nomeRecuperadoUsuario != null){
+            holder.nomeEmpresaCompras.setText(usuario.getNome());
+        }else {
+            holder.nomeEmpresaCompras.setText(pedido.getNomeEmpresa());
+        }
 
-        holder.nomeEmpresaCompras.setText(pedido.getNomeEmpresa());
         holder.nomeEmpresa.setText("Pedido: "+nomeProdutos);
         holder.quantidade.setText("Total de itens: "+String.valueOf(pedido.getItens().size()));
         holder.descricao.setText("Obserrvações: "+pedido.getObservacaoEmpresa());
@@ -149,39 +154,38 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            nomeEmpresa = itemView.findViewById(R.id.textNomeCompras);
-            descricao = itemView.findViewById(R.id.textDescricaoCompras);
-            quantidade = itemView.findViewById(R.id.quantidade_Compras);
-            status = itemView.findViewById(R.id.status_compras);
-            imagemEmpresa = itemView.findViewById(R.id.imagemCompras);
-            preco = itemView.findViewById(R.id.textPrecoCompras);
+            nomeEmpresa = itemView.findViewById(R.id.textNomePedidoEmpresa);
+            descricao = itemView.findViewById(R.id.textDescricaoPedido);
+            quantidade = itemView.findViewById(R.id.quantidade_pedidos);
+            status = itemView.findViewById(R.id.status_pedidos_empresa);
+            imagemEmpresa = itemView.findViewById(R.id.imagemStatusPedido);
+            preco = itemView.findViewById(R.id.textPrecoPedido);
             imagemEmpresaCompras = itemView.findViewById(R.id.imagemEmpresaCompras);
-            nomeEmpresaCompras = itemView.findViewById(R.id.textNomeEmpresaCompras);
-            linearLayout = itemView.findViewById(R.id.linearLayoutNomeEmpresa);
+            nomeEmpresaCompras = itemView.findViewById(R.id.textNomeClientePedido);
+            linearLayout = itemView.findViewById(R.id.linearLayoutNomeCliente);
         }
     }
 
 
 
     //Método par recuperar empresa
-    private String pesquisarEmpresa(String id) {
+    private void pesquisarUsuario(String id) {
 
-        String urlLogo = "";
+
 
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         DocumentReference empresaRef = referenciaFirestore
-                .collection("empresas")
+                .collection("usuarios")
                 .document(id);
 
         empresaRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()){
-                    Empresa dadosEmpresa = documentSnapshot.toObject(Empresa.class);
-                    if (dadosEmpresa != null){
-                        if (dadosEmpresa.getUrlImagem()!= null){
-                           url = dadosEmpresa.getUrlImagem();
-                           nomeRecuperadoEmpresa = dadosEmpresa.getNomeFantasia();
+                    Usuario dadosUsuario = documentSnapshot.toObject(Usuario.class);
+                    if (dadosUsuario != null){
+                        if (dadosUsuario.getNome()!= null){
+                           nomeRecuperadoUsuario = dadosUsuario.getNome();
 
                         }
 
@@ -189,12 +193,15 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
                 }
             }
         });
-        urlLogo = url;
 
-
-        return urlLogo;
 
     }
+
+
+
+
+
+
 
 
 

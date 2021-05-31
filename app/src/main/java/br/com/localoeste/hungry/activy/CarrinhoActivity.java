@@ -150,7 +150,7 @@ public class CarrinhoActivity extends AppCompatActivity {
         itensCarrinho = new ArrayList<>();
          referenciaFirestore.collection("pedidos")
                 .document(idEmpresaLogada)
-                .collection(idUsuario)
+                .collection("aguardando")
                 .whereEqualTo("status",Pedido.STATUS_SELECIONADO).get()
 
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -211,7 +211,7 @@ public class CarrinhoActivity extends AppCompatActivity {
 
     private void inicializarComponentes() {
 
-        recyclerCarrinho = findViewById(R.id.recyclerCompras);
+        recyclerCarrinho = findViewById(R.id.recyclerPedidosAtendimento);
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         autenticacao = ConfiguracaoFirebase.getReferenciaAutenticacao();
         storageRef =  ConfiguracaoFirebase.getFirebaseStorage();
@@ -387,7 +387,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     DocumentReference documentRef = referenciaFirestore
                             .collection("pedidos")
                             .document(idEmpresaLogada)
-                            .collection(idUsuario)
+                            .collection("aguardando")
                             .document(idPedido);
 
                     Map<String, Object> data = new HashMap<>();
@@ -437,7 +437,7 @@ public class CarrinhoActivity extends AppCompatActivity {
         referenciaFirestore
                 .collection("pedidos")
                 .document(idEmpresaLogada)
-                .collection(idUsuario)
+                .collection("aguardando")
                 .document(idPedido)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

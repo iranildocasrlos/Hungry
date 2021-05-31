@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".adapter.AdapterPedidoEmpresa">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".adapter.AdapterCompras">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/divisor" />
+
+
+            <LinearLayout
+                android:id="@+id/linearLayoutNomeCliente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textNomeClientePedido"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="0dp"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:singleLine="false"
+                    android:text="Nome da Empresa"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="Nome da Empresa" />
+
+            </LinearLayout>
+
+            <include layout="@layout/divisor" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+
+                    android:id="@+id/imagemStatusPedido"
+                    android:layout_width="121dp"
+                    android:layout_height="126dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:src="@drawable/food2" />
+
+                <TextView
+                    android:id="@+id/textNomePedidoEmpresa"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:lines="10"
+                    android:maxLines="10"
+                    android:minLines="5"
+                    android:singleLine="false"
+                    android:text="Sushi de salmão"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/status_pedidos_empresa"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center|center_vertical"
+                android:gravity="start|left"
+                android:text="Status: aguardando"
+                android:textColor="#FF6E40"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textPrecoPedido"
+                    android:layout_width="wrap_content"
+                    android:layout_height="39dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="R$ 19.90"
+                    android:textColor="@android:color/holo_green_light"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/quantidade_pedidos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="39dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="Quantidade: 1"
+                        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|left"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                android:gravity="start|left"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textDescricaoPedido"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:lines="4"
+                    android:maxLines="4"
+                    android:minLines="2"
+                    android:singleLine="false"
+                    android:text="Salmão com nosso delicioso arroz temperado"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <include layout="@layout/divisor" />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -9,6 +9,13 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/carrinhoFull"
+        android:icon="@drawable/ic_baseline_shopping_basket_24"
+        android:title="Pedidos"
+        android:iconTint="@color/white"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/menuConfiguracoes"
         android:title="Configurações"
         app:showAsAction="never" />
