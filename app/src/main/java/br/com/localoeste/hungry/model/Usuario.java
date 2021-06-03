@@ -84,7 +84,7 @@ public class Usuario {
         this.tipoUsuario = tipoUsuario;
     }
 
-    public  Usuario recuperarDadosUsuario(String id) {
+    public  void recuperarDadosUsuario(String id) {
 
 
         DocumentReference docRef = referenciaFirestore.collection("usuarios")
@@ -101,13 +101,11 @@ public class Usuario {
                     setTelefone(usuarioRecuperado.getTelefone());
 
 
+
                 }
 
             }
         });
-
-
-        return this;
 
 
     }

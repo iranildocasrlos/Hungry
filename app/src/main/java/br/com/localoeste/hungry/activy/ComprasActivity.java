@@ -62,7 +62,7 @@ public class ComprasActivity extends AppCompatActivity {
 
             if (bundle.containsKey("status_aguardando")){
 
-                idEmpresaLogada = (String)bundle.getSerializable("idEmpresa");
+                idEmpresaLogada = (String)bundle.getSerializable("status_aguardando");
                 idUsuario = (String)bundle.getSerializable("idUsuario");
                 idPedido = (String)bundle.getSerializable("idPedido");
 

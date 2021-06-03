@@ -49,6 +49,7 @@ import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 import br.com.localoeste.hungry.model.ItemPedido;
 import br.com.localoeste.hungry.model.Pedido;
 import br.com.localoeste.hungry.model.Produto;
+import br.com.localoeste.hungry.model.Usuario;
 
 public class CarrinhoActivity extends AppCompatActivity {
 
@@ -282,7 +283,10 @@ public class CarrinhoActivity extends AppCompatActivity {
 
             case R.id.menuCompras:
                 Intent itentAndamento = new Intent(CarrinhoActivity.this, ComprasActivity.class);
-                itentAndamento.putExtra("status_aguardando", pedidoRecuperado);
+                itentAndamento.putExtra("status_aguardando", pedidoRecuperado.getIdEmpresa());
+                itentAndamento.putExtra("idPedido", pedidoRecuperado.getIdPedido());
+                itentAndamento.putExtra("idUsuario", pedidoRecuperado.getIdUsuario());
+
                 startActivity(itentAndamento);
                 break;
 
@@ -472,9 +476,13 @@ public class CarrinhoActivity extends AppCompatActivity {
                 valorAtualizado = Double.parseDouble( valorExtraido.substring(3,9).trim());
             }
 
+                Usuario usuarioLogado = new Usuario();
+                usuarioLogado.setIdUsuario(idUsuario);
+                usuarioLogado.recuperarDadosUsuario(usuarioLogado.getIdUsuario());
 
             if (pedidoRecuperado.getTotal() != valorAtualizado){
                 pedidoRecuperado.setTotal(valorAtualizado);
+                pedidoRecuperado.setNome(usuarioLogado.getNome());
                 pedidoRecuperado.atualizarPedido(idPedido);
             }
 
@@ -507,16 +515,22 @@ public class CarrinhoActivity extends AppCompatActivity {
                     data.put("status", Pedido.STATUS_AGUARDANDO);
                     data.put("metodoPagamento", metodoPagamento);
                     data.put("urlLogo",pedidoRecuperado.getUrlLogo());
+                    data.put("nome", usuarioLogado.getNome());
+                    data.put("endereco", usuarioLogado.getEndereco());
+                    data.put("telefone",usuarioLogado.getTelefone());
                     data.put("nomeEmpresa",pedidoRecuperado.getNomeEmpresa());
                     //adicionar data
 
                     pedidoRecuperado.atualizarStatusPedido(idPedido, data);
-                    //Cria o nó peus pedidos
+                    //Cria o nó meus pedidos
                     pedidoRecuperado.salvarPedidoUsuario();
 
 
                     Intent itentAndamento = new Intent(CarrinhoActivity.this, ComprasActivity.class);
-                    itentAndamento.putExtra("status_aguardando", pedidoRecuperado);
+                    itentAndamento.putExtra("status_aguardando", pedidoRecuperado.getIdEmpresa());
+                    itentAndamento.putExtra("idUsuario", pedidoRecuperado.getIdUsuario());
+                    itentAndamento.putExtra("idPedido", pedidoRecuperado.getIdPedido());
+
                     startActivity(itentAndamento);
 
 

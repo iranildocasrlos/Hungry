@@ -17,9 +17,11 @@ public class Pedido implements Serializable {
     private String idProduto;
     private String idPedido;
     private String nome;
+    private Boolean user = false;
     private String nomeEmpresa;
     private String urlLogo;
     private String endereco;
+    private String telefone;
     private List<ItemPedido> itens;
     private Double total;
     private String status = "selecionado";
@@ -121,6 +123,14 @@ public class Pedido implements Serializable {
         this.endereco = endereco;
     }
 
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
     public List<ItemPedido> getItens() {
         return itens;
     }
@@ -157,6 +167,14 @@ public class Pedido implements Serializable {
         return observacaoEmpresa;
     }
 
+    public Boolean getUser() {
+        return user;
+    }
+
+    public void setUser(Boolean user) {
+        this.user = user;
+    }
+
     public void setObservacaoEmpresa(String observacaoEmpresa) {
         this.observacaoEmpresa = observacaoEmpresa;
     }
@@ -179,6 +197,7 @@ public class Pedido implements Serializable {
 
         setIdPedido(getIdPedido());
         setStatus(Pedido.STATUS_AGUARDANDO);
+        setUser(true);
         Task<Void> documentRef = db.collection("meus_pedidos")
                 .document("usuarios")
                 .collection(idUsuario)

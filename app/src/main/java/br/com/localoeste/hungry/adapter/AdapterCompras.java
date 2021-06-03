@@ -39,9 +39,10 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
     private List<Pedido> pedidos;
     private Context context;
     private FirebaseFirestore referenciaFirestore;
-    private  String  url,nomeRecuperadoUsuario;
-    private Usuario usuario;
-    private LinearLayout layout;
+    private  String  url,nomeRecuperadoUsuario,tipoUsuario;
+    private ImageView imagemEmpresaCompras;
+    private String nomeRecuperadoEmpresa;
+
 
     public AdapterCompras(List<Pedido> pedidos, Context context) {
         this.pedidos = pedidos;
@@ -63,6 +64,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
 
         String idUsuario = pedido.getIdUsuario();
         pesquisarUsuario(idUsuario);
+        pesquisarEmpresa(pedido.getIdEmpresa());
 
 
 
@@ -113,10 +115,14 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
         }
 
 
-        if (nomeRecuperadoUsuario != null){
-            holder.nomeEmpresaCompras.setText(usuario.getNome());
+        if (!pedido.getUser()){
+            holder.nomeEmpresaCompras.setText(pedido.getNome()+"\nEndereço: "+pedido.getEndereco()+" - Fone: "+pedido.getTelefone());
         }else {
             holder.nomeEmpresaCompras.setText(pedido.getNomeEmpresa());
+        }
+
+        if (url == null){
+            Picasso.get().load( pedido.getUrlLogo()).into( holder.imagemEmpresaCompras );
         }
 
         holder.nomeEmpresa.setText("Pedido: "+nomeProdutos);
@@ -124,11 +130,6 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
         holder.descricao.setText("Obserrvações: "+pedido.getObservacaoEmpresa());
         holder.preco.setText("R$ " + pedido.getTotal());
         holder.status.setText("Status : "+pedido.getStatus().toUpperCase());
-
-        if (pedido.getUrlLogo() != null){
-            Picasso.get().load( pedido.getUrlLogo()).into( holder.imagemEmpresaCompras );
-        }
-
 
 
 
@@ -142,8 +143,8 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imagemEmpresa;
-        TextView nomeEmpresa;
         ImageView imagemEmpresaCompras;
+        TextView nomeEmpresa;
         TextView nomeEmpresaCompras;
         TextView quantidade;
         TextView descricao;
@@ -159,8 +160,8 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
             quantidade = itemView.findViewById(R.id.quantidade_pedidos);
             status = itemView.findViewById(R.id.status_pedidos_empresa);
             imagemEmpresa = itemView.findViewById(R.id.imagemStatusPedido);
-            preco = itemView.findViewById(R.id.textPrecoPedido);
             imagemEmpresaCompras = itemView.findViewById(R.id.imagemEmpresaCompras);
+            preco = itemView.findViewById(R.id.textPrecoPedido);
             nomeEmpresaCompras = itemView.findViewById(R.id.textNomeClientePedido);
             linearLayout = itemView.findViewById(R.id.linearLayoutNomeCliente);
         }
@@ -186,6 +187,8 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
                     if (dadosUsuario != null){
                         if (dadosUsuario.getNome()!= null){
                            nomeRecuperadoUsuario = dadosUsuario.getNome();
+                           tipoUsuario = dadosUsuario.getTipoUsuario();
+
 
                         }
 
@@ -197,11 +200,37 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
 
     }
 
+    private String pesquisarEmpresa(String id) {
+
+        String urlLogo = "";
+
+        referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
+        DocumentReference empresaRef = referenciaFirestore
+                .collection("empresas")
+                .document(id);
+
+        empresaRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    Empresa dadosEmpresa = documentSnapshot.toObject(Empresa.class);
+                    if (dadosEmpresa != null){
+                        if (dadosEmpresa.getUrlImagem()!= null){
+                            url = dadosEmpresa.getUrlImagem();
+                            nomeRecuperadoEmpresa = dadosEmpresa.getNomeFantasia();
+
+                        }
+
+                    }
+                }
+            }
+        });
+        urlLogo = url;
 
 
+        return urlLogo;
 
-
-
+    }
 
 
 

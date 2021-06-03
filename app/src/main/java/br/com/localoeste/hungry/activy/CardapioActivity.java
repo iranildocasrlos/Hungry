@@ -1,4 +1,4 @@
-package br.com.localoeste.hungry.activy;
+ package br.com.localoeste.hungry.activy;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
