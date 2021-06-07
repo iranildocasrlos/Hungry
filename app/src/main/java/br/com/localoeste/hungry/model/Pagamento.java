@@ -1,0 +1,154 @@
+package br.com.localoeste.hungry.model;
+
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+public class Pagamento {
+
+    String idUsuario;
+    String idEmpresa;
+    String idPedido;
+    String dataTransacao;
+    Boolean devido = false;
+    String nomeEmpreea;
+    Double valor;
+    Double ganhos;;
+    Double porcentagem = 15.00;
+    int metodoPagamento;
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private String stringDate;
+
+
+
+
+
+    public Pagamento() {
+    }
+
+    public String getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(String idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(String idEmpresa) {
+        this.idEmpresa = idEmpresa;
+    }
+
+    public String getIdPedido() {
+        return idPedido;
+    }
+
+    public void setIdPedido(String idPedido) {
+        this.idPedido = idPedido;
+    }
+
+    public String getDataTransacao() {
+        return dataTransacao;
+    }
+
+    public void setDataTransacao(String dataTransacao) {
+        this.dataTransacao = dataTransacao;
+    }
+
+    public Boolean getDevido() {
+        return devido;
+    }
+
+    public void setDevido(Boolean devido) {
+        this.devido = devido;
+    }
+
+    public String getNomeEmpreea() {
+        return nomeEmpreea;
+    }
+
+    public void setNomeEmpreea(String nomeEmpreea) {
+        this.nomeEmpreea = nomeEmpreea;
+    }
+
+    public Double getValor() {
+        return valor;
+    }
+
+    public void setValor(Double valor) {
+        this.valor = valor;
+    }
+
+    public Double getGanhos() {
+        return ganhos;
+    }
+
+    public void setGanhos(Double ganhos) {
+        this.ganhos = ganhos;
+    }
+
+    public Double getPorcentagem() {
+        return porcentagem;
+    }
+
+    public void setPorcentagem(Double porcentagem) {
+        this.porcentagem = porcentagem;
+    }
+
+
+    public int getMetodoPagamento() {
+        return metodoPagamento;
+    }
+
+    public void setMetodoPagamento(int metodoPagamento) {
+        this.metodoPagamento = metodoPagamento;
+    }
+
+
+
+    //Métodos trasação
+
+    public void salvarPagamento(){
+
+        //get Month and Year current
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        String mesAno = (String.valueOf(month+1)+String.valueOf(year));
+
+
+        //Displaying the actual date
+        Date date = new Date();
+        SimpleDateFormat  DateFor = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+        stringDate = DateFor.format(date);
+        setDataTransacao(stringDate);
+
+
+        //Calcular nossa porcentagem
+        Double valorTrasacao = getValor();
+        Double resultado = (porcentagem % 100) * valorTrasacao;
+        Double valorDaPorcentagem =  resultado;
+        DecimalFormat df = new DecimalFormat("0.00");
+        df.format(valorDaPorcentagem);
+        setGanhos(valorDaPorcentagem);
+
+        if (getMetodoPagamento() == 1){
+            setDevido(true);
+        }
+
+         db.collection("pagamentos")
+                .document(getIdEmpresa())
+                .collection(mesAno)
+               .document(getIdPedido()).set(this);
+    }
+
+
+}

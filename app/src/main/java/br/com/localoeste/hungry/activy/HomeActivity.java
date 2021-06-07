@@ -71,20 +71,22 @@ public class HomeActivity extends AppCompatActivity {
         recuperarEmpresas();
 
         //Configurações da pesquisa
-        searchView.setHint("Pesquisar Restaurante");
+        searchView.setHint("Pesquisar Empresa");
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                pesquisarEmpresa(query);
+              //  pesquisarEmpresa(query);
 
-                return true;
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                pesquisarEmpresa(newText);
+                return true;
             }
+
         });
 
 
@@ -120,7 +122,7 @@ public class HomeActivity extends AppCompatActivity {
     private void pesquisarEmpresa(String nome) {
         referenciaFirestore
                 .collection("empresas")
-                .whereArrayContains("nomeFantasia", nome)
+                .whereArrayContains("nomeFantasia", nome+"\uf8ff")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -138,11 +140,14 @@ public class HomeActivity extends AppCompatActivity {
 
                                 }
 
-                            }
 
+
+                            }
+                            adapterEmpresa.notifyDataSetChanged();
                         }
-                        adapterEmpresa.notifyDataSetChanged();
+
                     }
+
                 });
 
     }

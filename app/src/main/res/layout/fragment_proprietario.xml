@@ -37,7 +37,6 @@
             android:ems="5"
             android:hint="Nome"
             android:inputType="textPersonName"
-            android:text="iranildo Carlos da Silva"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewCadastroUsuarrio" />
@@ -50,7 +49,6 @@
             android:ems="10"
             android:hint="E-mail"
             android:inputType="textPersonName"
-            android:text="iranildocarlos@localoeste.com.br"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nomeUsuario" />
@@ -63,7 +61,6 @@
             android:ems="10"
             android:hint="Endereço"
             android:inputType="textPersonName"
-            android:text="Rua Pedro Bolgione 116"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/emailUsuario" />
@@ -76,7 +73,6 @@
             android:ems="10"
             android:hint="Telefone"
             android:inputType="textPersonName"
-            android:text="11974124829"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/enderecoUsuario" />
@@ -89,7 +85,6 @@
             android:ems="10"
             android:hint="CPF"
             android:inputType="textPersonName"
-            android:text="27623677861"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/telefoneUsuario" />

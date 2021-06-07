@@ -47,6 +47,7 @@ import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.adapter.AdapterCarrinho;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 import br.com.localoeste.hungry.model.ItemPedido;
+import br.com.localoeste.hungry.model.Pagamento;
 import br.com.localoeste.hungry.model.Pedido;
 import br.com.localoeste.hungry.model.Produto;
 import br.com.localoeste.hungry.model.Usuario;
@@ -524,6 +525,16 @@ public class CarrinhoActivity extends AppCompatActivity {
                     pedidoRecuperado.atualizarStatusPedido(idPedido, data);
                     //Cria o nó meus pedidos
                     pedidoRecuperado.salvarPedidoUsuario();
+
+
+                    Pagamento novoPagamento = new Pagamento();
+                    novoPagamento.setIdEmpresa(pedidoRecuperado.getIdEmpresa());
+                    novoPagamento.setMetodoPagamento(pedidoRecuperado.getMetodoPagamento());
+                    novoPagamento.setIdUsuario(pedidoRecuperado.getIdUsuario());
+                    novoPagamento.setIdPedido(pedidoRecuperado.getIdPedido());
+                    novoPagamento.setNomeEmpreea(pedidoRecuperado.getNomeEmpresa());
+                    novoPagamento.setValor(pedidoRecuperado.getTotal());
+                    novoPagamento.salvarPagamento();
 
 
                     Intent itentAndamento = new Intent(CarrinhoActivity.this, ComprasActivity.class);
