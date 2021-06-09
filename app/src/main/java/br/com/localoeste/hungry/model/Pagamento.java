@@ -5,6 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,7 +20,7 @@ public class Pagamento {
     String nomeEmpreea;
     Double valor;
     Double ganhos;;
-    Double porcentagem = 15.00;
+    int porcentagem = 15;
     int metodoPagamento;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String stringDate;
@@ -95,11 +96,11 @@ public class Pagamento {
         this.ganhos = ganhos;
     }
 
-    public Double getPorcentagem() {
+    public int getPorcentagem() {
         return porcentagem;
     }
 
-    public void setPorcentagem(Double porcentagem) {
+    public void setPorcentagem(int porcentagem) {
         this.porcentagem = porcentagem;
     }
 
@@ -136,9 +137,10 @@ public class Pagamento {
         Double valorTrasacao = getValor();
         Double resultado = (porcentagem % 100) * valorTrasacao;
         Double valorDaPorcentagem =  resultado;
-        DecimalFormat df = new DecimalFormat("0.00");
-        df.format(valorDaPorcentagem);
-        setGanhos(valorDaPorcentagem);
+
+        //Formatando o ressultado para o padrão brasileiro de casas decimais
+        String valorFormatado = new DecimalFormat("##,00").format(valorDaPorcentagem);
+        setGanhos(Double.parseDouble(valorFormatado));
 
         if (getMetodoPagamento() == 1){
             setDevido(true);

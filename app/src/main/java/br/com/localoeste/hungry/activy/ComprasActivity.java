@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -29,6 +30,7 @@ import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 import br.com.localoeste.hungry.helper.UsuarioFirebase;
 import br.com.localoeste.hungry.model.ItemPedido;
 import br.com.localoeste.hungry.model.Pedido;
+import dmax.dialog.SpotsDialog;
 
 public class ComprasActivity extends AppCompatActivity {
 
@@ -42,6 +44,7 @@ public class ComprasActivity extends AppCompatActivity {
     private String idEmpresaLogada ,idUsuario, idPedido;
     private StorageReference storageRef;
     private Pedido pedidoRecuperado;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +101,14 @@ public class ComprasActivity extends AppCompatActivity {
 
 
     private void recuperaEmpresa(){
+
+        dialog = new SpotsDialog.Builder()
+                .setContext(this)
+                .setMessage("Carregando dados")
+                .setCancelable( false )
+                .build();
+        dialog.show();
+
         referenciaFirestore.collection("meus_pedidos")
                 .document("usuarios")
                 .collection(idUsuario)
@@ -107,20 +118,30 @@ public class ComprasActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+                          if  (!task.getResult().isEmpty()){
+                              for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                Map<String,Object> resultado = document.getData();
+                                      Map<String,Object> resultado = document.getData();
 
-                                if (resultado.get("idEmpresa") != null) {
-                                    idEmpresaLogada = resultado.get("idEmpresa").toString();
-                                    recuperarPedido();
-                                }
+                                      if (resultado.get("idEmpresa") != null) {
+                                          idEmpresaLogada = resultado.get("idEmpresa").toString();
+                                          recuperarPedido();
+                                      }else{
+                                          dialog.dismiss();
+                                      }
 
 
-                            }
+
+                              }
+                          }else{
+                              dialog.dismiss();
+                          }
+
                         }
                     }
+
                 });
+
 
     }
 
@@ -168,7 +189,7 @@ public class ComprasActivity extends AppCompatActivity {
                 });
 
 
-
+         dialog.dismiss();
     }
 
 

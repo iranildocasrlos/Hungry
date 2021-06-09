@@ -264,10 +264,6 @@ public class CardapioActivity extends AppCompatActivity {
             recuperarProdutos(idEmpresaLogada);
 
 
-
-
-
-
         }
 
 
@@ -292,43 +288,6 @@ public class CardapioActivity extends AppCompatActivity {
 
     }
 
-  //Sharead Preferences
-
-//    private void saveMap(Map<String, Object> inputMap) {
-//       SharedPreferences preferences = getApplicationContext().getSharedPreferences("dados_usuario", Context.MODE_PRIVATE);
-//
-//        if (preferences != null) {
-//            JSONObject jsonObject = new JSONObject(inputMap);
-//            String jsonString = jsonObject.toString();
-//            SharedPreferences.Editor editor = preferences.edit();
-//            editor.remove("dados_usuario").apply();
-//            editor.putString("dados_usuario", jsonString);
-//            editor.commit();
-//        }
-//    }
-//
-//
-//    private Map<String, Object> loadMap() {
-//        Map<String, Object> outputMap = new HashMap<>();
-//        SharedPreferences preferences = getApplicationContext().getSharedPreferences("dados_usuario", Context.MODE_PRIVATE);
-//
-//
-//
-//        try {
-//            if (preferences != null) {
-//                String jsonString = preferences.getString("dados_usuario", (new JSONObject()).toString());
-//                JSONObject jsonObject = new JSONObject(jsonString);
-//                Iterator<String> keysItr = jsonObject.keys();
-//                while (keysItr.hasNext()) {
-//                    String key = keysItr.next();
-//                    outputMap.put(key, jsonObject.get(key));
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return outputMap;
-//    }
 
     // COnfigura  o cabeçalho  baseado na empresa passada
     private void configurarEmpresa(Empresa empresaSelecionada) {
