@@ -139,7 +139,11 @@ public class Pagamento {
         Double valorDaPorcentagem =  resultado;
 
         //Formatando o ressultado para o padrão brasileiro de casas decimais
-        String valorFormatado = new DecimalFormat("##,00").format(valorDaPorcentagem);
+        String valorFormatado = new DecimalFormat("##,00")
+                .format(valorDaPorcentagem)
+                .replaceAll(",",".");
+
+
         setGanhos(Double.parseDouble(valorFormatado));
 
         if (getMetodoPagamento() == 1){
