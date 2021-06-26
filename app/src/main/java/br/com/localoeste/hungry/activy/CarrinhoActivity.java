@@ -522,14 +522,17 @@ public class CarrinhoActivity extends AppCompatActivity {
                     data.put("nomeEmpresa",pedidoRecuperado.getNomeEmpresa());
                     //adicionar data
 
-                    pedidoRecuperado.atualizarStatusPedido(idPedido, data);
                     //Cria o nó meus pedidos
                     pedidoRecuperado.salvarPedidoUsuario();
+                    pedidoRecuperado.atualizarStatusPedido(idPedido, data);
+                    pedidoRecuperado.atualizarPedidoUsuario(idPedido,data);
+
+
 
 
                     Pagamento novoPagamento = new Pagamento();
                     novoPagamento.setIdEmpresa(pedidoRecuperado.getIdEmpresa());
-                    novoPagamento.setMetodoPagamento(pedidoRecuperado.getMetodoPagamento());
+                    novoPagamento.setMetodoPagamento(metodoPagamento);
                     novoPagamento.setIdUsuario(pedidoRecuperado.getIdUsuario());
                     novoPagamento.setIdPedido(pedidoRecuperado.getIdPedido());
                     novoPagamento.setNomeEmpreea(pedidoRecuperado.getNomeEmpresa());
@@ -537,8 +540,9 @@ public class CarrinhoActivity extends AppCompatActivity {
                     novoPagamento.salvarPagamento();
 
 
-                    if (pedidoRecuperado.getMetodoPagamento() == 2){
+                    if (metodoPagamento == 2){
                         Intent itPagamento = new Intent(CarrinhoActivity.this, PaymentActivity.class);
+                        itPagamento.putExtra("pagamento", pedidoRecuperado.getTotal());
                         startActivity(itPagamento);
                     }else{
 
@@ -549,9 +553,6 @@ public class CarrinhoActivity extends AppCompatActivity {
 
                         startActivity(itentAndamento);
                     }
-
-
-
 
 
                     pedidoRecuperado = null;

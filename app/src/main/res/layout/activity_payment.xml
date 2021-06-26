@@ -8,7 +8,7 @@
     tools:context=".activy.PaymentActivity">
 
     <EditText
-        android:id="@+id/editTextTextPersonName4"
+        android:id="@+id/editTotalPayment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
         android:text="Total"
-        app:layout_constraintEnd_toStartOf="@+id/editTextTextPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/editSubTotal"
         app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -46,7 +46,7 @@
         android:hint="R$ 0.0"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/editSubTotal" />
 
     <TextView
         android:id="@+id/textView4"
@@ -88,7 +88,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName4"
+        app:layout_constraintTop_toBottomOf="@+id/editTotalPayment"
         app:rippleColor="#FF6D00" />
 
     <TextView
@@ -97,7 +97,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="SubTotal"
-        app:layout_constraintEnd_toStartOf="@+id/editTextTextPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/editSubTotal"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
@@ -125,7 +125,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/editSubTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

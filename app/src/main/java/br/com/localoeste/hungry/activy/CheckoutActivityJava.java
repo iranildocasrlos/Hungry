@@ -29,6 +29,7 @@ import com.stripe.android.view.CardInputWidget;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,17 +48,34 @@ import okhttp3.Response;
 public class CheckoutActivityJava extends AppCompatActivity {
 
     // 10.0.2.2 is the Android emulator's alias to localhost
-    private static final String BACKEND_URL = "http://192.168.0.110:4242/";
+    private static final String BACKEND_URL = "http://10.0.2.2:4242/";
 
     private OkHttpClient httpClient = new OkHttpClient();
-    private String paymentIntentClientSecret;
+    private String paymentIntentClientSecret, valorPago, valorPagoFormatado;
     private Stripe stripe;
+    private Double pagamento;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checkout);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+
+            if (bundle.containsKey("pagamento")){
+
+                pagamento = (Double) bundle.getSerializable("pagamento");
+                valorPago = String.valueOf(pagamento);
+                DecimalFormat df = new DecimalFormat("00.00");
+                valorPagoFormatado = df.format(pagamento);
+                valorPagoFormatado = valorPagoFormatado.replaceAll("\\D+","");
+
+            }
+
+
+        }
 
         // Configure the SDK with your Stripe publishable key so it can make requests to Stripe
         stripe = new Stripe(
@@ -85,7 +103,7 @@ public class CheckoutActivityJava extends AppCompatActivity {
         List<Map<String,Object>> itemList =new ArrayList<>();
         payMap.put("currency","BRL");
         itemMap.put("id","photo_subscription");
-        itemMap.put("amount",3500);
+        itemMap.put("amount",valorPagoFormatado);
         itemList.add(itemMap);
         payMap.put("items",itemList);
         String json = new Gson().toJson(payMap);

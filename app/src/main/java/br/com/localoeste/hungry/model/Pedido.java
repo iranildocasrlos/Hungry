@@ -207,6 +207,15 @@ public class Pedido implements Serializable {
 
 
     }
+    public void atualizarPedidoUsuario(String idPedidoSalvo, Map<String, Object>  data){
+
+        Task<Void> documentRef = db.collection("meus_pedidos")
+                .document("usuarios")
+                .collection(idUsuario)
+                .document(idPedidoSalvo)
+                .update(data);
+
+    }
 
     public void atualizarPedido(String idPedidoSalvo){
 

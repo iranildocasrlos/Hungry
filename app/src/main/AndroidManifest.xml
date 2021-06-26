@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Hungry">
         <activity android:name=".activy.PaymentActivity"></activity>
+        <activity android:name=".activy.CheckoutActivityJava"></activity>
         <activity
             android:name=".activy.PedidosActivity"
             android:parentActivityName=".activy.EmpresaActivity" />
