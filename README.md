@@ -1,6 +1,6 @@
 # Hungry
 Aplicativo para venda de comidas e Fast Food
-Utilizando API da Stripe Paymments
+Utilizando API da Stripe Paymments e autenticação via API do Google Firebase.
 </br></br>
 
 <img  src="https://localoeste.com.br/ServidorDocumentos/ucloud/direct/view.php?s=rx&/Screenshot_1625972193.png" height="400" width="210"/><br></br>
