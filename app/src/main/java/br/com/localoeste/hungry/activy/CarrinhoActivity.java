@@ -492,7 +492,7 @@ public class CarrinhoActivity extends AppCompatActivity {
 
 
             CharSequence[] itens = new CharSequence[]{
-                    "Dinheiro", "Máquina cartão", "Pagar pelo App"
+                    "Pagar pelo App" , "Máquina cartão", "Dinheiro"
             };
             builder.setSingleChoiceItems(itens, 0, new DialogInterface.OnClickListener() {
                 @Override
@@ -540,7 +540,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     novoPagamento.salvarPagamento();
 
 
-                    if (metodoPagamento == 2){
+                    if (metodoPagamento == 0){
                         Intent itPagamento = new Intent(CarrinhoActivity.this, PaymentActivity.class);
                         itPagamento.putExtra("pagamento", pedidoRecuperado.getTotal());
                         startActivity(itPagamento);

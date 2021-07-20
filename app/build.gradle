@@ -78,13 +78,16 @@ dependencies {
 
 
     // Stripe Android SDK
+//    implementation 'com.stripe:stripe-android:15.1.0'
+//    implementation 'com.squareup.okhttp3:okhttp:4.4.0'
+//    implementation 'com.google.code.gson:gson:2.8.6'
+//    implementation "com.stripe:stripeterminal:1.0.18"
+//    implementation 'com.sparkjava:spark-core:2.9.3'
+
+
     implementation 'com.stripe:stripe-android:15.1.0'
     implementation 'com.squareup.okhttp3:okhttp:4.4.0'
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation "com.stripe:stripeterminal:1.0.18"
-    implementation 'com.sparkjava:spark-core:2.9.3'
-
-
 
 
 
