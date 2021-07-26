@@ -55,6 +55,7 @@
         <item>Cartão Crédito</item>
         <item>Vale Refeição</item>
     </string-array>
+    <string name="title_activity_usuario">Map</string>
 
 
 </resources>
