@@ -174,6 +174,7 @@ public class AutenticacaoActivity extends AppCompatActivity {
     //Tela principal Usuário
     private void abrirTelaPrincipal() {
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+        //startActivity(new Intent(getApplicationContext(), CadastroMotoboyActivity.class));
     }
 
     //Tela principal Usuário

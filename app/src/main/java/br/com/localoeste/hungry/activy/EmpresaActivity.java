@@ -149,6 +149,10 @@ public class EmpresaActivity extends AppCompatActivity {
                 abrirConfiguracoes();
                 break;
 
+            case R.id.menuMotoboy:
+                abrirCadastroMotoboy();
+                break;
+
             case R.id.carrinhoFull:
                 Intent it = new Intent(EmpresaActivity.this, PedidosActivity.class);
                 startActivity(it);
@@ -179,6 +183,9 @@ public class EmpresaActivity extends AppCompatActivity {
         startActivity(new Intent(EmpresaActivity.this, NovoProdutoEmpresaActivity.class));
     }
 
+    private void abrirCadastroMotoboy(){
+        startActivity(new Intent(EmpresaActivity.this, CadastroMotoboyActivity.class));
+    }
 
 
     //Método responsável pelo evento de arrastar da lista de produtos

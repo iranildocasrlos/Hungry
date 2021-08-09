@@ -20,6 +20,10 @@
         android:title="Configurações"
         app:showAsAction="never" />
     <item
+        android:id="@+id/menuMotoboy"
+        android:title="Entregador"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/menuSair"
         android:title="Sair"
         app:showAsAction="never" />
