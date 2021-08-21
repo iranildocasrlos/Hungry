@@ -17,6 +17,7 @@ public class Usuario {
     private FirebaseFirestore referenciaFirestore =  ConfiguracaoFirebase.getReferenciaFirestore();
     private  String idUsuario,nome,email,endereco,telefone,cep,cpf,tipoUsuario;
 
+
     public Usuario() {
     }
 

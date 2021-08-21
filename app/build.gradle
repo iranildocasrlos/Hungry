@@ -93,6 +93,13 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.4.0'
     implementation 'com.google.code.gson:gson:2.8.6'
 
+    //Geofire
+    implementation 'com.firebase:geofire-java:3.0.0'
+
+
+    //Location
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+    implementation 'com.google.maps.android:android-maps-utils:2.2.5'
 
 
 }

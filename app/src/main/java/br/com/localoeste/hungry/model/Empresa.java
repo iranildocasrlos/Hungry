@@ -23,6 +23,7 @@ public class Empresa implements Serializable {
     private Boolean inicioAutomatico;
     private String categoria;
     private Boolean status;
+    private String endereco;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
@@ -30,6 +31,13 @@ public class Empresa implements Serializable {
     public Empresa() {
     }
 
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
 
     public String getNomeConta() {
         return nomeConta;
