@@ -272,6 +272,7 @@ public class HomeActivity extends AppCompatActivity {
       recyclerViewEmpressas = findViewById(R.id.recyclerEmpresas);
         Permissoes.validarPermissoes(permissoes, this, 1);
         recuperarLocalizacaoUsuario();
+
     }
 
     //Exibe apena sas empressa no raio de 8KM
@@ -291,21 +292,26 @@ public class HomeActivity extends AppCompatActivity {
                                     Empresa empresa=  document.toObject(Empresa.class);
                                     if (empresa.getUrlImagem() != "" && empresa.getUrlImagem() != null){
                                         Address addressEnderecoEMpresa = recuperarEndereco(empresa.getEndereco());
-                                        if (localUsuario.latitude != 0 && addressEnderecoEMpresa.getLatitude() != 0){
 
-                                                 localEmpresa = new LatLng(addressEnderecoEMpresa.getLatitude(),
-                                                                           addressEnderecoEMpresa.getLongitude());
+                                        if(localUsuario != null){
+                                            if (localUsuario.latitude != 0 && addressEnderecoEMpresa != null){
 
-                                               //Calcula distancia
-                                            double distance = SphericalUtil.computeDistanceBetween(localUsuario, localEmpresa);
-                                            Log.i("Distancia","A Distancia é = "+formatNumber(distance));
-                                            Double distanciaEncontrada = formatNumber(distance);
+                                                localEmpresa = new LatLng(addressEnderecoEMpresa.getLatitude(),
+                                                        addressEnderecoEMpresa.getLongitude());
 
-                                            if (distanciaEncontrada <= 8.0){
-                                                empresas.add(empresa);
+                                                //Calcula distancia
+                                                double distance = SphericalUtil.computeDistanceBetween(localUsuario, localEmpresa);
+                                                Log.i("Distancia","A Distancia é = "+formatNumber(distance));
+                                                Double distanciaEncontrada = formatNumber(distance);
+
+                                                if (distanciaEncontrada <= 8.0){
+                                                    empresas.add(empresa);
+                                                }
+
                                             }
-
                                         }
+
+
 
                                     }
 
@@ -324,14 +330,12 @@ public class HomeActivity extends AppCompatActivity {
 
     //Converte endereço em geolocalização
     private Address recuperarEndereco(String endereco) {
-
+        Address address = null;
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
             List<Address> listaEnderecos = geocoder.getFromLocationName(endereco, 1);
             if (listaEnderecos != null && listaEnderecos.size() > 0) {
-                Address address = listaEnderecos.get(0);
-
-                return address;
+                 address = listaEnderecos.get(0);
 
             }
 
@@ -339,7 +343,7 @@ public class HomeActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        return null;
+        return address;
 
     }
 

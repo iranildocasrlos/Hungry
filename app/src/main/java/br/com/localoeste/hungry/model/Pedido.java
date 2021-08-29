@@ -24,6 +24,7 @@ public class Pedido implements Serializable {
     private String telefone;
     private List<ItemPedido> itens;
     private Double total;
+    private Double frete;
     private String status = "selecionado";
     private int metodoPagamento;
     private String observacaoEmpresa;
@@ -94,6 +95,13 @@ public class Pedido implements Serializable {
         return idPedido;
     }
 
+    public Double getFrete() {
+        return frete;
+    }
+
+    public void setFrete(Double frete) {
+        this.frete = frete;
+    }
 
     public String getIdProduto() {
         return idProduto;

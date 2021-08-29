@@ -13,9 +13,10 @@ import br.com.localoeste.hungry.R;
 public class PaymentActivity extends AppCompatActivity {
 
     private Button buttonPayment;
-    private Double pagamento;
+    private Double pagamento,frete;
     private EditText subTotal;
     private EditText total;
+    private EditText txtFrete, disconto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,13 @@ public class PaymentActivity extends AppCompatActivity {
 
         subTotal = findViewById(R.id.editSubTotal);
         total = findViewById(R.id.editTotalPayment);
+        txtFrete =  findViewById(R.id.editFrete);
+        disconto = findViewById(R.id.editDiscount);
+
+        subTotal.setEnabled(false);
+        total.setEnabled(false);
+        txtFrete.setEnabled(false);
+        disconto.setEnabled(false);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
@@ -31,8 +39,10 @@ public class PaymentActivity extends AppCompatActivity {
             if (bundle.containsKey("pagamento")){
 
                 pagamento = (Double) bundle.getSerializable("pagamento");
+                frete = (Double) bundle.getSerializable("frete");
                 subTotal.setText(String.valueOf(pagamento));
-                total.setText(String.valueOf(pagamento));
+                txtFrete.setText(String.valueOf(frete));
+                total.setText(String.valueOf((pagamento + frete)));
 
             }
 

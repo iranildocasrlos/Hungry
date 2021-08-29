@@ -31,11 +31,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -46,6 +49,7 @@ import java.util.Map;
 import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.adapter.AdapterCarrinho;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
+import br.com.localoeste.hungry.model.Empresa;
 import br.com.localoeste.hungry.model.ItemPedido;
 import br.com.localoeste.hungry.model.Pagamento;
 import br.com.localoeste.hungry.model.Pedido;
@@ -66,10 +70,11 @@ public class CarrinhoActivity extends AppCompatActivity {
     private TextView textValor;
     private int qtdItensCarrinho;
     private int totalItem = 0;
-    private Double totalCarrinho;
+    private Double totalCarrinho, valorFrete;
     private Double precoDemais = 0.0;
     private Pedido pedidoRecuperado;
     private int metodoPagamento;
+    private Empresa empresa;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -141,6 +146,30 @@ public class CarrinhoActivity extends AppCompatActivity {
         swipe();
 
 
+
+
+    }
+    private Double recuperarFrete(){
+        referenciaFirestore.collection("empresas")
+                .document(idEmpresaLogada).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()){
+
+                                empresa = document.toObject(Empresa.class);
+
+                                valorFrete = empresa.getTaxaEntrega();
+
+
+                            }
+                        }
+                    }
+                });
+
+        return valorFrete;
 
 
     }
@@ -464,7 +493,7 @@ public class CarrinhoActivity extends AppCompatActivity {
 
     public void confirmarPedido(View view) {
         DecimalFormat df = new DecimalFormat("00.00");
-
+        recuperarFrete();
 
         String valorExtraido = textValor.getText().toString().replaceAll(",",".");
             Log.d("Log",String.valueOf(valorExtraido.length()));
@@ -515,6 +544,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     data.put("observacaoEmpresa", observacao);
                     data.put("status", Pedido.STATUS_AGUARDANDO);
                     data.put("metodoPagamento", metodoPagamento);
+                    data.put("frete",valorFrete);
                     data.put("urlLogo",pedidoRecuperado.getUrlLogo());
                     data.put("nome", usuarioLogado.getNome());
                     data.put("endereco", usuarioLogado.getEndereco());
@@ -537,12 +567,14 @@ public class CarrinhoActivity extends AppCompatActivity {
                     novoPagamento.setIdPedido(pedidoRecuperado.getIdPedido());
                     novoPagamento.setNomeEmpreea(pedidoRecuperado.getNomeEmpresa());
                     novoPagamento.setValor(pedidoRecuperado.getTotal());
+                    novoPagamento.setFrete(valorFrete);
                     novoPagamento.salvarPagamento();
 
 
                     if (metodoPagamento == 0){
                         Intent itPagamento = new Intent(CarrinhoActivity.this, PaymentActivity.class);
                         itPagamento.putExtra("pagamento", pedidoRecuperado.getTotal());
+                        itPagamento.putExtra("frete", valorFrete);
                         startActivity(itPagamento);
                     }else{
 

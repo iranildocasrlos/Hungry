@@ -19,7 +19,8 @@ public class Pagamento {
     Boolean devido = false;
     String nomeEmpreea;
     Double valor;
-    Double ganhos;;
+    Double ganhos;
+    Double frete;
     int porcentagem = 15;
     int metodoPagamento;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -104,6 +105,13 @@ public class Pagamento {
         this.porcentagem = porcentagem;
     }
 
+    public Double getFrete() {
+        return frete;
+    }
+
+    public void setFrete(Double frete) {
+        this.frete = frete;
+    }
 
     public int getMetodoPagamento() {
         return metodoPagamento;
