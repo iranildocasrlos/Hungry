@@ -101,5 +101,16 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.google.maps.android:android-maps-utils:2.2.5'
 
+    //jUnit
+    dependencies {
+        // Required -- JUnit 4 framework
+        testImplementation 'junit:junit:4.12'
+        // Optional -- Robolectric environment
+        testImplementation 'androidx.test:core:1.0.0'
+        // Optional -- Mockito framework
+        testImplementation 'org.mockito:mockito-core:1.10.19'
+    }
+
+
 
 }

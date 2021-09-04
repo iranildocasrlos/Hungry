@@ -45,7 +45,7 @@ public class ActivitySplash extends AppCompatActivity {
                 verificaUsuarioLogado();
                 // abrirAutenticacao();
             }
-        }, 3000);
+        }, 1000);
 
     }
 

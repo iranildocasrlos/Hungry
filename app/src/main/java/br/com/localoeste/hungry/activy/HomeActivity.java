@@ -17,6 +17,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -73,14 +74,15 @@ public class HomeActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
     private LocationManager locationManager;
     private LocationListener locationListener;
-    private LatLng localUsuario;
+    public LatLng localUsuario;
     private LatLng localEmpresa;
 
 
 
     private String[] permissoes = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.INTERNET
     };
 
     public UsuarioFirebase usuario = new UsuarioFirebase();
@@ -104,9 +106,8 @@ public class HomeActivity extends AppCompatActivity {
         adapterEmpresa = new AdapterEmpresa(empresas);
         recyclerViewEmpressas.setAdapter(adapterEmpresa);
 
-        //Recupera produtos da empresa
 
-        recuperarEmpresas();
+        //Recupera produtos da empresa
 
 
         //Configurações da pesquisa
@@ -159,15 +160,16 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
+    public LatLng recuperarLocalizacaoUsuario() {
 
 
-    private void recuperarLocalizacaoUsuario() {
-
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+
+
 
                 try {
                     //recuperar latitude e longitude
@@ -183,14 +185,20 @@ public class HomeActivity extends AppCompatActivity {
                     if (latitude != null && longitude != null) {
 //                        motorista.setLatitude(latitude);
 //                        motorista.setLongitude(longitude);
-                       Double total = latitude + longitude;
-                       Log.d("localizacao", "latitude --> "+latitude + "longitude --> "+longitude);
+                        Double total = latitude + longitude;
+                        Log.d("localizacao", "latitude --> " + latitude + "longitude --> " + longitude);
 //                        adicionaEventoCliqueRecyclerView();
 //                        locationManager.removeUpdates(locationListener);
 //                        adapter.notifyDataSetChanged();
 
+                        recuperarEmpresas();
+                        locationManager.removeUpdates(locationListener);
                     }
-                }catch (NullPointerException erro){
+
+
+                }
+
+                catch (NullPointerException erro){
 
                     onDestroy();
 
@@ -216,14 +224,21 @@ public class HomeActivity extends AppCompatActivity {
 
         //Solicitar atualizações de localização
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    0,
-                    0,
-                    locationListener
-            );
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED){
+                    locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            1,
+                            0,
+                            locationListener
+                    );
+                }
+            }
+
         }
 
+
+        return localUsuario;
 
     }
 
@@ -272,6 +287,9 @@ public class HomeActivity extends AppCompatActivity {
       recyclerViewEmpressas = findViewById(R.id.recyclerEmpresas);
         Permissoes.validarPermissoes(permissoes, this, 1);
         recuperarLocalizacaoUsuario();
+
+
+
 
     }
 
@@ -329,13 +347,27 @@ public class HomeActivity extends AppCompatActivity {
 
 
     //Converte endereço em geolocalização
-    private Address recuperarEndereco(String endereco) {
-        Address address = null;
+    public Address recuperarEndereco(String endereco) {
+
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
+
             List<Address> listaEnderecos = geocoder.getFromLocationName(endereco, 1);
+
+            if (listaEnderecos.isEmpty()){
+                Log.d("Lista", "Lista Vazia");
+            }
+            if (listaEnderecos ==  null){
+                Log.d("Lista", "Lista nula");
+            }
+
+            while (listaEnderecos.size() == 0){
+                listaEnderecos = geocoder.getFromLocationName(endereco, 1);
+            }
+
             if (listaEnderecos != null && listaEnderecos.size() > 0) {
-                 address = listaEnderecos.get(0);
+                Address address = listaEnderecos.get(0);
+                 return address;
 
             }
 
@@ -343,9 +375,12 @@ public class HomeActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        return address;
+        return null;
 
     }
+
+
+
 
 
     //Formata distancia entre os dois pontos usuário e empresa
@@ -430,6 +465,8 @@ public class HomeActivity extends AppCompatActivity {
         adapterEmpresa.notifyDataSetChanged();
         Log.d("logs","chamou onResume");
         super.onResume();
+        locationManager.removeUpdates(locationListener);
+
     }
 
 
