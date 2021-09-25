@@ -94,6 +94,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         inicializarComponentes();
+        recuperarLocalizacaoUsuario();
 
         //Configurações da Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -157,12 +158,14 @@ public class HomeActivity extends AppCompatActivity {
                 }
         ));
 
+
+
     }
 
 
-    public LatLng recuperarLocalizacaoUsuario() {
+    public void recuperarLocalizacaoUsuario() {
 
-
+        Log.i("Distancia","Chanou RecuperarLocalização ");
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         locationListener = new LocationListener() {
@@ -176,11 +179,15 @@ public class HomeActivity extends AppCompatActivity {
                     Double latitude = location.getLatitude();
                     Double longitude = location.getLongitude();
                     localUsuario = new LatLng(latitude, longitude);
+                    Log.i("Distancia","RecuperarLocalização retornou dados");
                     //Atualizar GeoFire
 //                    UsuarioFirebase.atualizarDadosLocalizacao(
 //                            location.getLatitude(),
 //                            location.getLongitude()
 //                    );
+
+
+                    Log.i("Distancia","RecuperarLocalização latitude: "+localUsuario.latitude);
 
                     if (latitude != null && longitude != null) {
 //                        motorista.setLatitude(latitude);
@@ -190,9 +197,9 @@ public class HomeActivity extends AppCompatActivity {
 //                        adicionaEventoCliqueRecyclerView();
 //                        locationManager.removeUpdates(locationListener);
 //                        adapter.notifyDataSetChanged();
-
                         recuperarEmpresas();
-                        locationManager.removeUpdates(locationListener);
+
+                     locationManager.removeUpdates(locationListener);
                     }
 
 
@@ -223,9 +230,10 @@ public class HomeActivity extends AppCompatActivity {
         };
 
         //Solicitar atualizações de localização
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED){
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED){
+
                     locationManager.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
                             1,
@@ -238,7 +246,7 @@ public class HomeActivity extends AppCompatActivity {
         }
 
 
-        return localUsuario;
+
 
     }
 
@@ -277,6 +285,8 @@ public class HomeActivity extends AppCompatActivity {
 
                 });
 
+
+
     }
 
 
@@ -286,15 +296,12 @@ public class HomeActivity extends AppCompatActivity {
       searchView =  findViewById(R.id.materialSearchView);
       recyclerViewEmpressas = findViewById(R.id.recyclerEmpresas);
         Permissoes.validarPermissoes(permissoes, this, 1);
-        recuperarLocalizacaoUsuario();
-
-
-
 
     }
 
     //Exibe apena sas empressa no raio de 8KM
     private void recuperarEmpresas() {
+        Log.i("Distancia","Entrou no recuperar empresas ");
 
         referenciaFirestore
                 .collection("empresas")
@@ -303,15 +310,27 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         empresas.clear();
-                        if (task.isSuccessful()){
+                        Log.i("Distancia","Limpou lista empresas");
 
+                        if (task.isSuccessful()){
+                            Log.i("Distancia","Sucesso na consulta");
                             for(QueryDocumentSnapshot document : task.getResult()){
                                 if (document.getData() != null){
+
                                     Empresa empresa=  document.toObject(Empresa.class);
                                     if (empresa.getUrlImagem() != "" && empresa.getUrlImagem() != null){
+                                        Log.i("Distancia","passou na validação da empresa possui imagem");
                                         Address addressEnderecoEMpresa = recuperarEndereco(empresa.getEndereco());
+                                       // -23,541945 -46,934203
 
+                                        //Double latitude = -23.541945;
+                                        //Double longitude = -46.934203;
+                                       // localUsuario = new LatLng(latitude, longitude);
+
+
+                                        Log.i("Distancia","Vai verificar se localUsuario possui dados...");
                                         if(localUsuario != null){
+                                            Log.i("Distancia","passou --> LocalUsuario possui dados");
                                             if (localUsuario.latitude != 0 && addressEnderecoEMpresa != null){
 
                                                 localEmpresa = new LatLng(addressEnderecoEMpresa.getLatitude(),
@@ -323,6 +342,7 @@ public class HomeActivity extends AppCompatActivity {
                                                 Double distanciaEncontrada = formatNumber(distance);
 
                                                 if (distanciaEncontrada <= 8.0){
+                                                    Log.i("Distancia","Adicionou emepresa");
                                                     empresas.add(empresa);
                                                 }
 
@@ -394,7 +414,11 @@ public class HomeActivity extends AppCompatActivity {
         }
 
 //        return String.format("%2.0f%s", distance, unit);
-          String distanciar = String.format("%2.2f", distance).replaceAll(" ","");;
+          String distanciar = String.format("%2.2f", distance).replaceAll(" ","");
+
+        if (distanciar.contains(",")){
+            distanciar = String.format("%2.2f", distance).replaceAll(",",".");
+        }
          Double distancia = Double.parseDouble(distanciar);
           return distancia;
     }
@@ -455,7 +479,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onRestart() {
         adapterEmpresa.notifyDataSetChanged();
         super.onRestart();
-        recuperarEmpresas();
+        recuperarLocalizacaoUsuario();
         Log.d("logs","chamou onRestart");
     }
 
@@ -466,6 +490,8 @@ public class HomeActivity extends AppCompatActivity {
         Log.d("logs","chamou onResume");
         super.onResume();
         locationManager.removeUpdates(locationListener);
+        recuperarLocalizacaoUsuario();
+
 
     }
 

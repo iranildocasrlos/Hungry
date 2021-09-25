@@ -11,11 +11,12 @@ public class testeHome extends TestCase {
 
     public void testPegouLocalizacao(){
         HomeActivity home = new HomeActivity();
-       assertNotNull(home.recuperarLocalizacaoUsuario());
+       assertNotNull(home.localUsuario);
     }
 
     public void testGeoCoder(){
         HomeActivity home = new HomeActivity();
+        home.recuperarLocalizacaoUsuario();
         assertNotNull(home.recuperarEndereco("Rua pedro Bolgione, 116"));
 
 
@@ -23,7 +24,8 @@ public class testeHome extends TestCase {
 
     public void testLocalUsuario(){
         HomeActivity home = new HomeActivity();
-        assertNotNull(home.recuperarLocalizacaoUsuario());
+        home.recuperarLocalizacaoUsuario();
+        assertNotNull(home.localUsuario);
 
     }
 
