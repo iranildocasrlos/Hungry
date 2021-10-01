@@ -24,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.model.LatLng;
@@ -77,6 +78,8 @@ public class HomeActivity extends AppCompatActivity {
     public LatLng localUsuario;
     private LatLng localEmpresa;
 
+    private ProgressBar progressBar;
+
 
 
     private String[] permissoes = new String[]{
@@ -92,6 +95,11 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+      //  progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.colorPrimaryDark), android.graphics.PorterDuff.Mode.MULTIPLY);
+
 
         inicializarComponentes();
         recuperarLocalizacaoUsuario();
@@ -200,6 +208,7 @@ public class HomeActivity extends AppCompatActivity {
                         recuperarEmpresas();
 
                      locationManager.removeUpdates(locationListener);
+                     progressBar.setVisibility(View.INVISIBLE);
                     }
 
 

@@ -7,6 +7,18 @@
     android:background="#FF7F50"
     tools:context=".activy.HomeActivity">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:progress="80"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:progressDrawable="@drawable/circle"
+        android:indeterminateDuration="@android:integer/config_longAnimTime" />/>
+
     <include
         android:id="@+id/include"
         layout="@layout/toolbar"
