@@ -11,6 +11,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -24,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -85,6 +87,7 @@ public class HomeActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     private TextView tv;
+    private ImageView img;
     //TextView text;
 
 
@@ -357,17 +360,20 @@ public class HomeActivity extends AppCompatActivity {
                                                 Log.i("Distancia","A Distancia é = "+formatNumber(distance));
                                                 Double distanciaEncontrada = formatNumber(distance);
 
-                                                if (distanciaEncontrada <= 8.0){
+                                                if (distanciaEncontrada <= 1.0){
                                                     Log.i("Distancia","Adicionou emepresa");
                                                     empresas.add(empresa);
                                                 }
-                                               else if (distanciaEncontrada > 8.0){
+                                               else if (distanciaEncontrada > 1.0){
                                                 //(localUsuario.latitude != 0 && addressEnderecoEMpresa == null) {
                                                    // View text = null;
                                                    //    text.setVisibility(View.VISIBLE);
                                                    // Toast.makeText(getApplicationContext(),"Não existe empresas cadastradas em sua região",Toast.LENGTH_SHORT).show();
                                                     tv=(TextView)findViewById(R.id.tv);
                                                     tv.setText("Sem empresas cadastradas em sua localidade");
+
+                                                    img=(ImageView)findViewById(R.id.img);
+                                                    img.setImageResource(R.drawable.exclamation);
 
 
                                                 }
