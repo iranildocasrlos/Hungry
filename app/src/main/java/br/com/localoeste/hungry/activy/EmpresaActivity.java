@@ -184,7 +184,7 @@ public class EmpresaActivity extends AppCompatActivity {
     }
 
     private void abrirCadastroMotoboy(){
-        startActivity(new Intent(EmpresaActivity.this, CadastroMotoboyActivity.class));
+        startActivity(new Intent(EmpresaActivity.this, AutenticacaoMotoboyActivity.class));
     }
 
 

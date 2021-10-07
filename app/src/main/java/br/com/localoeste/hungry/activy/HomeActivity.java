@@ -25,6 +25,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.model.LatLng;
@@ -63,6 +65,8 @@ import br.com.localoeste.hungry.model.Empresa;
 import br.com.localoeste.hungry.model.Produto;
 import br.com.localoeste.hungry.model.Usuario;
 
+import android.widget.Toast;
+
 public class HomeActivity extends AppCompatActivity {
 
 
@@ -79,6 +83,9 @@ public class HomeActivity extends AppCompatActivity {
     private LatLng localEmpresa;
 
     private ProgressBar progressBar;
+
+    private TextView tv;
+    //TextView text;
 
 
 
@@ -354,8 +361,20 @@ public class HomeActivity extends AppCompatActivity {
                                                     Log.i("Distancia","Adicionou emepresa");
                                                     empresas.add(empresa);
                                                 }
+                                               else if (distanciaEncontrada > 8.0){
+                                                //(localUsuario.latitude != 0 && addressEnderecoEMpresa == null) {
+                                                   // View text = null;
+                                                   //    text.setVisibility(View.VISIBLE);
+                                                   // Toast.makeText(getApplicationContext(),"Não existe empresas cadastradas em sua região",Toast.LENGTH_SHORT).show();
+                                                    tv=(TextView)findViewById(R.id.tv);
+                                                    tv.setText("Sem empresas cadastradas em sua localidade");
 
-                                            }
+
+                                                }
+                                            }//else{
+                                               // tv=(TextView)findViewById(R.id.tv);
+                                                //tv.setText("Sem empresas cadastradas em sua localidade");
+                                            //}
                                         }
 
 
