@@ -573,7 +573,7 @@ public class CarrinhoActivity extends AppCompatActivity {
 
                     if (metodoPagamento == 0){
                         Intent itPagamento = new Intent(CarrinhoActivity.this, PaymentActivity.class);
-                        itPagamento.putExtra("pagamento", pedidoRecuperado.getTotal());
+                        itPagamento.putExtra("pagamento", (pedidoRecuperado.getTotal()+valorFrete));
                         itPagamento.putExtra("frete", valorFrete);
                         startActivity(itPagamento);
                     }else{

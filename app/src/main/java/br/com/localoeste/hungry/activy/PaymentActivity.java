@@ -40,9 +40,9 @@ public class PaymentActivity extends AppCompatActivity {
 
                 pagamento = (Double) bundle.getSerializable("pagamento");
                 frete = (Double) bundle.getSerializable("frete");
-                subTotal.setText(String.valueOf(pagamento));
+                subTotal.setText(String.valueOf((pagamento-frete)));
                 txtFrete.setText(String.valueOf(frete));
-                total.setText(String.valueOf((pagamento + frete)));
+                total.setText(String.valueOf(pagamento));
 
             }
 

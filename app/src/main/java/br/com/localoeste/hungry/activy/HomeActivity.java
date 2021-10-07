@@ -117,8 +117,8 @@ public class HomeActivity extends AppCompatActivity {
         //Configurações da Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Hungry");
-
         setSupportActionBar(toolbar);
+
         //Configurações do recyclerView
         recyclerViewEmpressas.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewEmpressas.setHasFixedSize(true);
@@ -360,11 +360,11 @@ public class HomeActivity extends AppCompatActivity {
                                                 Log.i("Distancia","A Distancia é = "+formatNumber(distance));
                                                 Double distanciaEncontrada = formatNumber(distance);
 
-                                                if (distanciaEncontrada <= 1.0){
+                                                if (distanciaEncontrada <= 8.0){
                                                     Log.i("Distancia","Adicionou emepresa");
                                                     empresas.add(empresa);
                                                 }
-                                               else if (distanciaEncontrada > 1.0){
+                                               else if (distanciaEncontrada > 8.0){
                                                 //(localUsuario.latitude != 0 && addressEnderecoEMpresa == null) {
                                                    // View text = null;
                                                    //    text.setVisibility(View.VISIBLE);

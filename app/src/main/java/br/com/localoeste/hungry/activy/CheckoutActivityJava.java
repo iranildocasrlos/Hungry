@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -52,6 +53,7 @@ public class CheckoutActivityJava extends AppCompatActivity {
     private String paymentIntentClientSecret,valorPago, valorPagoFormatado;
     private Stripe stripe;
     private Double pagamento;
+    private ImageView imageView ;
 
 
 
@@ -64,6 +66,7 @@ public class CheckoutActivityJava extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
 
+           imageView = (ImageView) findViewById(R.id.imageOK);
             if (bundle.containsKey("pagamento")){
 
                 pagamento = (Double) bundle.getSerializable("pagamento");
@@ -225,14 +228,24 @@ public class CheckoutActivityJava extends AppCompatActivity {
 
             PaymentIntent paymentIntent = result.getIntent();
             PaymentIntent.Status status = paymentIntent.getStatus();
+
+           //Se o pagamento tiver sucesso
             if (status == PaymentIntent.Status.Succeeded) {
                 // Payment completed successfully
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//                activity.displayAlert(
+//                        "Payment completed",
+//                        gson.toJson(paymentIntent)
+//
+//                );
+
                 activity.displayAlert(
-                        "Payment completed",
-                        gson.toJson(paymentIntent)
+                        "Sucesso no Pagamento, dando andamento no pedido.",
+
+                              gson.toJson("")
 
                 );
+
                 Log.d("Stripe", "Sucesso no Pagamento");
 
             } else if (status == PaymentIntent.Status.RequiresPaymentMethod) {

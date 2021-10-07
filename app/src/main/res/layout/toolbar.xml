@@ -11,7 +11,7 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:subtitleTextColor="#FFFFFF"
-        app:titleTextColor="#FFFFFF" />
+        app:titleTextColor="#FFFFFF"/>
 
      <com.miguelcatalan.materialsearchview.MaterialSearchView
          android:id="@+id/materialSearchView"
