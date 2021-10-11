@@ -566,7 +566,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                     novoPagamento.setIdUsuario(pedidoRecuperado.getIdUsuario());
                     novoPagamento.setIdPedido(pedidoRecuperado.getIdPedido());
                     novoPagamento.setNomeEmpreea(pedidoRecuperado.getNomeEmpresa());
-                    novoPagamento.setValor(pedidoRecuperado.getTotal());
+                    novoPagamento.setValor((pedidoRecuperado.getTotal()+valorFrete));
                     novoPagamento.setFrete(valorFrete);
                     novoPagamento.salvarPagamento();
 
@@ -575,6 +575,8 @@ public class CarrinhoActivity extends AppCompatActivity {
                         Intent itPagamento = new Intent(CarrinhoActivity.this, PaymentActivity.class);
                         itPagamento.putExtra("pagamento", (pedidoRecuperado.getTotal()+valorFrete));
                         itPagamento.putExtra("frete", valorFrete);
+                        itPagamento.putExtra("idPedido",pedidoRecuperado.getIdPedido());
+                        itPagamento.putExtra("idEmpresa",pedidoRecuperado.getIdEmpresa());
                         startActivity(itPagamento);
                     }else{
 

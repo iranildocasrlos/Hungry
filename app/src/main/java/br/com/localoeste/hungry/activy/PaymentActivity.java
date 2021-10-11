@@ -17,6 +17,8 @@ public class PaymentActivity extends AppCompatActivity {
     private EditText subTotal;
     private EditText total;
     private EditText txtFrete, disconto;
+    private String idPedido;
+    private String idEmpresa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,14 @@ public class PaymentActivity extends AppCompatActivity {
                 total.setText(String.valueOf(pagamento));
 
             }
+            if (bundle.containsKey("idPedido")){
+                idPedido = (String) bundle.getSerializable("idPedido");
+
+            }
+            if (bundle.containsKey("idEmpresa")){
+                idEmpresa = (String) bundle.getSerializable("idEmpresa");
+
+            }
 
 
         }
@@ -58,6 +68,8 @@ public class PaymentActivity extends AppCompatActivity {
     public void payWithStripe(View view){
         Intent intentStripe = new Intent(PaymentActivity.this, CheckoutActivityJava.class);
         intentStripe.putExtra("pagamento",pagamento);
+        intentStripe.putExtra("idPedido",idPedido);
+        intentStripe.putExtra("idEmpresa",idEmpresa);
         startActivity(intentStripe);
     }
 

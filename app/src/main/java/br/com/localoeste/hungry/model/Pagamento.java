@@ -9,9 +9,11 @@ import java.text.NumberFormat;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Map;
 
 public class Pagamento {
 
+    Map<String, Object> jsonMap;
     String idUsuario;
     String idEmpresa;
     String idPedido;
@@ -31,6 +33,15 @@ public class Pagamento {
 
 
     public Pagamento() {
+    }
+
+
+    public Map<String, Object> getJsonMap() {
+        return jsonMap;
+    }
+
+    public void setJsonMap(Map<String, Object> jsonMap) {
+        this.jsonMap = jsonMap;
     }
 
     public String getIdUsuario() {
@@ -163,6 +174,29 @@ public class Pagamento {
                 .collection(mesAno)
                .document(getIdPedido()).set(this);
     }
+
+
+
+    public void salvarJsonStripe(){
+        setIdPedido(idPedido);
+        setJsonMap(jsonMap);
+
+        //get Month and Year current
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        String mesAno = (String.valueOf(month+1)+String.valueOf(year));
+
+
+        db.collection("pagamentos")
+                .document(getIdEmpresa())
+                .collection(mesAno)
+                .document(getIdPedido())
+                .update("jsonMap",jsonMap);
+    }
+
+
+
 
 
 }

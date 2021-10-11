@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import br.com.localoeste.hungry.R;
+import br.com.localoeste.hungry.model.Pagamento;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -54,6 +55,8 @@ public class CheckoutActivityJava extends AppCompatActivity {
     private Stripe stripe;
     private Double pagamento;
     private ImageView imageView ;
+    private String idPedido ;
+    private String idEmpresa ;
 
 
 
@@ -76,6 +79,18 @@ public class CheckoutActivityJava extends AppCompatActivity {
                 valorPagoFormatado = valorPagoFormatado.replaceAll("\\D+","");
 
             }
+
+            if (bundle.containsKey("idPedido")){
+                idPedido = (String) bundle.getSerializable("idPedido");
+
+            }
+            if (bundle.containsKey("idEmpresa")){
+                idEmpresa = (String) bundle.getSerializable("idEmpresa");
+
+            }
+
+
+
 
 
         }
@@ -210,7 +225,7 @@ public class CheckoutActivityJava extends AppCompatActivity {
         }
     }
 
-    private static final class PaymentResultCallback
+    private final class PaymentResultCallback
             implements ApiResultCallback<PaymentIntentResult> {
         @NonNull private final WeakReference<CheckoutActivityJava> activityRef;
 
@@ -233,28 +248,32 @@ public class CheckoutActivityJava extends AppCompatActivity {
             if (status == PaymentIntent.Status.Succeeded) {
                 // Payment completed successfully
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//                activity.displayAlert(
-//                        "Payment completed",
-//                        gson.toJson(paymentIntent)
-//
-//                );
 
-                activity.displayAlert(
-                        "Sucesso no Pagamento, dando andamento no pedido.",
+                String jsonString; //set to json string
+               jsonString =  gson.toJson(paymentIntent);
+                Map<String, Object> jsonMap = new Gson().fromJson(jsonString, new TypeToken<HashMap<String, Object>>() {}.getType());
 
-                              gson.toJson("")
 
-                );
+                Pagamento novoPagamento = new Pagamento();
+                novoPagamento.setJsonMap(jsonMap);
+                novoPagamento.setIdPedido(idPedido);
+                novoPagamento.setIdEmpresa(idEmpresa);
+                novoPagamento.salvarJsonStripe();
 
-                Log.d("Stripe", "Sucesso no Pagamento");
+
+              Intent intent = new Intent(CheckoutActivityJava.this, ComprasActivity.class);
+
+              startActivity(intent);
+               finish();
+
 
             } else if (status == PaymentIntent.Status.RequiresPaymentMethod) {
                 // Payment failed – allow retrying using a different payment method
                 activity.displayAlert(
-                        "Payment failed",
+                        "Falha no pagamento",
                         Objects.requireNonNull(paymentIntent.getLastPaymentError()).getMessage()
                 );
-                Log.d("Stripe", "Falha no Pagamento");
+
             }
         }
 
@@ -269,5 +288,11 @@ public class CheckoutActivityJava extends AppCompatActivity {
             activity.displayAlert("Error", e.toString());
         }
     }
+
+
+
+
+
+
 }
 
