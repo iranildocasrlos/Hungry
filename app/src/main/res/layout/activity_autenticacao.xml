@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FF6347"
     android:gravity="center"
+    android:onClick="resetarSenha"
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".activy.AutenticacaoActivity">
@@ -170,4 +171,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearTipoUsuario" />
+
+    <TextView
+        android:id="@+id/textViewEsqueci"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Esqueci minha senha?"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btSalvarConfigurcacao" />
 </androidx.constraintlayout.widget.ConstraintLayout>

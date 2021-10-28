@@ -1,8 +1,10 @@
 package br.com.localoeste.hungry.activy;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,7 +42,7 @@ public class AutenticacaoActivity extends AppCompatActivity {
     private Switch tipoAcesso, tipoUsuario;
     private FirebaseAuth  autenticacao;
     private LinearLayout linearTipoUsuario;
-    private TextView textViewQuem;
+    private TextView textViewQuem, textViewEsqueci;
     private FirebaseFirestore firestore ;
 
 
@@ -256,6 +258,48 @@ public class AutenticacaoActivity extends AppCompatActivity {
         return tipoUsuario.isChecked()? "E" : "U";
     }
 
+
+
+    //Resetr senha do usuário
+    public  void resetarSenha(View view){
+        AlertDialog.Builder mensagem = new AlertDialog.Builder(AutenticacaoActivity.this);
+        mensagem.setTitle("Redefinir senha");
+        mensagem.setMessage("Insira o e-mail usado para criar a conta!");
+        // DECLARACAO DO EDITTEXT
+        final EditText input = new EditText(this);
+        mensagem.setView(input);
+        mensagem.setNeutralButton("Redefinir", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (!input.getText().toString().trim().isEmpty()){
+
+                    String email = input.getText().toString().trim();
+                    FirebaseAuth auth = ConfiguracaoFirebase.getReferenciaAutenticacao();
+                    auth.sendPasswordResetEmail(email)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        Toast.makeText(getApplicationContext(), "Um e-mail para criar nova senha, foi enviado para:  "+input.getText().toString().trim(),
+                                                Toast.LENGTH_LONG).show();
+
+                                    }
+                                }
+                            });
+
+                }else{
+                    Toast.makeText(getApplicationContext(), "Insira um endereço de email ",
+                            Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+        });
+
+        mensagem.show();
+    }
+
     private void inicializarComponenetes() {
         campoEmail = findViewById(R.id.editNomeProduto);
         campoSenha = findViewById(R.id.editTextCategoria);
@@ -265,6 +309,7 @@ public class AutenticacaoActivity extends AppCompatActivity {
         tipoUsuario = findViewById(R.id.switchTipoAcesso);
         linearTipoUsuario = findViewById(R.id.linearTipoUsuario);
         textViewQuem = findViewById(R.id.textViewQuem);
+        textViewEsqueci = findViewById(R.id.textViewEsqueci);
         //autenticacao.signOut();
     }
 

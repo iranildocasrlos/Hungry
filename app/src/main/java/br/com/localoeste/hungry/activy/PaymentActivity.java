@@ -71,6 +71,7 @@ public class PaymentActivity extends AppCompatActivity {
         intentStripe.putExtra("idPedido",idPedido);
         intentStripe.putExtra("idEmpresa",idEmpresa);
         startActivity(intentStripe);
+        finish();
     }
 
 
