@@ -73,6 +73,7 @@ public class CarrinhoActivity extends AppCompatActivity {
     private Double totalCarrinho, valorFrete;
     private Double precoDemais = 0.0;
     private Pedido pedidoRecuperado;
+    private Double porcentagem = 0.15;
     private int metodoPagamento;
     private Empresa empresa;
 
@@ -561,12 +562,23 @@ public class CarrinhoActivity extends AppCompatActivity {
 
 
                     Pagamento novoPagamento = new Pagamento();
+
+                    //Calculos de porcentagem do valor pago
+                    Double porcentagemGahnos = (pedidoRecuperado.getTotal()*porcentagem);
+                    Double totalReceber = (pedidoRecuperado.getTotal() - porcentagemGahnos);
+                    String valorLiquidoFormatado = new DecimalFormat("##,00")
+                            .format(totalReceber)
+                            .replaceAll(",",".");
+                   //         Fim da formatação dos valores
+
+
                     novoPagamento.setIdEmpresa(pedidoRecuperado.getIdEmpresa());
                     novoPagamento.setMetodoPagamento(metodoPagamento);
                     novoPagamento.setIdUsuario(pedidoRecuperado.getIdUsuario());
                     novoPagamento.setIdPedido(pedidoRecuperado.getIdPedido());
                     novoPagamento.setNomeEmpreea(pedidoRecuperado.getNomeEmpresa());
                     novoPagamento.setValor((pedidoRecuperado.getTotal()+valorFrete));
+                    novoPagamento.setValorLiquido(Double.parseDouble(valorLiquidoFormatado));
                     novoPagamento.setFrete(valorFrete);
                     novoPagamento.salvarPagamento();
 

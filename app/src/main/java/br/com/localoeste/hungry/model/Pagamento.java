@@ -21,6 +21,7 @@ public class Pagamento {
     Boolean devido = false;
     String nomeEmpreea;
     Double valor;
+    Double valorLiquido;
     Double ganhos;
     Double frete;
     int porcentagem = 15;
@@ -38,6 +39,15 @@ public class Pagamento {
 
     public Map<String, Object> getJsonMap() {
         return jsonMap;
+    }
+
+
+    public Double getValorLiquido() {
+        return valorLiquido;
+    }
+
+    public void setValorLiquido(Double valorLiquido) {
+        this.valorLiquido = valorLiquido;
     }
 
     public void setJsonMap(Map<String, Object> jsonMap) {
