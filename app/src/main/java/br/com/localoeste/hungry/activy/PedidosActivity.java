@@ -54,7 +54,7 @@ public class PedidosActivity extends AppCompatActivity {
     private FirebaseFirestore referenciaFirestore;
     private String idEmpresa ,idUsuario, idPedido;
     private StorageReference storageRef;
-    private Pedido pedidoRecuperado;
+    private Pedido pedidoRecuperado, pedidoParaConsulta;
     private LatLng meuLocal;
     private EditText endereco;
     private Destino destino;
@@ -240,6 +240,8 @@ public class PedidosActivity extends AppCompatActivity {
                                     itensPedidos = pedidoRecuperado.getItens();
 
                                     pedidos.add(pedidoRecuperado);
+                                    pedidoParaConsulta = pedidoRecuperado;
+                                    recuperarDadosCliente();
                                     pedidoRecuperado = null;
 
 
@@ -260,18 +262,19 @@ public class PedidosActivity extends AppCompatActivity {
 
 
 
-        recuperarDadosUsuario();
+
 
 
 }
 
 
-
-    public  void recuperarDadosUsuario(){
+   /* Foi alterado o nome do método para recuoerarDadosCliente, para não confundir com o usuário
+    logado que é a empresa  */
+    public  void recuperarDadosCliente(){
 
 
         DocumentReference docRef =  referenciaFirestore.collection("usuarios")
-                .document(idUsuario);
+                .document(pedidoParaConsulta.getIdUsuario());
 
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
