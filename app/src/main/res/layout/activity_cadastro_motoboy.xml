@@ -28,51 +28,64 @@
             android:layout_gravity="center"
             android:layout_marginTop="0dp"
             android:layout_marginBottom="0dp"
-            android:src="@drawable/motoboy" />
+            android:src="@drawable/iconmotoboy" />
 
         <EditText
-            android:id="@+id/editNomeProduto"
+            android:id="@+id/editNomeMotoboy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:background="@drawable/bg_edit_text"
             android:ems="10"
-            android:hint="Nome"
+            android:hint="Nome do Motoboy"
             android:inputType="text"
             android:padding="16dp" />
 
         <EditText
-            android:id="@+id/emailUsuario"
+            android:id="@+id/editMarcaMoto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:background="@drawable/bg_edit_text"
             android:ems="10"
-            android:hint="E-mail"
+            android:hint="Marca da Moto"
             android:inputType="textWebEmailAddress|textEmailAddress"
             android:padding="16dp" />
 
 
         <EditText
-            android:id="@+id/editDescricaoProduto"
+            android:id="@+id/editModeloMoto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-2dp"
+            android:layout_margin="5dp"
             android:background="@drawable/bg_edit_text"
             android:ems="10"
-            android:hint="Modelo"
+            android:hint="Modelo da Moto"
+            android:inputType="textWebEmailAddress|textEmailAddress"
+            android:padding="16dp" />
+
+        <EditText
+            android:id="@+id/editCorMoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/bg_edit_text"
+            android:ems="10"
+            android:hint="Cor da Moto"
+            android:inputType="text"
+            android:padding="16dp" />
+
+        <EditText
+            android:id="@+id/editPlacaMoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/bg_edit_text"
+            android:ems="10"
+            android:hint="Placa da Moto"
             android:inputType="text"
             android:padding="16dp"
             android:singleLine="false" />
-
-        <EditText
-            android:id="@+id/editPrecoProduto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-2dp"
-            android:background="@drawable/bg_edit_text"
-            android:ems="10"
-            android:hint="Placa"
-            android:inputType="text|numberDecimal"
-            android:padding="16dp" />
 
 
         <LinearLayout
@@ -85,6 +98,7 @@
             android:id="@+id/btSalvarConfigurcacao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
             android:onClick="validarDadosProduto"
             android:padding="16dp"
             android:text="Salvar" />

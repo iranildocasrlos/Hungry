@@ -6,12 +6,20 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.EditText;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -27,8 +35,13 @@ import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.adapter.AdapterCompras;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 import br.com.localoeste.hungry.helper.UsuarioFirebase;
+import br.com.localoeste.hungry.listener.RecyclerItemClickListener;
+import br.com.localoeste.hungry.model.Destino;
 import br.com.localoeste.hungry.model.ItemPedido;
 import br.com.localoeste.hungry.model.Pedido;
+import br.com.localoeste.hungry.model.Requisicao;
+import br.com.localoeste.hungry.model.Usuario;
+import dmax.dialog.SpotsDialog;
 
 public class PedidosActivity extends AppCompatActivity {
 
@@ -42,6 +55,12 @@ public class PedidosActivity extends AppCompatActivity {
     private String idEmpresa ,idUsuario, idPedido;
     private StorageReference storageRef;
     private Pedido pedidoRecuperado;
+    private LatLng meuLocal;
+    private EditText endereco;
+    private Destino destino;
+    private Usuario usuario = new Usuario();
+    private Destino addressDestino;
+    private String nome, enderecoD,idUsuarioD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +78,22 @@ public class PedidosActivity extends AppCompatActivity {
 
             idEmpresa = UsuarioFirebase.getId_Usuario();
 
+        Intent intent = getIntent();
+        Bundle parametros =intent.getExtras();
+        if(parametros != null){
+            String nomeU = parametros.getString("nomeUsuario");
+            String enderecoU = parametros.getString("nomeRua");
+            String idUsuario = parametros.getString("numeroId");
+
+            nome = (String)parametros.getSerializable("nomeUsuario");
+            enderecoD = (String)parametros.getSerializable("nomeRua");
+            idUsuarioD = (String)parametros.getSerializable("numeroId");
+
+            //Toast.makeText(PedidosActivity.this, "nome", Toast.LENGTH_SHORT).show();
+        }
+
+
+
 
 
 
@@ -68,8 +103,76 @@ public class PedidosActivity extends AppCompatActivity {
         adapterPedidos = new AdapterCompras(pedidos , this);
         recyclerPedidos.setAdapter(adapterPedidos);
 
+        recyclerPedidos.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        getApplicationContext(),
+                        recyclerPedidos,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                //  ItemPedido itemPedido = itensPedidos.get(position);
+                                Pedido pedido = pedidos.get(position);
+                                //  startActivity(new Intent(PedidosActivity.this, RequisicoesActivity.class));
+                                if( pedido.getStatus().equals(Pedido.STATUS_AGUARDANDO)) {
+                                    pedido.setStatus(Pedido.STATUS_PREPARANDO);
+                                    pedido.atualizarStatusMeusPedidos();
+                                    pedido.atualizarStatus();
+
+                                } else if( pedido.getStatus().equals(Pedido.STATUS_PREPARANDO)){
+                                    pedido.setStatus(Pedido.STATUS_A_CAMINHO);
+                                    pedido.atualizarStatusAcaminho();
+                                    pedido.atualizarStatusMeusPedidosAcaminho();
+                                    startActivity(new Intent(PedidosActivity.this, AcompanhamentoPedidoActivity.class));
+
+                                    salvarRequisicao(usuario);
+                                }
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+
+                            }
+
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                            }
+
+
+
+
+                        }
+                )
+        );
+
         recuperarPedido();
         recuperaUsuario();
+
+
+
+    }
+
+
+    private void salvarRequisicao(Usuario usuario) {
+
+        Requisicao requisicao = new Requisicao();
+
+        requisicao.setCliente(usuario);
+
+        Usuario usuariologado = UsuarioFirebase.getDadosUsuarioLogado();
+        requisicao.setCliente(usuariologado);
+        //  usuariologado.setLatitude(String.valueOf(meuLocal.latitude));
+        //  usuariologado.setLongitude(String.valueOf(meuLocal.longitude));
+
+        //         requisicao.setDestino(destino);
+        //         usuario = UsuarioFirebase.getDadosUsuarioLogado();
+        //         requisicao.setCliente(usuario);
+        //         usuario.setNumero( String.valueOf(addressDestino.getLatitude()) );
+        //        usuario.setLongitude( String.valueOf(addressDestino.getLongitude()) );
+        requisicao.setBairro(usuario.getBairro());
+        requisicao.setUsuario(Usuario.getId_Usuario());
+        requisicao.setStatus(Pedido.STATUS_A_CAMINHO);
+        requisicao.salvarRequisicao();
 
     }
 
@@ -101,6 +204,7 @@ public class PedidosActivity extends AppCompatActivity {
                                 if (resultado.get("idEmpresa") != null) {
                                     idUsuario = resultado.get("idUsuario").toString();
                                     recuperarPedido();
+
                                 }
 
 
@@ -156,12 +260,33 @@ public class PedidosActivity extends AppCompatActivity {
 
 
 
-
+        recuperarDadosUsuario();
 
 
 }
 
 
+
+    public  void recuperarDadosUsuario(){
+
+
+        DocumentReference docRef =  referenciaFirestore.collection("usuarios")
+                .document(idUsuario);
+
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    Usuario novoUsuario = documentSnapshot.toObject(Usuario.class);
+
+                    usuario = novoUsuario;
+
+                }
+
+            }
+        });
+
+    }
 
 
     @Override

@@ -1,5 +1,7 @@
 package br.com.localoeste.hungry.helper;
 
+import android.location.Address;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,10 +19,36 @@ public class UsuarioFirebase{
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseFirestore referenciaFirestore;
 
-    private static String idUsuario,nome,email,endereco,telefone,cep,cpf,tipoUsuario;
+    private static String idUsuario,nome,email,endereco,telefone,cep,cpf,tipoUsuario,cidade, bairro;
 
     public UsuarioFirebase() {
     }
+
+    public static Usuario getDadosUsuarioLogado() {
+        FirebaseUser firebaseUser = getUsuarioAtual();
+
+        Usuario usuario = new Usuario();
+        //usuario.setId( firebaseUser.getUid() );
+        //usuario.setEmail( firebaseUser.getEmail() );
+        //usuario.setNome( firebaseUser.getDisplayName() );
+        Address addressDestino = null;
+
+        usuario.setIdUsuario(idUsuario);
+        usuario.setNome(nome);
+        usuario.setEmail(email);
+        usuario.setEndereco(endereco);
+        usuario.setTelefone(telefone);
+        usuario.setBairro(bairro);
+        usuario.setCep(cep);
+        usuario.setTipoUsuario(tipoUsuario);
+        usuario.setCidade(cidade);
+
+
+        return usuario;
+    }
+
+
+
 //++++++++++= Geters e Seters ++++++++++++++++++++++++++++++
 
 
@@ -87,6 +115,14 @@ public class UsuarioFirebase{
     public  void setCep(String cep) {
         UsuarioFirebase.cep = cep;
     }
+
+    public static String getCidade() {  return cidade;    }
+
+    public static void setCidade(String cidade) { UsuarioFirebase.cidade = cidade; }
+
+    public static String getBairro() { return bairro; }
+
+    public static void setBairro(String bairro) { UsuarioFirebase.bairro = bairro; }
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

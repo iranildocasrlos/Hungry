@@ -1,6 +1,7 @@
 package br.com.localoeste.hungry.model;
 
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
@@ -12,10 +13,14 @@ public class Motoboy implements Serializable {
     private String urlImagemMotoboy;
     private String urlImagemEmpresa;
     private String nomeMotoboy;
+    private String marcaMoto;
+    private String modeloMoto;
+    private String placaMoto;
+    private String corMoto;
     private String nomeEmpresa;
-    private String descricaoMotoboy;
-    private Double precoMotoboy;
-    private String idMotoboy;
+    private String descricaoProduto;
+    // private Double precoProduto;
+    private String idProduto;
     private String idEmpresa;
 
     private int quantidade;
@@ -54,35 +59,68 @@ public class Motoboy implements Serializable {
         this.idEmpresa = idUsuario;
     }
 
-    public  String geturlImagemMotoboy() {
+    public  String getUrlImagemMotoboy() {
         return urlImagemMotoboy;
     }
 
-    public void seturlImagemMotoboy(String urlImagemMotoboy) {
+    public void setUrlImagemMotoboy(String urlImagemMotoboy) {
         this.urlImagemMotoboy = urlImagemMotoboy;
     }
 
-    public String getnomeMotoboy() {
+    public String getNomeMotoboy() {
         return nomeMotoboy;
     }
 
-    public void setnomeMotoboy(String nomeMotoboy) {
+    public void setNomeMotoboy(String nomeMotoboy) {
         this.nomeMotoboy = nomeMotoboy;
     }
-    
 
-
-    public Double getPrecoUnidade() {
-        return precoUnidade;
+    public String getMarcaMoto() {
+        return marcaMoto;
     }
 
+    public void setMarcaMoto(String marcaMoto) { this.marcaMoto = marcaMoto; }
 
-    public String getIdMotoboy() {
-        return idMotoboy;
+
+    public String getModeloMoto() {
+        return modeloMoto;
+    }
+    public void setModeloMoto(String modeloMoto) { this.modeloMoto = modeloMoto;    }
+
+    public String getPlacaMoto() {
+        return placaMoto;
     }
 
-    public void setIdMotoboy(String idMotoboy) {
-        this.idMotoboy = idMotoboy;
+    public void setPlacaMoto(String placaMoto) {this.placaMoto = placaMoto;  }
+
+
+    public String getCorMoto() {
+        return corMoto;
+    }
+    public void setCorMoto(String corMoto) {this.corMoto = corMoto;    }
+
+    // public Double getPrecoProduto() {
+    //     return precoProduto;
+    //  }
+
+    // public void setPrecoProduto(Double precoProduto) {
+    //      this.precoProduto = precoProduto;
+    // }
+
+    //public Double getPrecoUnidade() {
+    //  return precoUnidade;
+    //}
+
+    //public void setPrecoUnidade(Double precoUnidade) {
+    //  this.precoUnidade = precoUnidade;
+    //}
+
+    public String getIdProduto() {
+        return idProduto;
+    }
+
+    public void setIdProduto(String idProduto) {
+        this.idProduto = idProduto;
     }
 
     public int getQuantidade() {
@@ -98,15 +136,18 @@ public class Motoboy implements Serializable {
         DocumentReference documentRef = db.collection("motoboys")
                 .document(getIdEmpresa())
                 .collection("motoboys_disponiveis")
-                .document(getIdMotoboy());
+                .document(getIdProduto());
         Map<String, Object> data = new HashMap<>();
         data.put("urlImagemMotoboy",urlImagemMotoboy);
         data.put("nomeMotoboy",nomeMotoboy);
-        data.put("descricaoMotoboy",descricaoMotoboy);
-        data.put("precoMotoboy",precoMotoboy);
-        data.put("precoUnidade",precoUnidade);
+        data.put("marcaMoto",marcaMoto);
+        data.put("modeloMoto",modeloMoto);
+        data.put("placaMoto",placaMoto);
+        data.put("corMoto",corMoto);
+        // data.put("precoProduto",precoProduto);
+        //data.put("precoUnidade",precoUnidade);
         data.put("idEmpresa",idEmpresa);
-        data.put("idMotoboy", idMotoboy);
+        //  data.put("idProduto", idProduto);
         data.put("urlImagemEmpresa", urlImagemEmpresa);
         data.put("nomeEmpresa", nomeEmpresa);
         documentRef.set(data);
@@ -115,13 +156,16 @@ public class Motoboy implements Serializable {
 
     public void atualizar(){
 
-        DocumentReference documentRef = db.collection("motoboys").document(getIdMotoboy());
+        DocumentReference documentRef = db.collection("motoboys").document(getIdProduto());
         Map<String, Object> data = new HashMap<>();
         data.put("nomeMotoboy",nomeMotoboy);
-        data.put("descricaoMotoboy",descricaoMotoboy);
-        data.put("precoMotoboy",precoMotoboy);
+        data.put("marcaMoto",marcaMoto);
+        data.put("modeloMoto",modeloMoto);
+        data.put("placaMoto",placaMoto);
+        data.put("corMoto",corMoto);
+        //   data.put("precoProduto",precoProduto);
         data.put("idEmpresa",idEmpresa);
-        data.put("idMotoboy", idMotoboy);
+        //  data.put("idProduto", idProduto);
         documentRef.update(data);
 
     }
@@ -131,7 +175,7 @@ public class Motoboy implements Serializable {
         DocumentReference documentRef = db.collection("motoboys")
                 .document(idEmpresa)
                 .collection("motoboys_disponiveis")
-                .document(getIdMotoboy());
+                .document(getIdProduto());
         Map<String, Object> data = new HashMap<>();
 
         data.put("urlImagemMotoboy", urlImagemMotoboy);
@@ -141,28 +185,5 @@ public class Motoboy implements Serializable {
     }
 
 
-    public String getUrlImagemMotoboy() {
-        return urlImagemMotoboy;
-    }
 
-    public String getNomeMotoboy() {
-        return nomeMotoboy;
-    }
-
-    public double getPrecoMotoboy() {
-        return precoMotoboy;
-    }
-
-    public String getDescricaoMotoboy() {
-        return descricaoMotoboy;
-    }
-
-    public void setNomeMotoboy(String nomeMotoboy) {
-    }
-
-    public void setDescricaoProduto(String descricaoProduto) {
-    }
-
-    public void setUrlImagemMotoboy(String urlImagemSelecionada) {
-    }
 }

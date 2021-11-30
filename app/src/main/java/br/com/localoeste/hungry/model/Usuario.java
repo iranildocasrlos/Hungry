@@ -1,5 +1,8 @@
 package br.com.localoeste.hungry.model;
 
+import android.os.Bundle;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,9 +20,80 @@ public class Usuario {
     private FirebaseFirestore referenciaFirestore =  ConfiguracaoFirebase.getReferenciaFirestore();
     private  String idUsuario,nome,email,endereco,telefone,cep,cpf,tipoUsuario;
 
+    private String latitude;
+    private String longitude;
+    private LatLng meuLocal;
+
+    private String rua;
+    private String numero;
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public LatLng getMeuLocal() {
+        return meuLocal;
+    }
+
+    public void setMeuLocal(LatLng meuLocal) {
+        this.meuLocal = meuLocal;
+    }
+
+    public String getRua() {
+        return rua;
+    }
+
+    public void setRua(String rua) {
+        this.rua = rua;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    private String cidade;
+    private String bairro;
+
+
 
     public Usuario() {
     }
+
+
+
+
 
     public String getIdUsuario() {
         return idUsuario;
@@ -86,6 +160,9 @@ public class Usuario {
     }
 
     public  void recuperarDadosUsuario(String id) {
+
+
+
 
 
         DocumentReference docRef = referenciaFirestore.collection("usuarios")

@@ -27,13 +27,12 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.UUID;
 
-import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
+import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.helper.EmpresaFirebase;
 import br.com.localoeste.hungry.model.Empresa;
 import br.com.localoeste.hungry.model.Motoboy;
-import br.com.localoeste.hungry.model.Produto;
-import br.com.localoeste.hungry.model.Usuario;
+//import br.com.localoeste.hungry.model.Produto;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CadastroMotoboyActivity extends AppCompatActivity {
@@ -46,10 +45,11 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
     private static final int SELECAO_GALERIA = 200;
     private StorageReference storageReference;
     private FirebaseFirestore referenciaFirestore;
-    private EditText editProdutoNome, editProdutoDescricao, editProdutoPreco;
+    private EditText editMotoboyNome, editMotoMarca, editMotoPlaca, editMotoCor, editMotoModelo;
     private String idUsuarioLogado ;
     private String idProduto ="";
-    private Produto produto = new Produto();
+    //private Produto produto = new Produto();
+    private Motoboy motoboy = new Motoboy();
     private String nomeRecuperadoEmpresa;
 
 
@@ -61,7 +61,7 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
 
         //Configurações da Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Novo Produto");
+        toolbar.setTitle("Cadastro Motoboy");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -71,9 +71,11 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
 
 
     private void inicializarComponentes() {
-        editProdutoNome = findViewById(R.id.editNomeProduto);
-        editProdutoDescricao = findViewById(R.id.editDescricaoProduto);
-        editProdutoPreco = findViewById(R.id.editPrecoProduto);
+        editMotoboyNome = findViewById(R.id.editNomeMotoboy);
+        editMotoMarca = findViewById(R.id.editMarcaMoto);
+        editMotoModelo = findViewById(R.id.editModeloMoto);
+        editMotoPlaca = findViewById(R.id.editPlacaMoto);
+        editMotoCor = findViewById(R.id.editCorMoto);
         imagemProduto = findViewById(R.id.imagem_produto);
         idUsuarioLogado = EmpresaFirebase.getId_empresa();
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
@@ -96,87 +98,67 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
 
 
 
-//        DocumentReference produtoRef = referenciaFirestore
-//                .collection("produtos")
-//                .document(idUsuarioLogado);
-//
-//        produtoRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                if(documentSnapshot.exists()){
-//                    Produto dadosProduto = documentSnapshot.toObject(Produto.class);
-//                    if (dadosProduto != null){
-//                        if (dadosProduto.getNomeProduto() != null){
-//
-//
-//
-//
-//                            if (dadosProduto.getUrlImagemProduto()!= null){
-//                                urlImagemSelecionada = dadosProduto.getUrlImagemProduto();
-//                                Picasso.get()
-//                                        .load(urlImagemSelecionada)
-//                                        .into(imagemProduto);
-//                            }
-//
-//
-//
-//                        }
-//
-//                    }
-//                }
-//            }
-//        });
+
 
     }
     public void validarDadosProduto(View view) {
         UUID uuid = UUID.randomUUID();
         idProduto = String.valueOf(uuid);
 
-        String nomeProduto = editProdutoNome.getText().toString();
-        String descricaoProduto = editProdutoDescricao.getText().toString();
-        String precoProduto = editProdutoPreco.getText().toString();
+        String nomeMotoboy = editMotoboyNome.getText().toString();
+        String marcaMoto = editMotoMarca.getText().toString();
+        String modeloMoto = editMotoModelo.getText().toString();
+        String placaMoto = editMotoPlaca.getText().toString();
+        String corMoto = editMotoCor.getText().toString();
 
 
-        if (!nomeProduto.isEmpty() ){
+        if (!nomeMotoboy.isEmpty()) {
 
-            if (!descricaoProduto.isEmpty() ){
+            if (!marcaMoto.isEmpty()) {
 
-                if (!precoProduto.isEmpty() ){
+                if (!modeloMoto.isEmpty()) {
+
+                    if (!placaMoto.isEmpty()) {
+
+                        if (!corMoto.isEmpty()) {
 
 
+                            motoboy.setIdProduto(idProduto);
+                            motoboy.setIdEmpresa(idUsuarioLogado);
+                            motoboy.setNomeMotoboy(nomeMotoboy);
+                            motoboy.setMarcaMoto(marcaMoto);
+                            motoboy.setModeloMoto(modeloMoto);
+                            motoboy.setPlacaMoto(placaMoto);
+                            motoboy.setCorMoto(corMoto);
+                            // motoboy.setPrecoUnidade(corMoto);;
+                            motoboy.setUrlImagemMotoboy(urlImagemSelecionada);
+                            motoboy.setNomeEmpresa(nomeRecuperadoEmpresa);
+                            motoboy.setUrlImagemEmpresa(urlImagemEmpresa);
+                            motoboy.salvar();
+                            salvarImagem();
+                            exibirMensagem("motoboy salvo com sucesso");
+                            abrirTelaRequisicoes();
+                            finish();
 
-                    produto.setIdProduto(idProduto);
-                    produto.setIdEmpresa(idUsuarioLogado);
-                    produto.setNomeProduto(nomeProduto);
-                    produto.setDescricaoProduto(descricaoProduto);
-                    produto.setPrecoProduto(Double.parseDouble(precoProduto));
-                    produto.setPrecoUnidade(Double.parseDouble(precoProduto));
-                    produto.setUrlImagemProduto(urlImagemSelecionada);
-                    produto.setNomeEmpresa(nomeRecuperadoEmpresa);
-                    produto.setUrlImagemEmpresa(urlImagemEmpresa);
-                    produto.salvar();
-                    salvarImagem();
-                    exibirMensagem("Produto salvo com sucesso");
+                        } else {
+                            exibirMensagem("Diigite um preço para o produto");
+                        }
 
-                    finish();
+                    } else {
+                        exibirMensagem("Diigite uma descrição para o produto ");
+                    }
 
-                }else {
-                    exibirMensagem("Diigite um preço para o produto");
+                } else {
+                    exibirMensagem("Diigite um nome para o produto");
                 }
 
-            }else {
-                exibirMensagem("Diigite uma descrição para o produto ");
+
             }
-
-        }else {
-            exibirMensagem("Diigite um nome para o produto");
         }
-
-
     }
-
-
-
+    private void abrirTelaRequisicoes(){
+        startActivity(new Intent(CadastroMotoboyActivity.this, RequisicoesActivity.class));
+    }
     private void salvarImagem(){
 
         if (imagemParaSalvar != null){
@@ -187,7 +169,7 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
 
             final StorageReference imagemRef = storageReference
                     .child("imagens")
-                    .child("produtos")
+                    .child("motoboys")
                     .child(idUsuarioLogado)
                     .child(idProduto+ ".jpeg");
 
@@ -209,11 +191,11 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
                             Uri uri = task.getResult();
                             urlImagemSelecionada = uri.toString();
                             if (urlImagemSelecionada != ""){
-                                Produto produto = new Produto();
-                                produto.setIdProduto(idProduto);
-                                produto.setIdEmpresa(idUsuarioLogado);
-                                produto.setUrlImagemProduto(urlImagemSelecionada);
-                                produto.salvarFoto();
+                                Motoboy motoboy = new Motoboy();
+                                motoboy.setIdProduto(idProduto);
+                                motoboy.setIdEmpresa(idUsuarioLogado);
+                                motoboy.setUrlImagemMotoboy(urlImagemSelecionada);
+                                motoboy.salvarFoto();
 
 
 

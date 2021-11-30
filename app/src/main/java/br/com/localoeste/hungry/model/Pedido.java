@@ -1,6 +1,7 @@
 package br.com.localoeste.hungry.model;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -10,7 +11,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
+
 public class Pedido implements Serializable {
+
+    private Destino destino;
 
     private String idEmpresa;
     private String idUsuario;
@@ -35,6 +40,7 @@ public class Pedido implements Serializable {
     public static final String STATUS_CHEGOU = "chegou";
     public static final String STATUS_RECEBIDO = "recebido";
     public static final String STATUS_AGUARDANDO = "aguardando";
+    private Usuario usuario;
 
 
     public Pedido() {
@@ -53,6 +59,14 @@ public class Pedido implements Serializable {
 
         documentRef.set(data);
 
+    }
+
+    public Destino getDestino() {
+        return destino;
+    }
+
+    public void setDestino(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public String getNomeEmpresa() {
@@ -198,7 +212,14 @@ public class Pedido implements Serializable {
                 .document(getIdPedido()).set(this);
 
 
+        //    DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
+        //   DatabaseReference pedido = firebaseRef.child("requisicoesPedidos");
 
+        //  String idRequisicao = pedido.push().getKey();
+        //  setId( idRequisicao );
+
+        //pedido.child( getId() ).setValue(this);
+        //   pedido.child(getIdPedido()).setValue(this);
 
     }
     public void salvarPedidoUsuario(){
@@ -210,9 +231,6 @@ public class Pedido implements Serializable {
                 .document("usuarios")
                 .collection(idUsuario)
                 .document(getIdPedido()).set(this);
-
-
-
 
     }
     public void atualizarPedidoUsuario(String idPedidoSalvo, Map<String, Object>  data){
@@ -237,6 +255,56 @@ public class Pedido implements Serializable {
                 .update(data);
 
     }
+
+
+    public void atualizarStatus(){
+        setIdPedido(getIdPedido());
+        // setStatus(Pedido.STATUS_PREPARANDO);
+        setUser(true);
+        Task<Void> documentRef = db.collection("pedidos")
+                .document(getIdEmpresa())
+                .collection("aguardando")
+                .document(getIdPedido()).set(this);
+
+    }
+
+    public void atualizarStatusMeusPedidos(){
+
+        setIdPedido(getIdPedido());
+        // setStatus(Pedido.STATUS_PREPARANDO);
+        setUser(true);
+        Task<Void> documentRef = db.collection("meus_pedidos")
+                .document("usuarios")
+                .collection(idUsuario)
+                .document(getIdPedido()).set(this);
+
+    }
+
+
+    public void atualizarStatusAcaminho(){
+        setIdPedido(getIdPedido());
+        // setStatus(Pedido.STATUS_PREPARANDO);
+        setUser(true);
+        Task<Void> documentRef = db.collection("pedidos")
+                .document(getIdEmpresa())
+                .collection("aguardando")
+                .document(getIdPedido()).set(this);
+
+    }
+
+    public void atualizarStatusMeusPedidosAcaminho(){
+
+        setIdPedido(getIdPedido());
+        // setStatus(Pedido.STATUS_PREPARANDO);
+        setUser(true);
+        Task<Void> documentRef = db.collection("meus_pedidos")
+                .document("usuarios")
+                .collection(idUsuario)
+                .document(getIdPedido()).set(this);
+
+    }
+
+
     public void atualizarStatusPedido(String idPedidoSalvo , Map<String, Object>  data){
 
         data.put("itens", getItens());

@@ -51,8 +51,11 @@ public class AdapterMotoboy extends RecyclerView.Adapter<AdapterMotoboy.MyViewHo
                 .into(holder.imagem);
 
         holder.nome.setText(motoboy.getNomeMotoboy());
-        holder.descricao.setText(motoboy.getDescricaoMotoboy());
-        holder.valor.setText("R$ " + df.format(motoboy.getPrecoMotoboy()));
+        holder.marca.setText(motoboy.getMarcaMoto());
+        holder.modelo.setText(motoboy.getModeloMoto());
+        holder.placa.setText(motoboy.getPlacaMoto());
+        holder.cor.setText(motoboy.getCorMoto());
+
     }
 
     @Override
@@ -61,8 +64,13 @@ public class AdapterMotoboy extends RecyclerView.Adapter<AdapterMotoboy.MyViewHo
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+
         CircleImageView imagem;
         TextView nome;
+        TextView modelo;
+        TextView marca;
+        TextView placa;
+        TextView cor;
         TextView descricao;
         TextView valor;
 

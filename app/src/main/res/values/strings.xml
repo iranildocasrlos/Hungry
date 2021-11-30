@@ -56,6 +56,10 @@
         <item>Vale Refeição</item>
     </string-array>
     <string name="title_activity_usuario">Map</string>
+    <string name="title_activity_acompanhamento_pedido_activity">
+        AcompanhamentoPedidoActivityActivity
+    </string>
+    <string name="title_activity_acompanhamento_pedido">AcompanhamentoPedidoActivity</string>
 
 
 </resources>

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FF6347"
     tools:context=".activy.AutenticacaoMotoboyActivity">
 
 
@@ -57,14 +58,16 @@
             android:layout_height="wrap_content"
             android:text="Logar"
             android:textColor="#FFFFFF"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
         <Switch
             android:id="@+id/switchAcesso"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/textViewCadastre"
@@ -72,7 +75,8 @@
             android:layout_height="wrap_content"
             android:text="Cadastre-se"
             android:textColor="#FFFFFF"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <EditText
@@ -117,14 +121,16 @@
             android:layout_height="wrap_content"
             android:text="Usuario"
             android:textColor="#FFFFFF"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"/>/>
 
         <Switch
             android:id="@+id/switchTipoAcesso"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/textViewEmpresa"
@@ -132,7 +138,8 @@
             android:layout_height="wrap_content"
             android:text="Empresa"
             android:textColor="#FFFFFF"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"/>/>
     </LinearLayout>
 
     <TextView
@@ -144,27 +151,27 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="2dp"
         android:layout_marginRight="2dp"
-        android:text="Quem você é?"
+        android:text="Cadastro de motoboy"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <Button
         android:id="@+id/btSalvarConfigurcacao"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="120dp"
         android:layout_marginEnd="2dp"
-        android:layout_marginRight="2dp"
         android:padding="16dp"
-        android:text="Acessar"
+        android:text="Cadastrar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearTipoUsuario" />
+        app:layout_constraintTop_toBottomOf="@+id/linearTipoUsuario"
+        app:layout_constraintVertical_bias="0.918" />
 </androidx.constraintlayout.widget.ConstraintLayout>
