@@ -11,11 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -33,7 +30,6 @@ import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 import br.com.localoeste.hungry.helper.UsuarioFirebase;
 import br.com.localoeste.hungry.model.ItemPedido;
 import br.com.localoeste.hungry.model.Pedido;
-import br.com.localoeste.hungry.model.Usuario;
 import dmax.dialog.SpotsDialog;
 
 public class ComprasActivity extends AppCompatActivity {
@@ -49,7 +45,6 @@ public class ComprasActivity extends AppCompatActivity {
     private StorageReference storageRef;
     private Pedido pedidoRecuperado;
     private AlertDialog dialog;
-    private Usuario usuario = new Usuario();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +96,6 @@ public class ComprasActivity extends AppCompatActivity {
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         autenticacao = ConfiguracaoFirebase.getReferenciaAutenticacao();
         storageRef =  ConfiguracaoFirebase.getFirebaseStorage();
-        recuperarDadosUsuario();
 
     }
 
@@ -124,24 +118,24 @@ public class ComprasActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
-                          if  (!task.getResult().isEmpty()){
-                              for (QueryDocumentSnapshot document : task.getResult()) {
+                            if  (!task.getResult().isEmpty()){
+                                for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                      Map<String,Object> resultado = document.getData();
+                                    Map<String,Object> resultado = document.getData();
 
-                                      if (resultado.get("idEmpresa") != null) {
-                                          idEmpresaLogada = resultado.get("idEmpresa").toString();
-                                          recuperarPedido();
-                                      }else{
-                                          dialog.dismiss();
-                                      }
+                                    if (resultado.get("idEmpresa") != null) {
+                                        idEmpresaLogada = resultado.get("idEmpresa").toString();
+                                        recuperarPedido();
+                                    }else{
+                                        dialog.dismiss();
+                                    }
 
 
 
-                              }
-                          }else{
-                              dialog.dismiss();
-                          }
+                                }
+                            }else{
+                                dialog.dismiss();
+                            }
 
                         }
                     }
@@ -150,8 +144,6 @@ public class ComprasActivity extends AppCompatActivity {
 
 
     }
-
-
 
 
 
@@ -166,7 +158,7 @@ public class ComprasActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                       pedidos.clear();
+                        pedidos.clear();
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
@@ -175,10 +167,10 @@ public class ComprasActivity extends AppCompatActivity {
 
                                 if(pedidoRecuperado != null){
 
-                                     itensCompras = pedidoRecuperado.getItens();
+                                    itensCompras = pedidoRecuperado.getItens();
 
-                                         pedidos.add(pedidoRecuperado);
-                                         pedidoRecuperado = null;
+                                    pedidos.add(pedidoRecuperado);
+                                    pedidoRecuperado = null;
 
 
 
@@ -197,7 +189,7 @@ public class ComprasActivity extends AppCompatActivity {
                 });
 
 
-         dialog.dismiss();
+        dialog.dismiss();
     }
 
 
@@ -206,38 +198,6 @@ public class ComprasActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         finish();
         return true;
-    }
-
-
-    public  void recuperarDadosUsuario(){
-
-        dialog = new SpotsDialog.Builder()
-                .setContext(this)
-                .setMessage("Carregando dados")
-                .setCancelable( false )
-                .build();
-        dialog.show();
-
-        DocumentReference docRef =  referenciaFirestore.collection("usuarios")
-                .document(idUsuario);
-
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    Usuario novoUsuario = documentSnapshot.toObject(Usuario.class);
-
-                    usuario = novoUsuario;
-
-                }
-
-
-            }
-        });
-
-
-
-
     }
 
 }

@@ -23,9 +23,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 
 import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.databinding.ActivityAcompanhamentoPedidoBinding;
+import br.com.localoeste.hungry.helper.UsuarioFirebase;
+import br.com.localoeste.hungry.model.Usuario;
 
 
 public class AcompanhamentoPedidoActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -37,6 +41,7 @@ public class AcompanhamentoPedidoActivity extends FragmentActivity implements On
     private EditText editDestino;
     private LocationManager locationManager;
     private LocationListener locationListener;
+    private Usuario cliente;
 
 
     @Override
@@ -52,7 +57,7 @@ public class AcompanhamentoPedidoActivity extends FragmentActivity implements On
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        //verificaStatusRequisicao();
+
     }
 
 

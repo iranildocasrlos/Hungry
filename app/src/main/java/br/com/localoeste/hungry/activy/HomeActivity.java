@@ -360,11 +360,11 @@ public class HomeActivity extends AppCompatActivity {
                                                 Log.i("Distancia","A Distancia é = "+formatNumber(distance));
                                                 Double distanciaEncontrada = formatNumber(distance);
 
-                                                if (distanciaEncontrada <= 8.0){
+                                                if (distanciaEncontrada <= 40.0){
                                                     Log.i("Distancia","Adicionou emepresa");
                                                     empresas.add(empresa);
                                                 }
-                                               else if (distanciaEncontrada > 8.0){
+                                               else if (distanciaEncontrada > 40.0){
                                                 //(localUsuario.latitude != 0 && addressEnderecoEMpresa == null) {
                                                    // View text = null;
                                                    //    text.setVisibility(View.VISIBLE);

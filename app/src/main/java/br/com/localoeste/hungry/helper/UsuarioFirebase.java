@@ -1,10 +1,15 @@
 package br.com.localoeste.hungry.helper;
 
 import android.location.Address;
+import android.util.Log;
 
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -170,7 +175,31 @@ public class UsuarioFirebase{
 
 
     }
+    public static void atualizarDadosLocalizacao(double lat, double lon){
 
+        //Define nó de local de usuário
+        DatabaseReference localUsuario = ConfiguracaoFirebase.getFirebaseDatabase()
+                .child("local_usuario");
+        GeoFire geoFire = new GeoFire(localUsuario);
+
+        //Recupera dados usuário logado
+        Usuario usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado();
+
+        //Configura localização do usuário
+        geoFire.setLocation(
+                usuarioLogado.getIdUsuario(),
+                new GeoLocation(lat, lon),
+                new GeoFire.CompletionListener() {
+                    @Override
+                    public void onComplete(String key, DatabaseError error) {
+                        if( error != null ){
+                            Log.d("Erro", "Erro ao salvar local!");
+                        }
+                    }
+                }
+        );
+
+    }
 
 
 

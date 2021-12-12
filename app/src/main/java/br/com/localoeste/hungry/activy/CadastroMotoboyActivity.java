@@ -7,6 +7,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -25,6 +27,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
@@ -33,6 +38,8 @@ import br.com.localoeste.hungry.helper.EmpresaFirebase;
 import br.com.localoeste.hungry.model.Empresa;
 import br.com.localoeste.hungry.model.Motoboy;
 //import br.com.localoeste.hungry.model.Produto;
+import br.com.localoeste.hungry.model.Requisicao;
+import br.com.localoeste.hungry.model.Usuario;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CadastroMotoboyActivity extends AppCompatActivity {
@@ -46,11 +53,13 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private FirebaseFirestore referenciaFirestore;
     private EditText editMotoboyNome, editMotoMarca, editMotoPlaca, editMotoCor, editMotoModelo;
-    private String idUsuarioLogado ;
-    private String idProduto ="";
+    private String idUsuarioLogado;
+    private String idProduto = "";
     //private Produto produto = new Produto();
     private Motoboy motoboy = new Motoboy();
     private String nomeRecuperadoEmpresa;
+
+    private Usuario usuario = new Usuario();
 
 
     @Override
@@ -89,21 +98,31 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
                 Intent i = new Intent(
                         Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                if (i.resolveActivity(getPackageManager()) != null){
-                    startActivityForResult(i,SELECAO_GALERIA);
+                if (i.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(i, SELECAO_GALERIA);
                 }
 
             }
         });
 
 
-
-
-
     }
+
     public void validarDadosProduto(View view) {
+
+
+        //Usuario usuario = new usuario();
+        String enderecoDestino = usuario.getEndereco();
+
+        if( !enderecoDestino.equals("") || enderecoDestino != null ){
+
+            Address addressDestino = recuperarEndereco( enderecoDestino );
+            if( addressDestino != null ){
+
+
         UUID uuid = UUID.randomUUID();
         idProduto = String.valueOf(uuid);
+
 
         String nomeMotoboy = editMotoboyNome.getText().toString();
         String marcaMoto = editMotoMarca.getText().toString();
@@ -130,10 +149,16 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
                             motoboy.setModeloMoto(modeloMoto);
                             motoboy.setPlacaMoto(placaMoto);
                             motoboy.setCorMoto(corMoto);
-                            // motoboy.setPrecoUnidade(corMoto);;
                             motoboy.setUrlImagemMotoboy(urlImagemSelecionada);
                             motoboy.setNomeEmpresa(nomeRecuperadoEmpresa);
                             motoboy.setUrlImagemEmpresa(urlImagemEmpresa);
+                            motoboy.setCidade(addressDestino.getAdminArea());
+                      //      motoboy.setCep(addressDestino.getPostalCode());
+                            motoboy.setBairro(addressDestino.getSubLocality());
+                            motoboy.setRua(addressDestino.getThoroughfare());
+                            motoboy.setNumero(addressDestino.getFeatureName());
+                            motoboy.setLatitude(String.valueOf(addressDestino.getLatitude()));
+                            motoboy.setLongitude(String.valueOf(addressDestino.getLongitude()));
                             motoboy.salvar();
                             salvarImagem();
                             exibirMensagem("motoboy salvo com sucesso");
@@ -156,6 +181,32 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
             }
         }
     }
+
+  }
+}
+
+    private Address recuperarEndereco(String endereco){
+
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> listaEnderecos = geocoder.getFromLocationName(endereco, 1);
+            if( listaEnderecos != null && listaEnderecos.size() > 0 ){
+                Address address = listaEnderecos.get(0);
+
+                return address;
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
+    }
+
+
+
     private void abrirTelaRequisicoes(){
         startActivity(new Intent(CadastroMotoboyActivity.this, RequisicoesActivity.class));
     }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.localoeste.hungry">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -19,7 +18,9 @@
         android:roundIcon="@mipmap/icone_hungry"
         android:supportsRtl="true"
         android:theme="@style/Theme.Hungry">
-
+        <activity
+            android:name=".activy.CorridaActivity"
+            android:exported="false" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -36,10 +37,6 @@
             android:name=".activy.AcompanhamentoPedidoActivity"
             android:exported="false"
             android:label="@string/title_activity_acompanhamento_pedido" />
-        <activity
-            android:name=".activy.AcompanhamentoPedidoActivityActivity"
-            android:exported="false"
-            android:label="@string/title_activity_acompanhamento_pedido_activity" />
         <activity
             android:name=".activy.AutenticacaoMotoboyActivity"
             android:exported="true" />
@@ -65,6 +62,9 @@
             android:parentActivityName=".activy.HomeActivity" />
         <activity
             android:name=".activy.ConfiguracoesUsuarioActivity"
+            android:parentActivityName=".activy.HomeActivity" />
+        <activity
+            android:name=".activy.RequisicoesActivity"
             android:parentActivityName=".activy.HomeActivity" />
         <activity
             android:name=".activy.NovoProdutoEmpresaActivity"

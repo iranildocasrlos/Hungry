@@ -34,6 +34,7 @@ import java.util.Map;
 import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.adapter.AdapterCompras;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
+import br.com.localoeste.hungry.helper.EmpresaFirebase;
 import br.com.localoeste.hungry.helper.UsuarioFirebase;
 import br.com.localoeste.hungry.listener.RecyclerItemClickListener;
 import br.com.localoeste.hungry.model.Destino;
@@ -119,10 +120,11 @@ public class PedidosActivity extends AppCompatActivity {
                                     pedido.atualizarStatus();
 
                                 } else if( pedido.getStatus().equals(Pedido.STATUS_PREPARANDO)){
-                                    pedido.setStatus(Pedido.STATUS_A_CAMINHO);
+                                    pedido.setStatus(Pedido.STATUS_PRONTO);
                                     pedido.atualizarStatusAcaminho();
                                     pedido.atualizarStatusMeusPedidosAcaminho();
-                                    startActivity(new Intent(PedidosActivity.this, AcompanhamentoPedidoActivity.class));
+                                   // startActivity(new Intent(PedidosActivity.this, AcompanhamentoPedidoActivity.class));
+                                    startActivity(new Intent(PedidosActivity.this, RequisicoesActivity.class));
 
                                     salvarRequisicao(usuario);
                                 }
@@ -158,20 +160,21 @@ public class PedidosActivity extends AppCompatActivity {
         Requisicao requisicao = new Requisicao();
 
         requisicao.setCliente(usuario);
+       // Usuario usuariologado = UsuarioFirebase.getDadosUsuarioLogado();
+       // requisicao.setCliente(usuariologado);
+        // requisicao.setBairro(usuario.getIdUsuario());
+        //requisicao.setBairro(usuario.getBairro());
+        //requisicao.setCidade(usuario.getCidade());
+        //requisicao.setRua(usuario.getRua());
+        //requisicao.setId(usuariologado.getIdUsuario());
+        // requisicao.setId(Usuario.getId_Usuario());
+        //requisicao.setNumero(usuario.getNumero());
+        //requisicao.setLatitude(usuario.getLatitude());
+        //requisicao.setLongitude(usuario.getLongitude());
+        //requisicao.setUsuario(usuario.getNome());
+        requisicao.setStatus(Pedido.STATUS_PRONTO);
 
-        Usuario usuariologado = UsuarioFirebase.getDadosUsuarioLogado();
-        requisicao.setCliente(usuariologado);
-        //  usuariologado.setLatitude(String.valueOf(meuLocal.latitude));
-        //  usuariologado.setLongitude(String.valueOf(meuLocal.longitude));
-
-        //         requisicao.setDestino(destino);
-        //         usuario = UsuarioFirebase.getDadosUsuarioLogado();
-        //         requisicao.setCliente(usuario);
-        //         usuario.setNumero( String.valueOf(addressDestino.getLatitude()) );
-        //        usuario.setLongitude( String.valueOf(addressDestino.getLongitude()) );
-        requisicao.setBairro(usuario.getBairro());
-        requisicao.setUsuario(Usuario.getId_Usuario());
-        requisicao.setStatus(Pedido.STATUS_A_CAMINHO);
+      //  requisicao.setEmpresa(EmpresaFirebase.getId_empresa());
         requisicao.salvarRequisicao();
 
     }
@@ -290,6 +293,9 @@ public class PedidosActivity extends AppCompatActivity {
         });
 
     }
+
+
+
 
 
     @Override

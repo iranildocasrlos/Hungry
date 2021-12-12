@@ -26,6 +26,10 @@ public class Usuario {
 
     private String rua;
     private String numero;
+    private String cidade;
+    private String bairro;
+
+
 
     public String getLatitude() {
         return latitude;
@@ -83,8 +87,7 @@ public class Usuario {
         this.bairro = bairro;
     }
 
-    private String cidade;
-    private String bairro;
+
 
 
 
@@ -224,6 +227,7 @@ public class Usuario {
         data.put("telefone",telefone);
         data.put("cpf", cpf);
         data.put("cep", cep);
+        data.put("latitude", latitude);
         documentRef.update(data);
 
 

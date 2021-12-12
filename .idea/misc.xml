@@ -12,11 +12,26 @@
         <entry key="..\:/Users/gleds/AndroidStudioProjects/Hungry/app/src/main/res/layout/adapter_motoboy.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/gleds/AndroidStudioProjects/Hungry/app/src/main/res/layout/adapter_produto.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/gleds/AndroidStudioProjects/Hungry/app/src/main/res/menu/menu_empresa.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry/app/src/main/res/layout/activity_acompanhamento_pedido.xml" value="0.1" />
         <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry/app/src/main/res/layout/activity_acompanhamento_pedido_activity.xml" value="0.1" />
         <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry/app/src/main/res/layout/activity_autenticacao_motoboy.xml" value="0.1" />
+        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry/app/src/main/res/layout/activity_cadastro_empresa.xml" value="0.25" />
         <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry/app/src/main/res/layout/activity_cadastro_motoboy.xml" value="0.1" />
-        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry/app/src/main/res/layout/activity_requisicoes.xml" value="0.1" />
+        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry/app/src/main/res/layout/activity_cadastro_usuario.xml" value="0.15760869565217392" />
+        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry/app/src/main/res/layout/activity_empresa.xml" value="0.18" />
+        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry/app/src/main/res/layout/activity_pedidos.xml" value="0.46445497630331756" />
+        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry/app/src/main/res/layout/activity_requisicoes.xml" value="0.22" />
+        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry/app/src/main/res/layout/adapter_carrinho.xml" value="0.25" />
+        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry/app/src/main/res/layout/adapter_empresa.xml" value="0.33" />
+        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry/app/src/main/res/layout/adapter_produto.xml" value="0.15760869565217392" />
+        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry/app/src/main/res/layout/adapter_requisicoes.xml" value="0.33" />
         <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry/app/src/main/res/menu/menu_main.xml" value="0.1388888888888889" />
+        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry/app/src/main/res/menu/menu_requisicao.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry_03/app/src/main/res/layout/activity_cardapio.xml" value="0.5" />
+        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry_03/app/src/main/res/layout/activity_pedidos.xml" value="0.10416666666666667" />
+        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry_03/app/src/main/res/layout/activity_requisicoes.xml" value="0.10416666666666667" />
+        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry_03/app/src/main/res/layout/adapter_produto.xml" value="0.10416666666666667" />
+        <entry key="..\:/Users/gleds/AndroidStudioProjects/hungry_03/app/src/main/res/layout/adapter_requisicoes.xml" value="0.10416666666666667" />
         <entry key="app/src/main/res/layout/activity_autenticacao.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_compras.xml" value="0.19701086956521738" />
         <entry key="app/src/main/res/layout/adapter_compras.xml" value="0.33" />

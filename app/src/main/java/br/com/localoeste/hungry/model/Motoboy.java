@@ -1,5 +1,6 @@
 package br.com.localoeste.hungry.model;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -33,6 +34,72 @@ public class Motoboy implements Serializable {
 
 
     //Métodos Getters e Setters
+
+
+    private String latitude;
+    private String longitude;
+    private LatLng meuLocal;
+
+    private String rua;
+    private String numero;
+    private String cidade;
+    private String bairro;
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public LatLng getMeuLocal() {
+        return meuLocal;
+    }
+
+    public void setMeuLocal(LatLng meuLocal) {
+        this.meuLocal = meuLocal;
+    }
+
+    public String getRua() {
+        return rua;
+    }
+
+    public void setRua(String rua) {
+        this.rua = rua;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
 
 
     public String getUrlImagemEmpresa() {
@@ -183,7 +250,5 @@ public class Motoboy implements Serializable {
 
 
     }
-
-
 
 }
