@@ -83,6 +83,14 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.MyViewHo
             holder.status.setBackgroundColor(Color.YELLOW);
 
 
+        }
+        else if (pedido.getStatus().equals(Pedido.STATUS_PRONTO)){
+
+            Picasso.get().load( R.drawable.food ).into( holder.imagemEmpresa );
+            holder.linearLayout.setBackgroundColor(Color.BLUE);
+            holder.status.setBackgroundColor(Color.BLUE);
+            holder.status.setTextColor(Color.WHITE);
+
         }else if (pedido.getStatus().equals(Pedido.STATUS_A_CAMINHO)){
 
             Picasso.get().load( R.drawable.delivery ).into( holder.imagemEmpresa );
