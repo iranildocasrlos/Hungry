@@ -213,17 +213,9 @@ public class Pedido implements Serializable {
                 .collection("aguardando")
                 .document(getIdPedido()).set(this);
 
-
-        //    DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
-        //   DatabaseReference pedido = firebaseRef.child("requisicoesPedidos");
-
-        //  String idRequisicao = pedido.push().getKey();
-        //  setId( idRequisicao );
-
-        //pedido.child( getId() ).setValue(this);
-        //   pedido.child(getIdPedido()).setValue(this);
-
     }
+
+
     public void salvarPedidoUsuario(){
 
         setIdPedido(getIdPedido());
@@ -235,6 +227,8 @@ public class Pedido implements Serializable {
                 .document(getIdPedido()).set(this);
 
     }
+
+
     public void atualizarPedidoUsuario(String idPedidoSalvo, Map<String, Object>  data){
 
         Task<Void> documentRef = db.collection("meus_pedidos")

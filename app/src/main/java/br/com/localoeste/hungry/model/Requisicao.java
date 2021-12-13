@@ -51,52 +51,17 @@ public class Requisicao {
 
     public Requisicao() {
     }
-    public void salvarRequisicao(){
+    public void salvarRequisicao(Pedido novoPedido){
 
 
-        Pedido pedido = new Pedido();
-
-//        DocumentReference documentRef = db.collection("requisicoes").document(getStatus());
-//           Map<String, Object> data = new HashMap<>();
-        //         data.put("usuario",usuario);
-        //    data.put("status",status);
-        //   data.put("id",id);
-        //   data.put("idUsuario",idUsuario);
-        //   data.put("cidade",cidade);
-        //   data.put("bairro",bairro);
-        //   data.put("rua",rua);
-        //   data.put("numero",numero);
-        //   data.put("latitude",latitude);
-        //   data.put("longitude",longitude);
-
-        //   documentRef.set(data);
-
-     //   CollectionReference requisicoes = db.collection("requisicoes");
-        //       Map<String, Object> data = new HashMap<>();
-
-        //        data.put("usuario",usuario);
-        //  data.put("status",status);
-        //   data.put("id",id);
-        //   data.put("cidade",cidade);
-        //   data.put("bairro",bairro);
-        //   data.put("rua",rua);
-        //   data.put("numero",numero);
-        //    data.put("latitude",latitude);
-        //    data.put("longitude",longitude);
-        //    data.put("empresa",empresa);
-
-        //     requisicoes.document("pronto").set(data);
-        // requisicoes.set(data);
+      //  Pedido pedido = new Pedido();
 
 
-       // UUID uuid = UUID.randomUUID();
-        //String uuidAsString = uuid.toString();
-      //  setEmpresa(uuidAsString);
         Task<Void> documentRef = db.collection("requisicoes")
                 .document(EmpresaFirebase.getId_empresa())
                 //.collection(String.valueOf(new ItemPedido()))
-                .collection(pedido.getIdPedido())
-                .document(getStatus()).set(this);
+                .collection(novoPedido.getIdUsuario())
+                .document(novoPedido.getIdPedido()).set(novoPedido);
 
 
     }

@@ -81,6 +81,7 @@ public class PedidosActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle parametros =intent.getExtras();
+
         if(parametros != null){
             String nomeU = parametros.getString("nomeUsuario");
             String enderecoU = parametros.getString("nomeRua");
@@ -95,15 +96,14 @@ public class PedidosActivity extends AppCompatActivity {
 
 
 
-
-
-
         //Configurações do recyclerView
         recyclerPedidos.setLayoutManager(new LinearLayoutManager(this));
         recyclerPedidos.setHasFixedSize(true);
         adapterPedidos = new AdapterCompras(pedidos , this);
         recyclerPedidos.setAdapter(adapterPedidos);
 
+
+        //Ação de toque no item da lista
         recyclerPedidos.addOnItemTouchListener(
                 new RecyclerItemClickListener(
                         getApplicationContext(),
@@ -123,10 +123,7 @@ public class PedidosActivity extends AppCompatActivity {
                                     pedido.setStatus(Pedido.STATUS_PRONTO);
                                     pedido.atualizarStatusAcaminho();
                                     pedido.atualizarStatusMeusPedidosAcaminho();
-                                   // startActivity(new Intent(PedidosActivity.this, AcompanhamentoPedidoActivity.class));
-                                    startActivity(new Intent(PedidosActivity.this, RequisicoesActivity.class));
-
-                                    salvarRequisicao(usuario);
+                                    salvarRequisicao(pedido);
                                 }
                             }
 
@@ -148,34 +145,20 @@ public class PedidosActivity extends AppCompatActivity {
         );
 
         recuperarPedido();
-        recuperaUsuario();
+        recuperaEmpresa();
 
 
 
     }
 
 
-    private void salvarRequisicao(Usuario usuario) {
+    private void salvarRequisicao(Pedido pedidoParaRquisicao) {
 
         Requisicao requisicao = new Requisicao();
-
-        requisicao.setCliente(usuario);
-       // Usuario usuariologado = UsuarioFirebase.getDadosUsuarioLogado();
-       // requisicao.setCliente(usuariologado);
-        // requisicao.setBairro(usuario.getIdUsuario());
-        //requisicao.setBairro(usuario.getBairro());
-        //requisicao.setCidade(usuario.getCidade());
-        //requisicao.setRua(usuario.getRua());
-        //requisicao.setId(usuariologado.getIdUsuario());
-        // requisicao.setId(Usuario.getId_Usuario());
-        //requisicao.setNumero(usuario.getNumero());
-        //requisicao.setLatitude(usuario.getLatitude());
-        //requisicao.setLongitude(usuario.getLongitude());
-        //requisicao.setUsuario(usuario.getNome());
         requisicao.setStatus(Pedido.STATUS_PRONTO);
+        requisicao.salvarRequisicao( pedidoParaRquisicao) ;
 
-      //  requisicao.setEmpresa(EmpresaFirebase.getId_empresa());
-        requisicao.salvarRequisicao();
+        adapterPedidos.notifyDataSetChanged();
 
     }
 
@@ -191,7 +174,7 @@ public class PedidosActivity extends AppCompatActivity {
     }
 
 
-    private void recuperaUsuario(){
+    private void recuperaEmpresa(){
         referenciaFirestore.collection("pedidos")
                 .whereArrayContains("idEmpresa",idEmpresa)
                 .get()
