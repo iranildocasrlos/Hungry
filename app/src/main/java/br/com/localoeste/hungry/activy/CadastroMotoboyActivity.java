@@ -46,7 +46,7 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
 
 
     private Bitmap imagemParaSalvar = null;
-    private CircleImageView imagemProduto;
+    private CircleImageView imagemMotoboy;
     private String urlImagemSelecionada = "";
     private String urlImagemEmpresa = "";
     private EditText endereco;
@@ -86,7 +86,7 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
         editMotoModelo = findViewById(R.id.editModeloMoto);
         editMotoPlaca = findViewById(R.id.editPlacaMoto);
         editMotoCor = findViewById(R.id.editCorMoto);
-        imagemProduto = findViewById(R.id.imagem_produto);
+        imagemMotoboy = findViewById(R.id.imagem_motoboy);
 
         endereco =findViewById(R.id.enderecoUsuario);
         idUsuarioLogado = EmpresaFirebase.getId_empresa();
@@ -95,7 +95,7 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
 
         pesquisarEmpresa(idUsuarioLogado);
 
-        imagemProduto.setOnClickListener(new View.OnClickListener() {
+        imagemMotoboy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(
@@ -110,21 +110,13 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
 
     }
 
-    public void validarDadosProduto(View view) {
+    public void validarDadosMotoboy(View view) {
 
 
         //Usuario usuario = new usuario();
         //String enderecoDestino = usuario.getEndereco();
         String enderecoDestino = endereco.getText().toString();
 
-        if( !enderecoDestino.equals("") || enderecoDestino != null ){
-
-            Address addressDestino = recuperarEndereco( enderecoDestino );
-            if( addressDestino != null ) {
-
-
-                UUID uuid = UUID.randomUUID();
-                idProduto = String.valueOf(uuid);
 
 
                 String enderecoM = endereco.getText().toString();
@@ -134,8 +126,8 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
                 String placaMoto = editMotoPlaca.getText().toString();
                 String corMoto = editMotoCor.getText().toString();
 
-                final Motoboy motoboy = new Motoboy();
-                motoboy.setIdProduto(idProduto);
+                Motoboy motoboy = new Motoboy();
+                motoboy.setIdMotoboy(idUsuarioLogado);
                 motoboy.setIdEmpresa(idUsuarioLogado);
                 motoboy.setNomeMotoboy(nomeMotoboy);
                 motoboy.setMarcaMoto(marcaMoto);
@@ -145,21 +137,14 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
                 motoboy.setUrlImagemMotoboy(urlImagemSelecionada);
                 motoboy.setNomeEmpresa(nomeRecuperadoEmpresa);
                 motoboy.setUrlImagemEmpresa(urlImagemEmpresa);
-                motoboy.setCidade(addressDestino.getAdminArea());
-                motoboy.setCep(addressDestino.getPostalCode());
-                motoboy.setBairro(addressDestino.getSubLocality());
-                motoboy.setRua(addressDestino.getThoroughfare());
-                motoboy.setNumero(addressDestino.getFeatureName());
-                motoboy.setLatitude(String.valueOf(addressDestino.getLatitude()));
-                motoboy.setLongitude(String.valueOf(addressDestino.getLongitude()));
                 motoboy.salvar();
                 salvarImagem();
                 exibirMensagem("motoboy salvo com sucesso");
                 abrirTelaRequisicoes();
                 finish();
-            }
+
        }
-}
+
 
     private Address recuperarEndereco(String endereco){
 
@@ -198,7 +183,7 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
                     .child("imagens")
                     .child("motoboys")
                     .child(idUsuarioLogado)
-                    .child(idProduto+ ".jpeg");
+                    .child(motoboy.getIdMotoboy()+ ".jpeg");
 
             UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
             uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -219,11 +204,13 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
                             urlImagemSelecionada = uri.toString();
                             if (urlImagemSelecionada != ""){
                                 Motoboy motoboy = new Motoboy();
-                                motoboy.setIdProduto(idProduto);
+
                                 motoboy.setIdEmpresa(idUsuarioLogado);
                                 motoboy.setUrlImagemMotoboy(urlImagemSelecionada);
-                                motoboy.salvarFoto();
 
+                                Toast.makeText(CadastroMotoboyActivity.this,
+                                        "Sucesso ao salvar imagem",
+                                        Toast.LENGTH_SHORT).show();
 
 
                             }
@@ -260,7 +247,7 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
                         break;
                 }
                 if (imagem != null){
-                    imagemProduto.setImageBitmap(imagem);
+                    imagemMotoboy.setImageBitmap(imagem);
                     imagemParaSalvar = imagem;
                 }
 

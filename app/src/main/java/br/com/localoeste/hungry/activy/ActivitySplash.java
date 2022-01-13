@@ -24,6 +24,8 @@ import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 import br.com.localoeste.hungry.helper.EmpresaFirebase;
 import br.com.localoeste.hungry.helper.UsuarioFirebase;
+import br.com.localoeste.hungry.model.Motoboy;
+import br.com.localoeste.hungry.model.Requisicao;
 
 public class ActivitySplash extends AppCompatActivity {
 
@@ -55,7 +57,7 @@ public class ActivitySplash extends AppCompatActivity {
             firestore = ConfiguracaoFirebase.getReferenciaFirestore();
 
             DocumentReference usuarios = firestore.collection("usuarios").document(usuarioAtual.getUid());
-
+            Log.d("UID","ID Logado__> "+usuarioAtual.getUid());
             if (usuarios != null){
 
                 usuarios.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -77,10 +79,14 @@ public class ActivitySplash extends AppCompatActivity {
                                     }
 
                                     Log.d("HUNGRY", user.getNome() + "==> ID: "+user.getId_Usuario());
+                                }else{
+
+                                    abrirTelaMotoboy();
+
                                 }
                             }
 
-                        }else {
+                        }else if(user != null){
 
                             DocumentReference empresas = firestore.collection("empresas").document(usuarioAtual.getUid());
                             empresas.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -100,38 +106,34 @@ public class ActivitySplash extends AppCompatActivity {
 
                             });
 
+                        }else if(usuarioAtual.getUid() != null){
+
+                                DocumentReference empresas = firestore.collection("motoboy").document(usuarioAtual.getUid());
+                                empresas.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        Motoboy userMotoboy = documentSnapshot.toObject(Motoboy.class);
+
+                                        if (userMotoboy != null) {
+
+                                            abrirTelaMotoboy();
+                                        }else{
+                                            abrirAutenticacao();
+                                        }
 
 
+
+                                    }
+
+
+                                });
 
                         }
 
                     }
                 });
 
-            }else{
-
-                DocumentReference empresas = firestore.collection("empresas").document(usuarioAtual.getUid());
-                empresas.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        EmpresaFirebase user = documentSnapshot.toObject(EmpresaFirebase.class);
-
-                        if (user.getCnpj()!= null){
-
-                                    abrirTelaPrincipalEmpresa();
-                                }else{
-                                    abrirTelaCadastroEmpresa();
-                                }
-
-                            }
-
-
-                });
-
-
             }
-
-
 
         }else{
             abrirAutenticacao();
@@ -155,6 +157,11 @@ public class ActivitySplash extends AppCompatActivity {
     }
     private void abrirTelaCadastroEmpresa() {
         startActivity(new Intent(getApplicationContext(), CadastroEmpresaActivity.class));
+    }
+
+    //Tela principal Motoboy
+    private void abrirTelaMotoboy(){
+        startActivity(new Intent(getApplicationContext(), RequisicoesActivity.class));
     }
 
 }

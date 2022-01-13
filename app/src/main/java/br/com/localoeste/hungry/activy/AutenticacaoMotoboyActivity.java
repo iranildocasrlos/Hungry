@@ -52,22 +52,8 @@ public class AutenticacaoMotoboyActivity extends AppCompatActivity {
         inicializarComponenetes();
 
         ///Metodo para verificar se o usuário está logado
-        verificaUsuarioLogado();
 
-        //Esconde ou exibe o swicht abaixo dele
-        // tipoAcesso.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-        //   @Override
-        // public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        //   if (isChecked){
-        //     linearTipoUsuario.setVisibility(View.VISIBLE);
-        //   textViewQuem.setVisibility(View.GONE);
-        //}else{
-        //  linearTipoUsuario.setVisibility(View.GONE);
-        //textViewQuem.setVisibility(View.GONE);
-        // }
-        // }
-        //}
-        // );
+
         textViewQuem.setVisibility(View.GONE);
 
         btAcessar.setOnClickListener(new View.OnClickListener() {
@@ -91,11 +77,7 @@ public class AutenticacaoMotoboyActivity extends AppCompatActivity {
                                     Toast.makeText(AutenticacaoMotoboyActivity.this,
                                             "Cadastro realizado com sucesso!",
                                             Toast.LENGTH_SHORT).show();
-
-                                    if (getTipoUsuario() == "M"){
-                                        abrirTelaCadastroUsuario();
-                                    }
-
+                                    abrirTelaCadastroMotoboy();
 
                                 }else {
                                     String erroExcecao = "";
@@ -120,27 +102,7 @@ public class AutenticacaoMotoboyActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                        //}
-                        //     else{
 
-                        //   autenticacao.signInWithEmailAndPassword(email, senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        //      @Override
-                        //     public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        //         if (task.isSuccessful()){
-
-                        verificaUsuarioFirestore();
-
-
-                        //        }else{
-                        //           Toast.makeText(AutenticacaoMotoboyActivity.this,
-                        //                   "Erro ao fazer login : " + task.getException() ,
-                        //                   Toast.LENGTH_SHORT).show();
-                        //         }
-                        //       }
-                        //     });
-
-                        //   }
 
                     }else{
                         Toast.makeText(AutenticacaoMotoboyActivity.this, "Preencha o campo senha", Toast.LENGTH_LONG).show();
@@ -148,7 +110,7 @@ public class AutenticacaoMotoboyActivity extends AppCompatActivity {
                 }else{
 
                     if (getTipoUsuario() == "M"){
-                        abrirTelaCadastroUsuario();
+                        abrirTelaCadastroMotoboy();
                     }
                 }
 
@@ -157,66 +119,16 @@ public class AutenticacaoMotoboyActivity extends AppCompatActivity {
 
     }
 
-    //Cadastro de Empresa
-    private void abrirTelaCadastroEmpresa() {
-        startActivity(new Intent(getApplicationContext(), CadastroEmpresaActivity.class));
-    }
 
     //Cadastro de Usuário
-    private void abrirTelaCadastroUsuario() {
+    private void abrirTelaCadastroMotoboy() {
 
         startActivity(new Intent(getApplicationContext(), CadastroMotoboyActivity.class));
     }
 
-    //Tela principal Usuário
-    //private void abrirTelaPrincipal() {
-    //  startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-    //startActivity(new Intent(getApplicationContext(), CadastroMotoboyActivity.class));
-    //}
 
-    //Tela principal Usuário
-    private void abrirTelaPrincipalEmpresa() {
-        startActivity(new Intent(getApplicationContext(), EmpresaActivity.class));
-    }
 
-    private void verificaUsuarioLogado() {
-        FirebaseUser usuarioAtual = autenticacao.getCurrentUser();
-        if (usuarioAtual != null){
-            //      abrirTelaPrincipal();
 
-        }
-    }
-
-    private void verificaUsuarioFirestore() {
-        FirebaseUser usuarioAtual = autenticacao.getCurrentUser();
-        if (usuarioAtual != null){
-            firestore = ConfiguracaoFirebase.getReferenciaFirestore();
-
-            DocumentReference usuarios = firestore.collection("motoboys").document(usuarioAtual.getUid());
-
-            if (usuarios != null) {
-
-                usuarios.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        MotoboyFirebase user = documentSnapshot.toObject(MotoboyFirebase.class);
-
-                        if (user != null) {
-                            if (user.getTipoUsuario() != null) {
-                                if (user.getTipoUsuario().equals("motoboys")) {
-                                    //  abrirTelaPrincipal();
-                                    Log.d("HUNGRY", user.getNome() + "==> ID: " + user.getId_Usuario());
-                                }
-                            }
-
-                        }
-
-                    }
-                });
-
-            }
-        }
-    }
 
 
     private String getTipoUsuario(){

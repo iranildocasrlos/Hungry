@@ -120,7 +120,7 @@ public class ConfiguracaoEmpresaActivity extends AppCompatActivity {
         spinnerFinal = findViewById(R.id.spinnerHorarioFinal);
         String[] categorias = getResources().getStringArray(R.array.nome_categoria);
         String[] horarios = getResources().getStringArray(R.array.horario);
-        imagePerfilEmpresa = findViewById(R.id.imagem_produto);
+        imagePerfilEmpresa = findViewById(R.id.imagem_motoboy);
         idUsuarioLogado = EmpresaFirebase.getId_empresa();
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
 

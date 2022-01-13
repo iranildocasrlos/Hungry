@@ -20,9 +20,8 @@ public class Motoboy implements Serializable {
     private String corMoto;
     private String nomeEmpresa;
     private String descricaoProduto;
-    private String idProduto;
+    private String IdMotoboy;
     private String idEmpresa;
-
     private int quantidade;
     private Double precoUnidade;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -43,6 +42,15 @@ public class Motoboy implements Serializable {
     private String numero;
     private String cidade;
     private String bairro;
+
+
+    public String getIdMotoboy() {
+        return IdMotoboy;
+    }
+
+    public void setIdMotoboy(String idMotoboy) {
+        IdMotoboy = idMotoboy;
+    }
 
     public String getLatitude() {
         return latitude;
@@ -166,14 +174,6 @@ public class Motoboy implements Serializable {
 
     public void setCorMoto(String corMoto) {this.corMoto = corMoto;    }
 
-    public String getIdProduto() {
-        return idProduto;
-    }
-
-    public void setIdProduto(String idProduto) {
-        this.idProduto = idProduto;
-    }
-
     public int getQuantidade() {
         return quantidade;
     }
@@ -184,57 +184,14 @@ public class Motoboy implements Serializable {
 
     public void salvar(){
 
-       // DocumentReference documentRef = db.collection("motoboys")
-         //       .document(getIdEmpresa())
-           //     .collection("motoboys_disponiveis")
-             //   .document(getIdProduto());
-        //Map<String, Object> data = new HashMap<>();
-        //data.put("urlImagemMotoboy",urlImagemMotoboy);
-        //data.put("nomeMotoboy",nomeMotoboy);
-        // data.put("marcaMoto",marcaMoto);
-        //data.put("modeloMoto",modeloMoto);
-        // data.put("placaMoto",placaMoto);
-        //  data.put("corMoto",corMoto);
-        //  data.put("idEmpresa",idEmpresa);
-        // data.put("urlImagemEmpresa", urlImagemEmpresa);
-        // data.put("nomeEmpresa", nomeEmpresa);
-        // documentRef.set(data);
-
-        DocumentReference documentRef = db.collection("motoboy").document(getNomeMotoboy());
+        DocumentReference documentRef = db.collection("motoboy").document(getIdMotoboy());
 
 
         documentRef.set(this);
     }
 
-    public void atualizar(){
-
-        DocumentReference documentRef = db.collection("motoboys").document(getIdProduto());
-        Map<String, Object> data = new HashMap<>();
-        data.put("nomeMotoboy",nomeMotoboy);
-        data.put("marcaMoto",marcaMoto);
-        data.put("modeloMoto",modeloMoto);
-        data.put("placaMoto",placaMoto);
-        data.put("corMoto",corMoto);
-        //   data.put("precoProduto",precoProduto);
-        data.put("idEmpresa",idEmpresa);
-        //  data.put("idProduto", idProduto);
-        documentRef.update(data);
-
-    }
 
 
-    public void salvarFoto(){
-        DocumentReference documentRef = db.collection("motoboys")
-                .document(idEmpresa)
-                .collection("motoboys_disponiveis")
-                .document(getIdProduto());
-        Map<String, Object> data = new HashMap<>();
-
-        data.put("urlImagemMotoboy", urlImagemMotoboy);
-        documentRef.update(data);
-
-
-    }
 
     public void setCep(String postalCode) {
     }

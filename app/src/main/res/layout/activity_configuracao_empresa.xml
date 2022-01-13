@@ -22,7 +22,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
 
-            android:id="@+id/imagem_produto"
+            android:id="@+id/imagem_motoboy"
             android:layout_width="411dp"
             android:layout_height="62dp"
             android:layout_gravity="center"

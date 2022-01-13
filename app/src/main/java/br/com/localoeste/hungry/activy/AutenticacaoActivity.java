@@ -34,6 +34,8 @@ import br.com.localoeste.hungry.R;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 import br.com.localoeste.hungry.helper.EmpresaFirebase;
 import br.com.localoeste.hungry.helper.UsuarioFirebase;
+import br.com.localoeste.hungry.model.Motoboy;
+import br.com.localoeste.hungry.model.Requisicao;
 
 public class AutenticacaoActivity extends AppCompatActivity {
 
@@ -186,11 +188,17 @@ public class AutenticacaoActivity extends AppCompatActivity {
 
     private void verificaUsuarioLogado() {
         FirebaseUser usuarioAtual = autenticacao.getCurrentUser();
-        if (usuarioAtual != null){
+        if (usuarioAtual != null) {
             abrirTelaPrincipal();
 
         }
     }
+        //Tela principal Motoboy
+        private void abrirTelaMotoboy(){
+            startActivity(new Intent(getApplicationContext(), RequisicoesActivity.class));
+        }
+
+
 
     private void verificaUsuarioFirestore() {
         FirebaseUser usuarioAtual = autenticacao.getCurrentUser();
@@ -221,9 +229,12 @@ public class AutenticacaoActivity extends AppCompatActivity {
 
                                     Log.d("HUNGRY", user.getNome() + "==> ID: " + user.getId_Usuario());
                                 }
+                                else if (user.getTipoUsuario().equals("motoboy")){
+                                        abrirTelaMotoboy();
+                                }
                             }
 
-                        } else {
+                        } else{
 
                             DocumentReference empresas = firestore.collection("empresas").document(usuarioAtual.getUid());
                             empresas.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,7 +23,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.util.UUID;
@@ -73,7 +71,7 @@ public class NovoProdutoEmpresaActivity extends AppCompatActivity {
         editProdutoNome = findViewById(R.id.editNomeProduto);
         editProdutoDescricao = findViewById(R.id.editDescricaoProduto);
         editProdutoPreco = findViewById(R.id.editPrecoProduto);
-        imagemProduto = findViewById(R.id.imagem_produto);
+        imagemProduto = findViewById(R.id.imagem_motoboy);
         idUsuarioLogado = EmpresaFirebase.getId_empresa();
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         storageReference = ConfiguracaoFirebase.getFirebaseStorage();
