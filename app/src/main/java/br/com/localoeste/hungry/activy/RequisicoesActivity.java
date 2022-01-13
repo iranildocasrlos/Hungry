@@ -1,11 +1,15 @@
 package br.com.localoeste.hungry.activy;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.style.TtsSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,9 +21,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+//import com.google.firebase.database.Query;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.localoeste.hungry.R;
+import br.com.localoeste.hungry.adapter.AdapterEmpresa;
 import br.com.localoeste.hungry.adapter.AdapterRequisicoes;
 import br.com.localoeste.hungry.helper.ConfiguracaoFirebase;
 import br.com.localoeste.hungry.helper.UsuarioFirebase;
@@ -42,28 +54,18 @@ import br.com.localoeste.hungry.model.Requisicao;
 public class RequisicoesActivity extends AppCompatActivity {
 
 
-    //Componentes
-    private TextView nome;
-    private TextView distancia;
-
-
+    private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth autenticacao;
-    private RecyclerView recyclerRequisicoes;
-    private AdapterRequisicoes adapterRequisicoes;
-    private List<Requisicao> requisicoes = new ArrayList<>();
-    private FirebaseFirestore referenciaFirestore;
-    private String idUsuarioLogado;
-    private StorageReference storageRef;
+    private RecyclerView mFirestoreList;
+    private FirestoreRecyclerAdapter adapter;
 
 
+    private AdapterEmpresa adapterEmpresa;
+
+    private List<Empresa> empresas = new ArrayList<>();
 
 
-    //firebase
-    private FirebaseFirestore firestore;
-
-    private Requisicao requisicao = new Requisicao();
-
-    private Requisicao requisicaoRecuperado, requisicaoParaConsulta;
+    private String idEmpresa ,idUsuario, idPedido;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -72,37 +74,40 @@ public class RequisicoesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requisicoes);
 
-        firestore = FirebaseFirestore.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        mFirestoreList = findViewById(R.id.recyclerRequisicoes);
+
+        idEmpresa = UsuarioFirebase.getId_Usuario();
+
 
         //Configurações da Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Requisições");
 
         setSupportActionBar(toolbar);
-        inicializarComponentes();
 
         //Configurações do recyclerView
-        recyclerRequisicoes.setLayoutManager(new LinearLayoutManager(this));
-        recyclerRequisicoes.setHasFixedSize(true);
-        adapterRequisicoes = new AdapterRequisicoes(requisicoes,this);
-        recyclerRequisicoes.setAdapter(adapterRequisicoes);
+        mFirestoreList.setLayoutManager(new LinearLayoutManager(this));
+        mFirestoreList.setHasFixedSize(true);
+       // adapterEmpresa = new AdapterEmpresa(empresas,this);
+        mFirestoreList.setAdapter(adapterEmpresa);
 
-        //Recuperar Requisicao
-        recuperarRequisicoes();
-
-
-        recyclerRequisicoes.addOnItemTouchListener(
+        mFirestoreList.addOnItemTouchListener(
                 new RecyclerItemClickListener(
                         getApplicationContext(),
-                        recyclerRequisicoes,
+                        mFirestoreList,
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                Requisicao requisicao = requisicoes.get(position);
+                                //Requisicao requisicao = requisicoes.get(position);
+                                Empresa empresa = empresas.get(position);
 
-                                if( requisicao.getStatus().equals(Requisicao.STATUS_PRONTO)) {
-                                    requisicao.setStatus(Requisicao.STATUS_VIAGEM);
-                                                                }
+                                  startActivity(new Intent(RequisicoesActivity.this, CorridaActivity.class));
+
+
+                                //   if( requisicao.getStatus().equals(Requisicao.STATUS_PRONTO)) {
+                               //     requisicao.setStatus(Requisicao.STATUS_VIAGEM);
+                               // }
                             }
 
                             @Override
@@ -121,96 +126,60 @@ public class RequisicoesActivity extends AppCompatActivity {
 
 
 
-    }
+        //Query
+        Query query = firebaseFirestore.collection("empresas");
+                //.document(idEmpresa)
+                //.collection(idUsuario);
+                //.document(idPedido)
+                //.get();
+        //RecyclerOptions
+        FirestoreRecyclerOptions<requisicaoFirebase> options = new FirestoreRecyclerOptions.Builder<requisicaoFirebase>()
+                .setQuery(query, requisicaoFirebase.class)
+                .build();
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.menuSair:
-                autenticacao.signOut();
-                finish();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-
-       // switch (item.getItemId()){
-         //   case R.id.menuSair:
-           //     deslogarUsuario();
-             //   finish();
-               // break;
-    }
-    private void recuperarRequisicoes() {
-       DocumentReference reference =  referenciaFirestore.collection("requisicoes")
-                .document("pronto");
-
-        reference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        adapter = new FirestoreRecyclerAdapter<requisicaoFirebase, RequisicaoViewHolder>(options) {
+            @NonNull
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            public RequisicaoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_requisicao, parent,false);
 
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    if(documentSnapshot.exists()){
-                       if(documentSnapshot.getData().get("status").equals("pronto")) {
-
-                           Requisicao requisicaoRetorno =  (Requisicao) documentSnapshot.toObject(Requisicao.class);
-                           String usuario = (String) documentSnapshot.getData().get("usuario");
-                           String cidade = (String) documentSnapshot.getData().get("cidade");
-
-                                                   Log.d("dyww nome", usuario);
-                           Log.d("dyww distancia", cidade);
-                       }
-                    }
-                }
-
+                return new RequisicaoViewHolder(view);
             }
 
-        });
+            @Override
+            protected void onBindViewHolder(@NonNull RequisicaoViewHolder holder, int position, @NonNull requisicaoFirebase model) {
+                holder.list_nome.setText(model.getEmail());
+                holder.list_endereco.setText(model.getEndereco());
+            }
+        };
+        mFirestoreList.setHasFixedSize(true);
+        mFirestoreList.setLayoutManager(new LinearLayoutManager(this));
+        mFirestoreList.setAdapter(adapter);
     }
 
 
-    private void inicializarComponentes() {
+    private class RequisicaoViewHolder extends RecyclerView.ViewHolder{
 
-        //Configura componentes
-        nome = findViewById(R.id.textRequisicaoNome);
-        distancia = findViewById(R.id.textRequisicaoDistancia);
+        private TextView list_nome;
+        private TextView list_endereco;
 
-        getSupportActionBar().setTitle("Requisições");
+        public RequisicaoViewHolder (@NonNull View itemView){
+            super(itemView);
 
-        //Configura componentes
-
-
-        recyclerRequisicoes = findViewById(R.id.recyclerRequisicoes);
-        idUsuarioLogado = UsuarioFirebase.getId_Usuario();
-        referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
-        autenticacao = ConfiguracaoFirebase.getReferenciaAutenticacao();
-        storageRef =  ConfiguracaoFirebase.getFirebaseStorage();
-
+            list_nome = itemView.findViewById(R.id.list_nome);
+            list_endereco = itemView.findViewById(R.id.list_endereco);
+        }
     }
 
-    private  void exibirMensagem(String texto){
-        Toast.makeText(this, texto, Toast.LENGTH_SHORT).show();
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
     @Override
     protected void onStart() {
-        adapterRequisicoes.notifyDataSetChanged();
         super.onStart();
-
+        adapter.startListening();
     }
-
-    @Override
-    protected void onRestart() {
-
-        super.onRestart();
-
-    }
-
-    }
+}

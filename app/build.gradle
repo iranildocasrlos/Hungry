@@ -72,6 +72,9 @@ dependencies {
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    //FirebaseUI for Cloud firestore: 6.2.0
+    implementation 'com.firebaseui:firebase-ui-firestore:6.2.0'
+
     //SpinnerSearch
     implementation 'com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1'
 

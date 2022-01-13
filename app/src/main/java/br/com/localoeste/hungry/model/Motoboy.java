@@ -20,7 +20,6 @@ public class Motoboy implements Serializable {
     private String corMoto;
     private String nomeEmpresa;
     private String descricaoProduto;
-    // private Double precoProduto;
     private String idProduto;
     private String idEmpresa;
 
@@ -164,23 +163,8 @@ public class Motoboy implements Serializable {
     public String getCorMoto() {
         return corMoto;
     }
+
     public void setCorMoto(String corMoto) {this.corMoto = corMoto;    }
-
-    // public Double getPrecoProduto() {
-    //     return precoProduto;
-    //  }
-
-    // public void setPrecoProduto(Double precoProduto) {
-    //      this.precoProduto = precoProduto;
-    // }
-
-    //public Double getPrecoUnidade() {
-    //  return precoUnidade;
-    //}
-
-    //public void setPrecoUnidade(Double precoUnidade) {
-    //  this.precoUnidade = precoUnidade;
-    //}
 
     public String getIdProduto() {
         return idProduto;
@@ -200,25 +184,26 @@ public class Motoboy implements Serializable {
 
     public void salvar(){
 
-        DocumentReference documentRef = db.collection("motoboys")
-                .document(getIdEmpresa())
-                .collection("motoboys_disponiveis")
-                .document(getIdProduto());
-        Map<String, Object> data = new HashMap<>();
-        data.put("urlImagemMotoboy",urlImagemMotoboy);
-        data.put("nomeMotoboy",nomeMotoboy);
-        data.put("marcaMoto",marcaMoto);
-        data.put("modeloMoto",modeloMoto);
-        data.put("placaMoto",placaMoto);
-        data.put("corMoto",corMoto);
-        // data.put("precoProduto",precoProduto);
-        //data.put("precoUnidade",precoUnidade);
-        data.put("idEmpresa",idEmpresa);
-        //  data.put("idProduto", idProduto);
-        data.put("urlImagemEmpresa", urlImagemEmpresa);
-        data.put("nomeEmpresa", nomeEmpresa);
-        documentRef.set(data);
+       // DocumentReference documentRef = db.collection("motoboys")
+         //       .document(getIdEmpresa())
+           //     .collection("motoboys_disponiveis")
+             //   .document(getIdProduto());
+        //Map<String, Object> data = new HashMap<>();
+        //data.put("urlImagemMotoboy",urlImagemMotoboy);
+        //data.put("nomeMotoboy",nomeMotoboy);
+        // data.put("marcaMoto",marcaMoto);
+        //data.put("modeloMoto",modeloMoto);
+        // data.put("placaMoto",placaMoto);
+        //  data.put("corMoto",corMoto);
+        //  data.put("idEmpresa",idEmpresa);
+        // data.put("urlImagemEmpresa", urlImagemEmpresa);
+        // data.put("nomeEmpresa", nomeEmpresa);
+        // documentRef.set(data);
 
+        DocumentReference documentRef = db.collection("motoboy").document(getNomeMotoboy());
+
+
+        documentRef.set(this);
     }
 
     public void atualizar(){
@@ -251,4 +236,6 @@ public class Motoboy implements Serializable {
 
     }
 
+    public void setCep(String postalCode) {
+    }
 }

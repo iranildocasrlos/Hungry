@@ -58,9 +58,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     }
 
     public void btCadastroUsuario(View view){
-        //   btCadastroUsuario.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //   public void onClick(View v) {
+
 
         String enderecoDestino = endereco.getText().toString();
 

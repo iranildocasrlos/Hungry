@@ -157,6 +157,9 @@ public class PedidosActivity extends AppCompatActivity {
         Requisicao requisicao = new Requisicao();
         requisicao.setStatus(Pedido.STATUS_PRONTO);
         requisicao.salvarRequisicao( pedidoParaRquisicao) ;
+       // usuario.setNumero( String.valueOf(addressDestino.getLatitude()) );
+       // usuario.setLongitude( String.valueOf(addressDestino.getLongitude()) );
+
 
         adapterPedidos.notifyDataSetChanged();
 

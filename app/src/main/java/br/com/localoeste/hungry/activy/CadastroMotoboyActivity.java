@@ -49,13 +49,13 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
     private CircleImageView imagemProduto;
     private String urlImagemSelecionada = "";
     private String urlImagemEmpresa = "";
+    private EditText endereco;
     private static final int SELECAO_GALERIA = 200;
     private StorageReference storageReference;
     private FirebaseFirestore referenciaFirestore;
     private EditText editMotoboyNome, editMotoMarca, editMotoPlaca, editMotoCor, editMotoModelo;
     private String idUsuarioLogado;
     private String idProduto = "";
-    //private Produto produto = new Produto();
     private Motoboy motoboy = new Motoboy();
     private String nomeRecuperadoEmpresa;
 
@@ -80,12 +80,15 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
 
 
     private void inicializarComponentes() {
+
         editMotoboyNome = findViewById(R.id.editNomeMotoboy);
         editMotoMarca = findViewById(R.id.editMarcaMoto);
         editMotoModelo = findViewById(R.id.editModeloMoto);
         editMotoPlaca = findViewById(R.id.editPlacaMoto);
         editMotoCor = findViewById(R.id.editCorMoto);
         imagemProduto = findViewById(R.id.imagem_produto);
+
+        endereco =findViewById(R.id.enderecoUsuario);
         idUsuarioLogado = EmpresaFirebase.getId_empresa();
         referenciaFirestore = ConfiguracaoFirebase.getReferenciaFirestore();
         storageReference = ConfiguracaoFirebase.getFirebaseStorage();
@@ -105,84 +108,57 @@ public class CadastroMotoboyActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     public void validarDadosProduto(View view) {
 
 
         //Usuario usuario = new usuario();
-        String enderecoDestino = usuario.getEndereco();
+        //String enderecoDestino = usuario.getEndereco();
+        String enderecoDestino = endereco.getText().toString();
 
         if( !enderecoDestino.equals("") || enderecoDestino != null ){
 
             Address addressDestino = recuperarEndereco( enderecoDestino );
-            if( addressDestino != null ){
+            if( addressDestino != null ) {
 
 
-        UUID uuid = UUID.randomUUID();
-        idProduto = String.valueOf(uuid);
+                UUID uuid = UUID.randomUUID();
+                idProduto = String.valueOf(uuid);
 
 
-        String nomeMotoboy = editMotoboyNome.getText().toString();
-        String marcaMoto = editMotoMarca.getText().toString();
-        String modeloMoto = editMotoModelo.getText().toString();
-        String placaMoto = editMotoPlaca.getText().toString();
-        String corMoto = editMotoCor.getText().toString();
+                String enderecoM = endereco.getText().toString();
+                String nomeMotoboy = editMotoboyNome.getText().toString();
+                String marcaMoto = editMotoMarca.getText().toString();
+                String modeloMoto = editMotoModelo.getText().toString();
+                String placaMoto = editMotoPlaca.getText().toString();
+                String corMoto = editMotoCor.getText().toString();
 
-
-        if (!nomeMotoboy.isEmpty()) {
-
-            if (!marcaMoto.isEmpty()) {
-
-                if (!modeloMoto.isEmpty()) {
-
-                    if (!placaMoto.isEmpty()) {
-
-                        if (!corMoto.isEmpty()) {
-
-
-                            motoboy.setIdProduto(idProduto);
-                            motoboy.setIdEmpresa(idUsuarioLogado);
-                            motoboy.setNomeMotoboy(nomeMotoboy);
-                            motoboy.setMarcaMoto(marcaMoto);
-                            motoboy.setModeloMoto(modeloMoto);
-                            motoboy.setPlacaMoto(placaMoto);
-                            motoboy.setCorMoto(corMoto);
-                            motoboy.setUrlImagemMotoboy(urlImagemSelecionada);
-                            motoboy.setNomeEmpresa(nomeRecuperadoEmpresa);
-                            motoboy.setUrlImagemEmpresa(urlImagemEmpresa);
-                            motoboy.setCidade(addressDestino.getAdminArea());
-                      //      motoboy.setCep(addressDestino.getPostalCode());
-                            motoboy.setBairro(addressDestino.getSubLocality());
-                            motoboy.setRua(addressDestino.getThoroughfare());
-                            motoboy.setNumero(addressDestino.getFeatureName());
-                            motoboy.setLatitude(String.valueOf(addressDestino.getLatitude()));
-                            motoboy.setLongitude(String.valueOf(addressDestino.getLongitude()));
-                            motoboy.salvar();
-                            salvarImagem();
-                            exibirMensagem("motoboy salvo com sucesso");
-                            abrirTelaRequisicoes();
-                            finish();
-
-                        } else {
-                            exibirMensagem("Diigite um preço para o produto");
-                        }
-
-                    } else {
-                        exibirMensagem("Diigite uma descrição para o produto ");
-                    }
-
-                } else {
-                    exibirMensagem("Diigite um nome para o produto");
-                }
-
-
+                final Motoboy motoboy = new Motoboy();
+                motoboy.setIdProduto(idProduto);
+                motoboy.setIdEmpresa(idUsuarioLogado);
+                motoboy.setNomeMotoboy(nomeMotoboy);
+                motoboy.setMarcaMoto(marcaMoto);
+                motoboy.setModeloMoto(modeloMoto);
+                motoboy.setPlacaMoto(placaMoto);
+                motoboy.setCorMoto(corMoto);
+                motoboy.setUrlImagemMotoboy(urlImagemSelecionada);
+                motoboy.setNomeEmpresa(nomeRecuperadoEmpresa);
+                motoboy.setUrlImagemEmpresa(urlImagemEmpresa);
+                motoboy.setCidade(addressDestino.getAdminArea());
+                motoboy.setCep(addressDestino.getPostalCode());
+                motoboy.setBairro(addressDestino.getSubLocality());
+                motoboy.setRua(addressDestino.getThoroughfare());
+                motoboy.setNumero(addressDestino.getFeatureName());
+                motoboy.setLatitude(String.valueOf(addressDestino.getLatitude()));
+                motoboy.setLongitude(String.valueOf(addressDestino.getLongitude()));
+                motoboy.salvar();
+                salvarImagem();
+                exibirMensagem("motoboy salvo com sucesso");
+                abrirTelaRequisicoes();
+                finish();
             }
-        }
-    }
-
-  }
+       }
 }
 
     private Address recuperarEndereco(String endereco){

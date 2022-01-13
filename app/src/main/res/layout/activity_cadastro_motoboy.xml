@@ -24,7 +24,7 @@
 
             android:id="@+id/imagem_produto"
             android:layout_width="411dp"
-            android:layout_height="126dp"
+            android:layout_height="60dp"
             android:layout_gravity="center"
             android:layout_marginTop="0dp"
             android:layout_marginBottom="0dp"
@@ -83,6 +83,17 @@
             android:background="@drawable/bg_edit_text"
             android:ems="10"
             android:hint="Placa da Moto"
+            android:inputType="text"
+            android:padding="16dp"
+            android:singleLine="false" />
+        <EditText
+            android:id="@+id/enderecoUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/bg_edit_text"
+            android:ems="10"
+            android:hint="Endereço"
             android:inputType="text"
             android:padding="16dp"
             android:singleLine="false" />
