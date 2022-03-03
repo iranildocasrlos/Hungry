@@ -47,8 +47,9 @@ import okhttp3.Response;
 
 public class CheckoutActivityJava extends AppCompatActivity {
     // 10.0.2.2 is the Android emulator's alias to localhost
-   // private static final String BACKEND_URL = "http://192.168.64.2/pagamentos/";
-   private static final String BACKEND_URL = "https://localoeste.com.br/pagamentos/";
+
+   // private static final String BACKEND_URL = "http://192.168.64.0/pagamentos/";
+   private static final String BACKEND_URL = "COLOQUE AQUI O ENDEREÇO DO SEU SERVER";
 
     private OkHttpClient httpClient = new OkHttpClient();
     private String paymentIntentClientSecret,valorPago, valorPagoFormatado;
@@ -98,7 +99,7 @@ public class CheckoutActivityJava extends AppCompatActivity {
         // Configure the SDK with your Stripe publishable key so it can make requests to Stripe
         stripe = new Stripe(
                 getApplicationContext(),
-                Objects.requireNonNull("pk_test_51Gwr7mDqeS0b1Gcl1BDHP26JbKm3jzbiSPMSbFKTiXVizgtn3qnnoVvDclV9HrKKOgI5lLcQKThxQmfF0cnqeJHX00nUBpqh2K")
+                Objects.requireNonNull("COLOQUE AQUI SUA CHAVE DE AUTENTICAÇAO DO STRIPE")
         );
         startCheckout();
     }
